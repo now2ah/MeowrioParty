@@ -2,7 +2,5 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    int tileIndex;
-
-
+    public int tileIndex;
 }
