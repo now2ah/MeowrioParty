@@ -1,0 +1,26 @@
+name: 💡 기능 요청
+description: 새로운 기능이나 개선 사항을 제안합니다.
+title: "[Feature] "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: 기능 설명
+      description: 요청하려는 기능이나 개선점을 구체적으로 설명해주세요.
+      placeholder: 예: 유저가 캐릭터의 스킨을 변경할 수 있는 기능이 필요합니다.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reason
+    attributes:
+      label: 필요 이유
+      description: 이 기능이 왜 필요한가요? 어떤 문제를 해결하나요?
+      placeholder: 사용자 개인화 경험이 부족합니다.
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 추가 정보
+      description: 참고할 자료나 유사 기능이 있다면 작성해주세요.
