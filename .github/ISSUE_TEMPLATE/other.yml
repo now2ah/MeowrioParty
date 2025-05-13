@@ -1,0 +1,13 @@
+name: 📌 기타 문의/제안
+description: 버그나 기능 요청이 아닌 일반적인 문의사항이나 제안을 남겨주세요.
+title: "[Discussion] "
+labels: [question]
+body:
+  - type: textarea
+    id: content
+    attributes:
+      label: 내용
+      description: 자유롭게 작성해주세요.
+      placeholder: 예: 프로젝트 구조에 대한 질문이 있습니다.
+    validations:
+      required: true
