@@ -2,14 +2,19 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private int playerID;
+    private string playerName;
+    public Tile currentTile;
+    public Tile nextTile;
+    //public Board board;
+
+    public void Initialize(Tile startTile)
     {
-        
+        //currentTile = startTile;
+        //transform.position = currentTile.transform.position;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Move(int diceValue) // int steps? int diceValue?
     {
         
     }
