@@ -1,6 +1,0 @@
-blank_issues_enabled: false  # 빈 이슈 작성을 비활성화
-
-contact_links:
-  - name: ❓ 질문 / 기타 문의
-    url: https://github.com/Unity-Bootcamp-12/MeowrioParty/discussions
-    about: 일반적인 질문은 Discussions 탭을 이용해주세요.
