@@ -1,12 +1,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Board : MonoBehaviour
+public class Board :MonoBehaviour
 {
-    List<Tile> boardTiles;
+    //public Tile[] Tiles { get; private set; }
+    //[SerializeField]
+    public Tile[] tiles;
 
-    private void Awake()
+    [SerializeField]
+    private VoidEventChannelSO OnGameStart;
+
+    private void OnEnable()
     {
-        boardTiles = new List<Tile>();
+        OnGameStart.OnEventRaised += InitializeBoard;
+    }
+    private void OnDisable()
+    {
+        OnGameStart.OnEventRaised -= InitializeBoard;
+    }
+
+
+    private void InitializeBoard()
+    {
+
     }
 }
