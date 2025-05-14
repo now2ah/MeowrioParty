@@ -6,15 +6,15 @@ using UnityEngine;
 public class BoardManager : Singleton<BoardManager>
 {
     [SerializeField]
-    private int maxTurn;
+    private int _maxTurn;
     [SerializeField]
-    private int currentTurn;
+    private int _currentTurn;
     [SerializeField]
-    List<Player> players;
+    List<Player> _playerList;
 
     [SerializeField]
-    private GameObject diceObj;
-    private Dice dice;
+    private GameObject _diceObj;
+    private Dice _dice;
 
     //private Board board;
     public Board board;
@@ -29,7 +29,7 @@ public class BoardManager : Singleton<BoardManager>
     {
         base.Awake();
         //players = new List<Player>();
-        dice = diceObj.GetComponent<Dice>();
+        _dice = _diceObj.GetComponent<Dice>();
 
     }
     private void Start()
@@ -43,8 +43,8 @@ public class BoardManager : Singleton<BoardManager>
     }
     private void InitializeGameSetting()
     {
-        currentTurn = 0;
-        maxTurn = 10;
+        _currentTurn = 0;
+        _maxTurn = 10;
 
 
     }
@@ -53,7 +53,7 @@ public class BoardManager : Singleton<BoardManager>
     {
         OnGameStart.RaiseEvent();
 
-        SetPlayerOrder();
+        SetPlayerTurnOrder();
 
         PlayGame();
 
@@ -61,35 +61,35 @@ public class BoardManager : Singleton<BoardManager>
 
     private void PlayGame()
     {
-        StartCoroutine(DelaySec());
+        StartCoroutine(GameLoopCoroutine());
     }
-    private IEnumerator DelaySec()
+    private IEnumerator GameLoopCoroutine()
     {
-        for (int i = 0; i < maxTurn; i++)
+        for (int i = 0; i < _maxTurn; i++)
         {
-            for (int j = 0; j < players.Count; j++)
+            for (int j = 0; j < _playerList.Count; j++)
             {                
                 yield return new WaitForSeconds(10f);
 
-                int diceValue = dice.RollDice();
-                players[j].Move(diceValue);
+                int diceValue = _dice.RollDice();
+                _playerList[j].Move(diceValue);
             }
         }
 
     }
 
-    void SetPlayerOrder()
+    void SetPlayerTurnOrder()
     {
         List<(int, Player)> playerDiceNumberList = new List<(int, Player)>();
 
-        for (int i = 0; i < players.Count; ++i)
+        for (int i = 0; i < _playerList.Count; ++i)
         {
             (int, Player) playerDiceNumber;
 
-            int diceNumber = dice.RollDice();
+            int diceNumber = _dice.RollDice();
 
             playerDiceNumber.Item1 = diceNumber;
-            playerDiceNumber.Item2 = players[i];
+            playerDiceNumber.Item2 = _playerList[i];
 
             playerDiceNumberList.Add(playerDiceNumber);
         }
@@ -98,7 +98,7 @@ public class BoardManager : Singleton<BoardManager>
 
         for (int i = 0; i < playerDiceNumberList.Count; i++)
         {
-            players[i] = playerDiceNumberList[i].Item2;
+            _playerList[i] = playerDiceNumberList[i].Item2;
         }
     }
 

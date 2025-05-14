@@ -4,7 +4,7 @@ using UnityEngine;
 public class Dice : MonoBehaviour
 {
     [SerializeField]
-    private IntEventChannelSO OnRollDice;
+    private IntEventChannelSO OnDiceRolled;
 
     [SerializeField]
     private int minValue = 1;
@@ -15,7 +15,7 @@ public class Dice : MonoBehaviour
     public int RollDice()
     {
         int value = UnityEngine.Random.Range(minValue, maxValue + 1);
-        OnRollDice.RaiseEvent(value);
+        OnDiceRolled.RaiseEvent(value);
         Debug.Log(value);
         return value;
     }
