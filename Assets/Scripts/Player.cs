@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -13,12 +15,11 @@ public class Player : MonoBehaviour
 
     public int order;
 
-    private Dice _dice;
+    public Dice _dice;
 
-    private void Start()
-    {
-        
-    }
+    [SerializeField]
+    private List<GameObject> _diceNumberObjects = new List<GameObject>();
+
 
     public void Initialize(Tile startTile)
     {
@@ -38,20 +39,18 @@ public class Player : MonoBehaviour
     {
         int index = currentTile.tileIndex;
         int nextIndex = 0;
+        int leftIndex = diceValue-1;
         for (int i = 0; i < diceValue; i++)
         {
+            _diceNumberObjects[leftIndex].SetActive(true);
+
             nextIndex = (++index) % BoardManager.Instance.board.tiles.Length;
             Transform destination = BoardManager.Instance.board.tiles[nextIndex].transform;
-
             transform.position = destination.position;
-
             yield return new WaitForSeconds(1f);
+            _diceNumberObjects[leftIndex].SetActive(false);
+            leftIndex--;
         }
         currentTile = BoardManager.Instance.board.tiles[nextIndex];
-    }
-
-    public void DiceValueIndicator(int diceValue)
-    {
-
     }
 }

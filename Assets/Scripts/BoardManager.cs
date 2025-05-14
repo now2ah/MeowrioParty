@@ -17,13 +17,13 @@ public class BoardManager : Singleton<BoardManager>
     [SerializeField]
     private int _maxGameTurn;
     [SerializeField]
-    private int _currentGameTurn;   
+    private int _currentGameTurn;
     [SerializeField]
     List<Player> _playerList;
 
-    [SerializeField]
-    private GameObject _diceObj;
-    private Dice _dice;
+    //[SerializeField]
+    //private GameObject _diceObj;
+    //private Dice _dice;
 
     //private Board board;
     public Board board;
@@ -51,7 +51,7 @@ public class BoardManager : Singleton<BoardManager>
     {
         base.Awake();
         //players = new List<Player>();
-        _dice = _diceObj.GetComponent<Dice>();
+        //_dice = _diceObj.GetComponent<Dice>();
         _setOrderIndex = 0;
         _isTurnStarted = false;
         _currentState = GameState.GameReady;
@@ -80,45 +80,49 @@ public class BoardManager : Singleton<BoardManager>
 
     private void OnMainGameStarted_OnEventRaised()
     {
-        
+
     }
 
     private void OnRollDice_OnEventRaised(int diceValue)
     {
         if (_currentState == GameState.GameReady)
         {
-            _dice.MoveTo(_playerList[_setOrderIndex].gameObject);
-            _dice.PlayDiceAnimation();
-
-            (int, Player) playerDiceNumber;
-        
-            playerDiceNumber.Item1 = diceValue;
-            playerDiceNumber.Item2 = _playerList[_setOrderIndex];
-
-            playerDiceNumberList.Add(playerDiceNumber);
-            _setOrderIndex++;
-            if(_setOrderIndex == _playerList.Count)
+            //_dice.MoveTo(_playerList[_setOrderIndex].gameObject);
+            _playerList[_setOrderIndex]._dice.PlayDiceAnimation(() =>
             {
-                onSetOrderRollDice.RaiseEvent();
-            }
+                (int, Player) playerDiceNumber;
 
+                playerDiceNumber.Item1 = diceValue;
+                playerDiceNumber.Item2 = _playerList[_setOrderIndex];
+
+                playerDiceNumberList.Add(playerDiceNumber);
+                _setOrderIndex++;
+
+                if (_setOrderIndex == _playerList.Count)
+                {
+                    onSetOrderRollDice.RaiseEvent();
+                    return;
+                }
+
+                _playerList[_setOrderIndex]._dice.gameObject.SetActive(true);
+            });
         }
         else if (_currentState == GameState.GamePlaying)
         {
             //int playerListIndex = _currentMovingPlayerIndex;
             //int playerListIndex = _currentMovingPlayerIndex % _playerList.Count;
-            
+
             _currentPlayer = _playerList[_currentMovingPlayerIndex];
-            _dice.MoveTo(_currentPlayer.gameObject);
+            //_dice.MoveTo(_currentPlayer.gameObject);
             _playerList[_currentMovingPlayerIndex].Move(diceValue);
             Debug.Log("current turn is " + _currentGameTurn);
             _currentMovingPlayerIndex++;
-            if(_currentMovingPlayerIndex == _playerList.Count)
+            if (_currentMovingPlayerIndex == _playerList.Count)
             {
                 _currentMovingPlayerIndex = 0;
                 _currentGameTurn++;
             }
-            if(_currentGameTurn == _maxGameTurn)
+            if (_currentGameTurn == _maxGameTurn)
             {
                 _currentState = GameState.GameEnd;
             }
@@ -136,6 +140,8 @@ public class BoardManager : Singleton<BoardManager>
     private void StartGame()
     {
         OnGameStart.RaiseEvent();
+
+        _playerList[0]._dice.gameObject.SetActive(true);
         //PlayGame();
     }
 
@@ -151,10 +157,10 @@ public class BoardManager : Singleton<BoardManager>
         _currentState = GameState.GamePlaying;
         _currentPlayer = _playerList[0];
     }
-    
+
     private void PlayGame()
     {
-        
+
     }
 
     private IEnumerator GameLoopCoroutine()
@@ -162,7 +168,7 @@ public class BoardManager : Singleton<BoardManager>
         for (int i = 0; i < _maxGameTurn; i++)
         {
             for (int j = 0; j < _playerList.Count; j++)
-            {                
+            {
                 yield return new WaitForSeconds(10f);
 
                 //int diceValue = _dice.RollDice();

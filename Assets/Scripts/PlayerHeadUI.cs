@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerHeadUI : MonoBehaviour
@@ -7,6 +8,7 @@ public class PlayerHeadUI : MonoBehaviour
     private void Awake()
     {
         _worldCanvas = GetComponent<Canvas>();
+
     }
 
     // Update is called once per frame
@@ -17,4 +19,5 @@ public class PlayerHeadUI : MonoBehaviour
             _worldCanvas.transform.forward = Camera.main.transform.forward;
         }
     }
+
 }
