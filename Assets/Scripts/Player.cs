@@ -23,7 +23,7 @@ public class Player : MonoBehaviour
     }
 
 
-    public void Move(int diceValue) // int steps? int diceValue?
+    public void Move(int diceValue) 
     {
         //int nextTileIndex = currentTile.tileIndex + diceValue;
 

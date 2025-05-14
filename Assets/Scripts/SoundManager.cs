@@ -6,11 +6,11 @@ using UnityEngine.SceneManagement;
 public class SoundManager : Singleton<SoundManager>
 {
 
-    AudioSource BGMSource;
-    AudioSource SFXSource;
+    AudioSource _bgmSource;
+    AudioSource _sfxSource;
 
-    private Dictionary<BGMType, AudioClip> BGMDic = new Dictionary<BGMType, AudioClip>();
-    private Dictionary<SFXType, AudioClip> SFXDic = new Dictionary<SFXType, AudioClip>();
+    private Dictionary<BGMType, AudioClip> _bgmClips = new Dictionary<BGMType, AudioClip>();
+    private Dictionary<SFXType, AudioClip> _sfxClips = new Dictionary<SFXType, AudioClip>();
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void InitSoundManager()
@@ -20,11 +20,11 @@ public class SoundManager : Singleton<SoundManager>
         DontDestroyOnLoad(obj);
 
         GameObject bgmObj = new GameObject("BGM");
-        SoundManager.Instance.BGMSource = bgmObj.AddComponent<AudioSource>();
+        SoundManager.Instance._bgmSource = bgmObj.AddComponent<AudioSource>();
         bgmObj.transform.SetParent(obj.transform);
 
         GameObject sfxObj = new GameObject("SFX");
-        SoundManager.Instance.SFXSource = sfxObj.AddComponent<AudioSource>();
+        SoundManager.Instance._sfxSource = sfxObj.AddComponent<AudioSource>();
         sfxObj.transform.SetParent(obj.transform);
 
         AudioClip[] BGMClips = Resources.LoadAll<AudioClip>("Sound/BGM");
@@ -33,7 +33,7 @@ public class SoundManager : Singleton<SoundManager>
             try
             {
                 BGMType type = (BGMType)Enum.Parse(typeof(BGMType), clip.name);
-                SoundManager.Instance.BGMDic.Add(type, clip);
+                SoundManager.Instance._bgmClips.Add(type, clip);
             }
             catch
             {
@@ -46,7 +46,7 @@ public class SoundManager : Singleton<SoundManager>
             try
             {
                 SFXType type = (SFXType)Enum.Parse(typeof(SFXType), clip.name);
-                SoundManager.Instance.SFXDic.Add(type, clip);
+                SoundManager.Instance._sfxClips.Add(type, clip);
             }
             catch
             {
@@ -56,11 +56,11 @@ public class SoundManager : Singleton<SoundManager>
     }
     public void PlayBGM(BGMType type)
     {
-        BGMSource.Play();
+        _bgmSource.Play();
     }
     public void PlaySFX(SFXType type)
     {
-        SFXSource.PlayOneShot(SFXDic[type]);
+        _sfxSource.PlayOneShot(_sfxClips[type]);
     }
 }
 public enum BGMType
