@@ -4,18 +4,22 @@ using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
-    private int playerID;
-    private string playerName;
+    private int _playerID;
+    private string _playerName;
+
     public Tile currentTile;
     //public Tile nextTile;
     //public Board board;
 
     public int order;
 
+    private Dice _dice;
+
     private void Start()
     {
         
     }
+
     public void Initialize(Tile startTile)
     {
         //currentTile = startTile;
@@ -44,5 +48,10 @@ public class Player : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
         currentTile = BoardManager.Instance.board.tiles[nextIndex];
+    }
+
+    public void DiceValueIndicator(int diceValue)
+    {
+
     }
 }

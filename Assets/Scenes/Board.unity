@@ -235,6 +235,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba8eb544decd94c44b8c95b4ffd7c1e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &610873985 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8613348121097284209, guid: 35689aae04913224d8356c024bb7f508, type: 3}
+  m_PrefabInstance: {fileID: 5149568943204046300}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb2358e472cfa67488a73a1ef38ec11e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &643203362
 GameObject:
   m_ObjectHideFlags: 0
@@ -264,7 +275,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbfded1121da9454e9e26a25763518ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnDiceRolled: {fileID: 11400000, guid: d15e663eaf644754f8cb2ed2ce4def9d, type: 2}
+  _onDiceRolled: {fileID: 0}
+  _onRollButtonClicked: {fileID: 0}
   minValue: 1
   maxValue: 6
 --- !u!4 &643203364
@@ -486,7 +498,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8530428331039964353, guid: 35689aae04913224d8356c024bb7f508, type: 3}
       propertyPath: m_Name
-      value: Player 2
+      value: Player 1
       objectReference: {fileID: 0}
     - target: {fileID: 8613348121097284209, guid: 35689aae04913224d8356c024bb7f508, type: 3}
       propertyPath: currentTile
@@ -526,13 +538,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e868dfc2b4efcb49a42fbe9b8bebbfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxTurn: 0
-  _currentTurn: 0
-  _playerList: []
+  _maxGameTurn: 0
+  _currentGameTurn: 0
+  _playerList:
+  - {fileID: 610873985}
+  - {fileID: 1572967920}
   _diceObj: {fileID: 7064570029090595158}
   board: {fileID: 2072996420}
   OnGameStart: {fileID: 11400000, guid: 12d5ec8fdd78e774ebd139c3d2462bee, type: 2}
   OnRollDice: {fileID: 11400000, guid: d15e663eaf644754f8cb2ed2ce4def9d, type: 2}
+  onSetOrderRollDice: {fileID: 11400000, guid: afd2305517b084d46bc8cf8b07407ce6, type: 2}
+  onMainGameStarted: {fileID: 11400000, guid: a418ea1b657e59942bceb92f363a2faf, type: 2}
 --- !u!4 &956446944
 Transform:
   m_ObjectHideFlags: 0
@@ -746,6 +762,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &1572967920 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8613348121097284209, guid: 35689aae04913224d8356c024bb7f508, type: 3}
+  m_PrefabInstance: {fileID: 902997188}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb2358e472cfa67488a73a1ef38ec11e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1613125828
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1449,8 +1476,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -400.8, y: 37.511536}
-  m_SizeDelta: {x: 80, y: 35}
+  m_AnchoredPosition: {x: -298, y: -150}
+  m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &1998238051888201743
 RectTransform:
@@ -1469,8 +1496,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 0, y: -110}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2037739895546116479
 CanvasRenderer:
@@ -1543,8 +1570,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -400.8, y: 70.5}
-  m_SizeDelta: {x: 80, y: 35}
+  m_AnchoredPosition: {x: -300, y: -35}
+  m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &2379648074971992830
 PrefabInstance:
@@ -1962,8 +1989,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 75
+  m_fontSizeBase: 75
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2023,7 +2050,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 60, y: 100}
+  m_SizeDelta: {x: 150, y: 256}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4825247012940665515
 GameObject:
@@ -2139,11 +2166,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 368152164550325371, guid: 35689aae04913224d8356c024bb7f508, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.84
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 368152164550325371, guid: 35689aae04913224d8356c024bb7f508, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.65
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 368152164550325371, guid: 35689aae04913224d8356c024bb7f508, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2177,13 +2204,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 893423793961365705, guid: 35689aae04913224d8356c024bb7f508, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 893423793961365705, guid: 35689aae04913224d8356c024bb7f508, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 2471339748360650166, guid: 35689aae04913224d8356c024bb7f508, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 91463221959547c4ea29a34b4475b123, type: 2}
     - target: {fileID: 8530428331039964353, guid: 35689aae04913224d8356c024bb7f508, type: 3}
       propertyPath: m_Name
-      value: Player 1
+      value: Player 0
       objectReference: {fileID: 0}
     - target: {fileID: 8613348121097284209, guid: 35689aae04913224d8356c024bb7f508, type: 3}
       propertyPath: currentTile
@@ -2421,7 +2456,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbfded1121da9454e9e26a25763518ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnDiceRolled: {fileID: 11400000, guid: d15e663eaf644754f8cb2ed2ce4def9d, type: 2}
+  _onDiceRolled: {fileID: 11400000, guid: d15e663eaf644754f8cb2ed2ce4def9d, type: 2}
+  _onRollButtonClicked: {fileID: 11400000, guid: 1c0a750c9fc08654aa70c3cc860fdca6, type: 2}
   minValue: 1
   maxValue: 6
 --- !u!1 &7777446333241378824
@@ -2460,7 +2496,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 156}
-  m_SizeDelta: {x: 0, y: 80}
+  m_SizeDelta: {x: 0, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7924566288919168474
 GameObject:
@@ -2474,6 +2510,7 @@ GameObject:
   - component: {fileID: 8120320469660693515}
   - component: {fileID: 8530201560794661076}
   - component: {fileID: 6674609997004846525}
+  - component: {fileID: 8808339657881100389}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2535,10 +2572,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -2668,8 +2705,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32
-  m_fontSizeBase: 32
+  m_fontSize: 75
+  m_fontSizeBase: 75
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2742,6 +2779,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &8808339657881100389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7924566288919168474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44313ad1e5e9d7545b85d345a2c7f918, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rollDiceButton: {fileID: 1790430506260088562}
+  _onRollButtonClicked: {fileID: 11400000, guid: 1c0a750c9fc08654aa70c3cc860fdca6, type: 2}
 --- !u!114 &8814077211530978026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2789,8 +2840,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 75
+  m_fontSizeBase: 75
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

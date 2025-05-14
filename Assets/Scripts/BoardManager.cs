@@ -56,6 +56,7 @@ public class BoardManager : Singleton<BoardManager>
         _isTurnStarted = false;
         _currentState = GameState.GameReady;
         _currentGameTurn = 0;
+        _currentPlayer = null;
     }
 
     private void OnEnable()
@@ -65,21 +66,30 @@ public class BoardManager : Singleton<BoardManager>
         //onMainGameStarted.OnEventRaised += OnMainGameStarted_OnEventRaised;
     }
 
-    private void OnMainGameStarted_OnEventRaised()
-    {
-        throw new NotImplementedException();
-    }
-
     private void OnDisable()
     {
         OnRollDice.OnEventRaised -= OnRollDice_OnEventRaised;
         onSetOrderRollDice.OnEventRaised -= SetPlayerTurnOrder;
     }
 
+    private void Start()
+    {
+        InitializeGameSetting();
+        StartGame();
+    }
+
+    private void OnMainGameStarted_OnEventRaised()
+    {
+        
+    }
+
     private void OnRollDice_OnEventRaised(int diceValue)
     {
-        if(_currentState == GameState.GameReady)
+        if (_currentState == GameState.GameReady)
         {
+            _dice.MoveTo(_playerList[_setOrderIndex].gameObject);
+            _dice.PlayDiceAnimation();
+
             (int, Player) playerDiceNumber;
         
             playerDiceNumber.Item1 = diceValue;
@@ -97,6 +107,9 @@ public class BoardManager : Singleton<BoardManager>
         {
             //int playerListIndex = _currentMovingPlayerIndex;
             //int playerListIndex = _currentMovingPlayerIndex % _playerList.Count;
+            
+            _currentPlayer = _playerList[_currentMovingPlayerIndex];
+            _dice.MoveTo(_currentPlayer.gameObject);
             _playerList[_currentMovingPlayerIndex].Move(diceValue);
             Debug.Log("current turn is " + _currentGameTurn);
             _currentMovingPlayerIndex++;
@@ -110,21 +123,8 @@ public class BoardManager : Singleton<BoardManager>
                 _currentState = GameState.GameEnd;
             }
         }
-        else
-        {
-
-        }
     }
 
-    private void Start()
-    {
-        InitializeGameSetting();
-        StartGame();
-    }
-    private void Update()
-    {
-
-    }
     private void InitializeGameSetting()
     {
         _currentGameTurn = 0;
@@ -149,6 +149,7 @@ public class BoardManager : Singleton<BoardManager>
         }
         onMainGameStarted.RaiseEvent();
         _currentState = GameState.GamePlaying;
+        _currentPlayer = _playerList[0];
     }
     
     private void PlayGame()
