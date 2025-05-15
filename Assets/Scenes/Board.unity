@@ -2040,6 +2040,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 91463221959547c4ea29a34b4475b123, type: 2}
+    - target: {fileID: 5591120291840657255, guid: 35689aae04913224d8356c024bb7f508, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8410309787757443655, guid: 35689aae04913224d8356c024bb7f508, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8530428331039964353, guid: 35689aae04913224d8356c024bb7f508, type: 3}
       propertyPath: m_Name
       value: Player 0
