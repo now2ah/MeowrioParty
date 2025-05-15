@@ -275,8 +275,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbfded1121da9454e9e26a25763518ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _onDiceRolled: {fileID: 0}
-  _onRollButtonClicked: {fileID: 0}
   minValue: 1
   maxValue: 6
 --- !u!4 &643203364
@@ -538,16 +536,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e868dfc2b4efcb49a42fbe9b8bebbfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _currentPhase: 0
   _maxGameTurn: 0
   _currentGameTurn: 0
   _playerList:
   - {fileID: 610873985}
   - {fileID: 1572967920}
-  board: {fileID: 2072996420}
-  OnGameStart: {fileID: 11400000, guid: 12d5ec8fdd78e774ebd139c3d2462bee, type: 2}
-  OnRollDice: {fileID: 11400000, guid: d15e663eaf644754f8cb2ed2ce4def9d, type: 2}
-  onSetOrderRollDice: {fileID: 11400000, guid: afd2305517b084d46bc8cf8b07407ce6, type: 2}
-  onMainGameStarted: {fileID: 11400000, guid: a418ea1b657e59942bceb92f363a2faf, type: 2}
+  _board: {fileID: 2072996420}
+  _currentPlayer: {fileID: 0}
 --- !u!4 &956446944
 Transform:
   m_ObjectHideFlags: 0
@@ -1354,7 +1350,6 @@ MonoBehaviour:
   - {fileID: 1931478846}
   - {fileID: 725075762}
   - {fileID: 1843111679}
-  OnGameStart: {fileID: 11400000, guid: 12d5ec8fdd78e774ebd139c3d2462bee, type: 2}
 --- !u!1 &136830271752479555
 GameObject:
   m_ObjectHideFlags: 0
