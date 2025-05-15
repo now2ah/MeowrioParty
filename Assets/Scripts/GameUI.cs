@@ -8,6 +8,6 @@ public class GameUI : MonoBehaviour
 
     private void Awake()
     {
-        _rollDiceButton.onClick.AddListener(() => { _onRollButtonClicked.RaiseEvent(); });
+        _rollDiceButton.onClick.AddListener(() => { Debug.Log("roll button clicked");  _onRollButtonClicked.RaiseEvent(); });
     }
 }

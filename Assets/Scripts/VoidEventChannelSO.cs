@@ -10,3 +10,4 @@ public class VoidEventChannelSO : ScriptableObject
         OnEventRaised?.Invoke();
     }
 }
+

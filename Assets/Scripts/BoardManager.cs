@@ -1,145 +1,100 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public enum GameState
+public enum GamePhase
 {
-    // 순서 정하고
-    // 메인게임
-    // 게임 종료
     GameReady,
-    GamePlaying,
+    GamePlay,
     GameEnd
 }
 public class BoardManager : Singleton<BoardManager>
 {
-    [SerializeField]
-    private int _maxGameTurn;
-    [SerializeField]
-    private int _currentGameTurn;   
-    [SerializeField]
-    List<Player> _playerList;
+    [SerializeField] private GamePhase _currentPhase;
+    [SerializeField] private int _maxGameTurn;
+    [SerializeField] private int _currentGameTurn;
+    [SerializeField] private List<Player> _playerList;
+    [SerializeField] private Board _board;
+    [SerializeField] private Player _currentPlayer;
 
-    [SerializeField]
-    private GameObject _diceObj;
-    private Dice _dice;
+    private int _currentPlayerIndex; // Index of Player who is moving now
+    private int _setTurnOrderIndex;
+    private List<(int, Player)> playerDiceNumberList = new List<(int, Player)>();
 
-    //private Board board;
-    public Board board;
-
-    [SerializeField]
-    private VoidEventChannelSO OnGameStart;
-    [SerializeField]
-    private IntEventChannelSO OnRollDice;
-    [SerializeField]
-    private VoidEventChannelSO onSetOrderRollDice;
-    [SerializeField]
-    private VoidEventChannelSO onMainGameStarted;
-
-
-    List<(int, Player)> playerDiceNumberList = new List<(int, Player)>();
-    private int _setOrderIndex;
-    private Player _currentPlayer;
-    private bool _isTurnStarted;
-
-    private GameState _currentState;
-
-    private int _currentMovingPlayerIndex = 0;    // Index of Player who is moving now
+    public Board Board { get { return _board; } }   //_board를 클래스 외부에서 쓸 수 있도록 하는 Property
 
     public override void Awake()
     {
         base.Awake();
-        //players = new List<Player>();
-        _dice = _diceObj.GetComponent<Dice>();
-        _setOrderIndex = 0;
-        _isTurnStarted = false;
-        _currentState = GameState.GameReady;
-        _currentGameTurn = 0;
-    }
-
-    private void OnEnable()
-    {
-        OnRollDice.OnEventRaised += OnRollDice_OnEventRaised;
-        onSetOrderRollDice.OnEventRaised += SetPlayerTurnOrder;
-        //onMainGameStarted.OnEventRaised += OnMainGameStarted_OnEventRaised;
-    }
-
-    private void OnMainGameStarted_OnEventRaised()
-    {
-        throw new NotImplementedException();
-    }
-
-    private void OnDisable()
-    {
-        OnRollDice.OnEventRaised -= OnRollDice_OnEventRaised;
-        onSetOrderRollDice.OnEventRaised -= SetPlayerTurnOrder;
-    }
-
-    private void OnRollDice_OnEventRaised(int diceValue)
-    {
-        if(_currentState == GameState.GameReady)
-        {
-            (int, Player) playerDiceNumber;
         
-            playerDiceNumber.Item1 = diceValue;
-            playerDiceNumber.Item2 = _playerList[_setOrderIndex];
-
-            playerDiceNumberList.Add(playerDiceNumber);
-            _setOrderIndex++;
-            if(_setOrderIndex == _playerList.Count)
-            {
-                onSetOrderRollDice.RaiseEvent();
-            }
-
-        }
-        else if (_currentState == GameState.GamePlaying)
-        {
-            //int playerListIndex = _currentMovingPlayerIndex;
-            //int playerListIndex = _currentMovingPlayerIndex % _playerList.Count;
-            _playerList[_currentMovingPlayerIndex].Move(diceValue);
-            Debug.Log("current turn is " + _currentGameTurn);
-            _currentMovingPlayerIndex++;
-            if(_currentMovingPlayerIndex == _playerList.Count)
-            {
-                _currentMovingPlayerIndex = 0;
-                _currentGameTurn++;
-            }
-            if(_currentGameTurn == _maxGameTurn)
-            {
-                _currentState = GameState.GameEnd;
-            }
-        }
-        else
-        {
-
-        }
+        _currentPhase = GamePhase.GameReady;
+        _maxGameTurn = 2;
+        _currentGameTurn = 0;
+        _currentPlayerIndex = 0;
+        //players = new List<Player>();
+        //initialize board
+        _currentPlayer = null;
+        _setTurnOrderIndex = 0;
     }
 
     private void Start()
     {
-        InitializeGameSetting();
         StartGame();
     }
+
     private void Update()
     {
+        if (_currentPhase == GamePhase.GameReady)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                if (_setTurnOrderIndex == _playerList.Count)
+                {
+                    SetPlayerTurnOrder();
+                    SetGamePhase(GamePhase.GamePlay);
+                }
+                else
+                {
+                    int playersDiceNum = _playerList[_setTurnOrderIndex].RollDiceForOrder();
+                    AddToPlayerOrderList(playersDiceNum);
+                }
+            }
+        }
+        
+        if (_currentPhase == GamePhase.GamePlay)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                _currentPlayer = _playerList[_currentPlayerIndex];
 
-    }
-    private void InitializeGameSetting()
-    {
-        _currentGameTurn = 0;
-        _maxGameTurn = 2;
+                _playerList[_currentPlayerIndex].RollDiceForMove();
 
+                //int playersDiceNum = _playerList[_currentMovingPlayerIndex].RollDice();
+                //_playerList[_currentMovingPlayerIndex].Move(playersDiceNum);
+                _currentPlayerIndex++;
 
+                if (_currentPlayerIndex == _playerList.Count)
+                {
+                    _currentPlayerIndex = 0;
+                    _currentGameTurn++;
+                }
+
+                if (_currentGameTurn == _maxGameTurn)
+                {
+                    _currentPhase = GamePhase.GameEnd;
+                }
+            }
+        }
     }
 
     private void StartGame()
     {
-        OnGameStart.RaiseEvent();
-        //PlayGame();
+        SetGamePhase(GamePhase.GameReady);
     }
 
-    void SetPlayerTurnOrder()
+    private void SetPlayerTurnOrder()
     {
         playerDiceNumberList.Sort((a, b) => b.Item1.CompareTo(a.Item1));
 
@@ -147,32 +102,24 @@ public class BoardManager : Singleton<BoardManager>
         {
             _playerList[i] = playerDiceNumberList[i].Item2;
         }
-        onMainGameStarted.RaiseEvent();
-        _currentState = GameState.GamePlaying;
-    }
-    
-    private void PlayGame()
-    {
-        
+
+        _currentPhase = GamePhase.GamePlay;
+        _currentPlayer = _playerList[0];
     }
 
-    private IEnumerator GameLoopCoroutine()
+    private void SetGamePhase(GamePhase phase)
     {
-        for (int i = 0; i < _maxGameTurn; i++)
-        {
-            for (int j = 0; j < _playerList.Count; j++)
-            {                
-                yield return new WaitForSeconds(10f);
-
-                //int diceValue = _dice.RollDice();
-                //_playerList[j].Move(diceValue);
-            }
-        }
-
+        _currentPhase = phase;
     }
 
-    private void EndGame()
+    private void AddToPlayerOrderList(int diceValue)
     {
+        (int, Player) playerDiceNumber;
 
+        playerDiceNumber.Item1 = diceValue;
+        playerDiceNumber.Item2 = _playerList[_setTurnOrderIndex];
+
+        playerDiceNumberList.Add(playerDiceNumber);
+        _setTurnOrderIndex++;
     }
 }
