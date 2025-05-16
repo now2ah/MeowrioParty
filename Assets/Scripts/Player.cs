@@ -13,19 +13,28 @@ public class Player : MonoBehaviour
     [SerializeField] private List<GameObject> _diceNumberObjects = new List<GameObject>(); // Comment: 아래 변수도 불필요
 
     private Queue<Tile> _moveQueue = new Queue<Tile>();
-    private bool isMoving = false;
+    private bool _isMoving = false;
     [SerializeField] float moveSpeed = 5f;
+
+    public bool IsMoving { get { return _isMoving; } }
+
+    private void Awake()
+    {
+        _moveQueue = new Queue<Tile>();
+    }
 
     private void Update()
     {
-        if (_moveQueue.Count > 0 && !isMoving) //움직이고 있지 않고 큐가 차면
+        if (_moveQueue.Count > 0 && !_isMoving) //움직이고 있지 않고 큐가 차면
         {
-            isMoving = true;
+            _isMoving = true;
             StartCoroutine(MoveTileQueue());
         }
     }
+
     public int RollDice()
     {
+        _dice.gameObject.SetActive(true);
         return _dice.Roll();
     }
 
@@ -43,7 +52,7 @@ public class Player : MonoBehaviour
         {
             Tile nextTile = _moveQueue.Dequeue();
 
-/*            int current = nextTile.tileIndex - i;
+/*          int current = nextTile.tileIndex - i;
             int next = nextTile.tileIndex - i - 1;
             if (current < _diceNumberObjects.Count && next >= 0)
             {
@@ -71,11 +80,18 @@ public class Player : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
 
         }
-        isMoving = false;
-        _dice.gameObject.SetActive(false);
+        _isMoving = false;
+        
+    }
+
+    public void MoveTo(Tile nextTile)
+    {
+        if (_moveQueue != null)
+        {
+            _moveQueue.Enqueue(nextTile);
+        }
     }
         
-
     // comment: 아래 로직은 필히 없어져야 함.
     private IEnumerator MoveCoroutine(Tile nextTile)
     {
