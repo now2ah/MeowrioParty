@@ -19,9 +19,9 @@ public class Dice : MonoBehaviour
     }
 
     // 주사위를 굴려 값을 반환
-    public int Roll(Action callback = null)
+    public int Roll()
     {
-        StartCoroutine(RollCoroutine(callback));
+        _diceValue = UnityEngine.Random.Range(minValue, maxValue + 1);
         Debug.Log(_diceValue);
         return _diceValue;
     }

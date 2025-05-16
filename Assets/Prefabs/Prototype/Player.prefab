@@ -772,7 +772,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentTile: {fileID: 0}
-  order: 0
   _dice: {fileID: 4703905502264224665}
   _diceNumberObjects:
   - {fileID: 8346682432342113208}
@@ -781,7 +780,6 @@ MonoBehaviour:
   - {fileID: 7663944735954139252}
   - {fileID: 5330425179038455204}
   - {fileID: 1591847200611228001}
-  _onDiceRolled: {fileID: 0}
 --- !u!1001 &2085461149390761703
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -836,7 +834,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7513807293974418592, guid: a6f974d2cc4cdde418c2fc624372285e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
