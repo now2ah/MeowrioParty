@@ -67,16 +67,7 @@ public class BoardManager : Singleton<BoardManager>
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                _currentPlayer = _playerList[_currentPlayerIndex];
-
-                int playersDiceNum = _currentPlayer.RollDice();
-                for (int i = 0; i < playersDiceNum; i++)
-                {
-                    int index = (_currentPlayer.currentTile.tileIndex + 1 ) % _board.tiles.Length;
-                    _currentPlayer.MoveToNextTile(_board.tiles[index]);
-                }
-                //int playersDiceNum = _playerList[_currentMovingPlayerIndex].RollDice();
-                //_playerList[_currentMovingPlayerIndex].Move(playersDiceNum);
+                MovePlayerByTileQueue();
                 _currentPlayerIndex++;
 
                 if (_currentPlayerIndex == _playerList.Count)
@@ -93,6 +84,22 @@ public class BoardManager : Singleton<BoardManager>
         }
     }
 
+    private void MovePlayerByTileQueue()
+    {
+        _currentPlayer = _playerList[_currentPlayerIndex];
+        _currentPlayer._dice.gameObject.SetActive(true);
+        Queue<Tile> tileQueue = new Queue<Tile>();
+        int playersDiceNum = _currentPlayer.RollDice();//주사위 굴려서 랜덤값 받아오고
+        //그만큼 플레이어 이동 
+        int index = _currentPlayer.currentTile.tileIndex + 1;
+        for (int i = 0; i < playersDiceNum; i++)
+        {
+            tileQueue.Enqueue(_board.tiles[index]);//가야하는다음타일들을넣어서
+            index++;
+            (index) %= _board.tiles.Length;
+        }
+        _currentPlayer.GetMoveQueue(tileQueue);
+    }
     private void StartGame()
     {
         _currentPhase = GamePhase.GameReady;
