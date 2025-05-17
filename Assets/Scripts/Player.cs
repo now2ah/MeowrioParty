@@ -11,25 +11,10 @@ public class Player : MonoBehaviour
     [SerializeField] public Dice _dice;
     [SerializeField] private List<GameObject> _diceNumberObjects = new List<GameObject>(); // Comment: 아래 변수도 불필요
 
-    private Queue<Tile> _moveQueue = new Queue<Tile>();
     private bool _isMoving = false;
-    [SerializeField] float moveSpeed = 5f;
+    [SerializeField] private float moveSpeed = 5f;
 
     public bool IsMoving { get { return _isMoving; } }
-
-    private void Awake()
-    {
-        _moveQueue = new Queue<Tile>();
-    }
-
-    private void Update()
-    {
-        if (_moveQueue.Count > 0 && !_isMoving) //움직이고 있지 않고 큐가 차면
-        {
-            _isMoving = true;
-            StartCoroutine(MoveTileQueue());
-        }
-    }
 
     public int RollDice()
     {
@@ -37,65 +22,35 @@ public class Player : MonoBehaviour
         return _dice.Roll();
     }
 
-    public void GetMoveQueue(Queue<Tile> tileQueue)
-    {
-        _moveQueue.Clear();
-        _moveQueue = tileQueue;//타일 큐를 받아와서
-    }
-
-    private IEnumerator MoveTileQueue()
-    {
-        //int _diceValueUI = _dice.DiceValue-1;
-        //_diceNumberObjects[_diceValueUI].SetActive(true);
-        for (int i = 0; i < _moveQueue.Count; i++)
-        {
-            Tile nextTile = _moveQueue.Dequeue();
-
-/*          int current = nextTile.tileIndex - i;
-            int next = nextTile.tileIndex - i - 1;
-            if (current < _diceNumberObjects.Count && next >= 0)
-            {
-                if (_diceNumberObjects[current] != null)
-                    _diceNumberObjects[current].SetActive(false);
-                if (_diceNumberObjects[next] != null)
-                    _diceNumberObjects[next].SetActive(true);
-            }
-*/
-            Vector3 startPos = transform.position;
-            Vector3 endPos = nextTile.transform.position;
-            float distance = Vector3.Distance(startPos, endPos);
-            float duration = distance / moveSpeed;
-            float elapsed = 0f;
-
-            while (elapsed < duration)
-            {
-                transform.position = Vector3.Lerp(startPos, endPos, elapsed / duration);
-                elapsed += Time.deltaTime;
-                yield return null;
-            }
-
-            transform.position = endPos; // 최종 위치 보정
-            currentTile = nextTile;
-            yield return new WaitForSeconds(0.1f);
-
-        }
-        _isMoving = false;
-        
-    }
-
     public void MoveTo(Tile nextTile)
     {
-        if (_moveQueue != null)
+        if (!_isMoving)
         {
-            _moveQueue.Enqueue(nextTile);
+            StartCoroutine(MoveToSequenceCo(nextTile));
         }
     }
-        
-    // comment: 아래 로직은 필히 없어져야 함.
-    private IEnumerator MoveCoroutine(Tile nextTile)
+
+    private IEnumerator MoveToSequenceCo(Tile nextTile)
     {
-        transform.position = nextTile.transform.position;
+        _isMoving = true;
+        Vector3 startPos = transform.position;
+        Vector3 endPos = nextTile.transform.position;
+        float distance = Vector3.Distance(startPos, endPos);
+        float duration = distance / moveSpeed;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            transform.position = Vector3.Lerp(startPos, endPos, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = endPos; // 최종 위치 보정
         currentTile = nextTile;
-        yield return new WaitForSeconds(1f);
+
+        _isMoving = false;
     }
+
+ 
 }

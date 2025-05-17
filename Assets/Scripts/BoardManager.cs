@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,13 +11,13 @@ public enum GamePhase
 public class BoardManager : Singleton<BoardManager>
 {
     [SerializeField] private GamePhase _currentPhase;
-    [SerializeField] private int _maxGameTurn; //테스트를 위해 인스펙터 노출 추후 수정 예정
-    [SerializeField] private int _currentGameTurn;
+    [SerializeField] private int _maxRound; //테스트를 위해 인스펙터 노출 추후 수정 예정
+    [SerializeField] private int _currentRound;
     [SerializeField] private List<Player> _playerList;
     [SerializeField] private Board _board;
     [SerializeField] private Player _currentPlayer;
 
-    private int _currentPlayerIndex; // 현재 움직이고 있는 플레이어의 인덱스스
+    private int _currentPlayerIndex; // 현재 움직이고 있는 플레이어의 인덱스
     private int _setTurnOrderIndex;
     private List<(int, Player)> _playerDiceNumberList = new List<(int, Player)>();
 
@@ -25,10 +26,10 @@ public class BoardManager : Singleton<BoardManager>
     public override void Awake()
     {
         base.Awake();
-        
+
         _currentPhase = GamePhase.GameReady;
-        _maxGameTurn = 2;
-        _currentGameTurn = 0;
+        _maxRound = 2;
+        _currentRound = 0;
         _currentPlayerIndex = 0;
         //players = new List<Player>();
         //initialize board
@@ -36,7 +37,7 @@ public class BoardManager : Singleton<BoardManager>
         _setTurnOrderIndex = 0;
 
         //player 순서 정하는 list 초기화
-        for (int i=0; i<_playerList.Count; ++i)
+        for (int i = 0; i < _playerList.Count; ++i)
         {
             (int, Player) playerDiceNumber;
 
@@ -48,7 +49,7 @@ public class BoardManager : Singleton<BoardManager>
 
     private void Start()
     {
-        StartGame();
+        StartBoardGame();
     }
 
     private void Update()
@@ -67,11 +68,11 @@ public class BoardManager : Singleton<BoardManager>
 
                 if (IsAllPlayerRolledDiceForOrder())
                 {
-                    SetPlayerTurnOrder();
+                    SetTurnOrder();
                     _currentPhase = GamePhase.GamePlay;
                 }
             }
-            
+
             //Player 1
             if (Input.GetKeyDown(KeyCode.S))
             {
@@ -84,29 +85,28 @@ public class BoardManager : Singleton<BoardManager>
 
                 if (IsAllPlayerRolledDiceForOrder())
                 {
-                    SetPlayerTurnOrder();
+                    SetTurnOrder();
                     _currentPhase = GamePhase.GamePlay;
                 }
             }
         }
-        
+
         if (_currentPhase == GamePhase.GamePlay)
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                //MovePlayerByTileQueue();
                 _currentPlayer = _playerList[_currentPlayerIndex];
                 _currentPlayer._dice.gameObject.SetActive(false);
-                ProcessPlayerTurn(_currentPlayer);
+                ProcessTurn(_currentPlayer);
                 _currentPlayerIndex++;
 
                 if (_currentPlayerIndex == _playerList.Count)
                 {
                     _currentPlayerIndex = 0;
-                    _currentGameTurn++;
+                    _currentRound++;
                 }
 
-                if (_currentGameTurn == _maxGameTurn)
+                if (_currentRound == _maxRound)
                 {
                     _currentPhase = GamePhase.GameEnd;
                 }
@@ -114,12 +114,12 @@ public class BoardManager : Singleton<BoardManager>
         }
     }
 
-    private void StartGame()
+    private void StartBoardGame()
     {
         _currentPhase = GamePhase.GameReady;
     }
 
-    private void SetPlayerTurnOrder()
+    private void SetTurnOrder()
     {
         _playerDiceNumberList.Sort((a, b) => b.Item1.CompareTo(a.Item1));
 
@@ -143,18 +143,29 @@ public class BoardManager : Singleton<BoardManager>
         _setTurnOrderIndex++;
     }
 
-    private void ProcessPlayerTurn(Player currentPlayer)
+    private void ProcessTurn(Player currentPlayer)
     {
-        //주사위 던지기
-        int playersDiceNum = _currentPlayer.RollDice();
+        int playersDiceNum = _currentPlayer.RollDice(); //주사위 던지기
+        StartCoroutine(SendTileCo(currentPlayer, playersDiceNum)); //움직여
+    }
+    private IEnumerator SendTileCo(Player player, int diceValue)
+    {
+        int tileIndex = player.currentTile.tileIndex;
 
-        //주사위 수 만큼 타일 이동 명령
-        int index = _currentPlayer.currentTile.tileIndex + 1;
-        for (int i = 0; i < playersDiceNum; i++)
+        for (int i = 0; i < diceValue; i++) //한 타일씩 -> 나중에 갈림길 고려
         {
-            _currentPlayer.MoveTo(_board.tiles[index]);
-            index++;
-            (index) %= _board.tiles.Length;
+            int nextIndex = (tileIndex + 1) % _board.tiles.Length;
+            Tile nextTile = _board.tiles[nextIndex];
+
+            player.MoveTo(nextTile);
+            tileIndex = nextIndex;
+
+            while (player.IsMoving)
+            {
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
