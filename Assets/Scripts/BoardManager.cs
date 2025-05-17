@@ -11,8 +11,8 @@ public enum GamePhase
 public class BoardManager : Singleton<BoardManager>
 {
     [SerializeField] private GamePhase _currentPhase;
-    [SerializeField] private int _maxGameRound; //테스트를 위해 인스펙터 노출 추후 수정 예정
-    [SerializeField] private int _currentGameRound;
+    [SerializeField] private int _maxRound; //테스트를 위해 인스펙터 노출 추후 수정 예정
+    [SerializeField] private int _currentRound;
     [SerializeField] private List<Player> _playerList;
     [SerializeField] private Board _board;
     [SerializeField] private Player _currentPlayer;
@@ -28,8 +28,8 @@ public class BoardManager : Singleton<BoardManager>
         base.Awake();
 
         _currentPhase = GamePhase.GameReady;
-        _maxGameRound = 2;
-        _currentGameRound = 0;
+        _maxRound = 2;
+        _currentRound = 0;
         _currentPlayerIndex = 0;
         //players = new List<Player>();
         //initialize board
@@ -103,10 +103,10 @@ public class BoardManager : Singleton<BoardManager>
                 if (_currentPlayerIndex == _playerList.Count)
                 {
                     _currentPlayerIndex = 0;
-                    _currentGameRound++;
+                    _currentRound++;
                 }
 
-                if (_currentGameRound == _maxGameRound)
+                if (_currentRound == _maxRound)
                 {
                     _currentPhase = GamePhase.GameEnd;
                 }
