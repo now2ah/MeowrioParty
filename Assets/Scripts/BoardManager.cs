@@ -10,7 +10,8 @@ public enum GamePhase
 }
 public class BoardManager : Singleton<BoardManager>
 {
-    [SerializeField] private GamePhase _currentPhase;
+    public InputManagerSO inputManager;
+
     [SerializeField] private int _maxRound; //테스트를 위해 인스펙터 노출 추후 수정 예정
     [SerializeField] private int _currentRound;
     [SerializeField] private List<Player> _playerList;
@@ -18,8 +19,11 @@ public class BoardManager : Singleton<BoardManager>
     [SerializeField] private Player _currentPlayer;
 
     private int _currentPlayerIndex; // 현재 움직이고 있는 플레이어의 인덱스
-    private int _setTurnOrderIndex;
     private List<(int, Player)> _playerDiceNumberList = new List<(int, Player)>();
+    private PhaseMachine _phaseMachine;
+    private GameReadyPhase _readyPhase;
+    private GamePlayPhase _playPhase;
+    private GameEndPhase _endPhase;
 
     public Board Board { get { return _board; } }   //_board를 클래스 외부에서 쓸 수 있도록 하는 Property
 
@@ -27,14 +31,12 @@ public class BoardManager : Singleton<BoardManager>
     {
         base.Awake();
 
-        _currentPhase = GamePhase.GameReady;
         _maxRound = 2;
         _currentRound = 0;
         _currentPlayerIndex = 0;
         //players = new List<Player>();
         //initialize board
         _currentPlayer = null;
-        _setTurnOrderIndex = 0;
 
         //player 순서 정하는 list 초기화
         for (int i = 0; i < _playerList.Count; ++i)
@@ -45,6 +47,17 @@ public class BoardManager : Singleton<BoardManager>
             playerDiceNumber.Item2 = _playerList[i];
             _playerDiceNumberList.Add(playerDiceNumber);
         }
+
+        _phaseMachine = gameObject.AddComponent<PhaseMachine>();
+        _readyPhase = new GameReadyPhase(this);
+        _playPhase = new GamePlayPhase(this);
+        _endPhase = new GameEndPhase(this);
+
+        inputManager.OnConfirmButtonPerformed += InputManager_OnConfirmButtonPerformed;
+
+        //temporary code before applying network feature
+        inputManager.OnPlayer0DiceButtonPerformed += InputManager_OnPlayer0DiceButtonPerformed;
+        inputManager.OnPlayer1DiceButtonPerformed += InputManager_OnPlayer1DiceButtonPerformed;
     }
 
     private void Start()
@@ -52,71 +65,65 @@ public class BoardManager : Singleton<BoardManager>
         StartBoardGame();
     }
 
-    private void Update()
+    private void StartBoardGame()
     {
-        if (_currentPhase == GamePhase.GameReady)
+        _phaseMachine.StartPhase(_readyPhase);
+    }
+
+    //temporary code before applying network feature
+    private void InputManager_OnPlayer0DiceButtonPerformed(object sender, bool e)
+    {
+        if (_phaseMachine.IsPhase(_readyPhase))
         {
-            //Player 0
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                //check if rolled dice
-                if (_playerDiceNumberList[0].Item1 == -1)
-                {
-                    int playersDiceNum = _playerList[0].RollDice();
-                    AddToPlayerOrderList(0, playersDiceNum);
-                }
-
-                if (IsAllPlayerRolledDiceForOrder())
-                {
-                    SetTurnOrder();
-                    _currentPhase = GamePhase.GamePlay;
-                }
-            }
-
-            //Player 1
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                //check if rolled dice
-                if (_playerDiceNumberList[1].Item1 == -1)
-                {
-                    int playersDiceNum = _playerList[1].RollDice();
-                    AddToPlayerOrderList(1, playersDiceNum);
-                }
-
-                if (IsAllPlayerRolledDiceForOrder())
-                {
-                    SetTurnOrder();
-                    _currentPhase = GamePhase.GamePlay;
-                }
-            }
-        }
-
-        if (_currentPhase == GamePhase.GamePlay)
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                _currentPlayer = _playerList[_currentPlayerIndex];
-                _currentPlayer._dice.gameObject.SetActive(false);
-                ProcessTurn(_currentPlayer);
-                _currentPlayerIndex++;
-
-                if (_currentPlayerIndex == _playerList.Count)
-                {
-                    _currentPlayerIndex = 0;
-                    _currentRound++;
-                }
-
-                if (_currentRound == _maxRound)
-                {
-                    _currentPhase = GamePhase.GameEnd;
-                }
-            }
+            ProcessDiceForTurnOrderButton(0);
         }
     }
 
-    private void StartBoardGame()
+    //temporary code before applying network feature
+    private void InputManager_OnPlayer1DiceButtonPerformed(object sender, bool e)
     {
-        _currentPhase = GamePhase.GameReady;
+        if (_phaseMachine.IsPhase(_readyPhase))
+        {
+            ProcessDiceForTurnOrderButton(1);
+        }
+    }
+
+    //temporary code before applying network feature
+    private void ProcessDiceForTurnOrderButton(int playerIndex)
+    {
+        if (_playerDiceNumberList[playerIndex].Item1 == -1)
+        {
+            int playersDiceNum = _playerList[playerIndex].RollDice();
+            AddToPlayerOrderList(playerIndex, playersDiceNum);
+        }
+
+        if (IsAllPlayerRolledDiceForOrder())
+        {
+            SetTurnOrder();
+            _phaseMachine.ChangePhase(_playPhase);
+        }
+    }
+
+    private void AddToPlayerOrderList(int playerIndex, int diceValue)
+    {
+        (int, Player) playerDiceNumber;
+
+        playerDiceNumber.Item1 = diceValue;
+        playerDiceNumber.Item2 = _playerList[playerIndex];
+
+        _playerDiceNumberList[playerIndex] = playerDiceNumber;
+    }
+
+    //if all player rolled dice
+    bool IsAllPlayerRolledDiceForOrder()
+    {
+        for (int i = 0; i < _playerDiceNumberList.Count; ++i)
+        {
+            if (_playerDiceNumberList[i].Item1 == -1)
+                return false;
+        }
+
+        return true;
     }
 
     private void SetTurnOrder()
@@ -128,19 +135,36 @@ public class BoardManager : Singleton<BoardManager>
             _playerList[i] = _playerDiceNumberList[i].Item2;
         }
 
-        _currentPhase = GamePhase.GamePlay;
+        _phaseMachine.ChangePhase(_playPhase);
         _currentPlayer = _playerList[0];
     }
 
-    private void AddToPlayerOrderList(int playerIndex, int diceValue)
+
+    private void InputManager_OnConfirmButtonPerformed(object sender, bool e)
     {
-        (int, Player) playerDiceNumber;
+        if (_phaseMachine.IsPhase(_playPhase))
+        {
+            ProcessConfirmButton();
+        }
+    }
 
-        playerDiceNumber.Item1 = diceValue;
-        playerDiceNumber.Item2 = _playerList[playerIndex];
+    private void ProcessConfirmButton()
+    {
+        _currentPlayer = _playerList[_currentPlayerIndex];
+        _currentPlayer._dice.gameObject.SetActive(false);
+        ProcessTurn(_currentPlayer);
+        _currentPlayerIndex++;
 
-        _playerDiceNumberList[playerIndex] = playerDiceNumber;
-        _setTurnOrderIndex++;
+        if (_currentPlayerIndex == _playerList.Count)
+        {
+            _currentPlayerIndex = 0;
+            _currentRound++;
+        }
+
+        if (_currentRound == _maxRound)
+        {
+            _phaseMachine.ChangePhase(_endPhase);
+        }
     }
 
     private void ProcessTurn(Player currentPlayer)
@@ -148,6 +172,7 @@ public class BoardManager : Singleton<BoardManager>
         int playersDiceNum = _currentPlayer.RollDice(); //주사위 던지기
         StartCoroutine(SendTileCo(currentPlayer, playersDiceNum)); //움직여
     }
+
     private IEnumerator SendTileCo(Player player, int diceValue)
     {
         int tileIndex = player.currentTile.tileIndex;
@@ -167,17 +192,5 @@ public class BoardManager : Singleton<BoardManager>
 
             yield return new WaitForSeconds(0.1f);
         }
-    }
-
-    //if all player rolled dice
-    bool IsAllPlayerRolledDiceForOrder()
-    {
-        for (int i = 0; i < _playerDiceNumberList.Count; ++i)
-        {
-            if (_playerDiceNumberList[i].Item1 == -1)
-                return false;
-        }
-
-        return true;
     }
 }

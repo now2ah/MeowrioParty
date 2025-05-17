@@ -536,9 +536,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e868dfc2b4efcb49a42fbe9b8bebbfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentPhase: 0
-  _maxGameTurn: 0
-  _currentGameTurn: 0
+  inputManager: {fileID: 11400000, guid: d47f0c20fe52b0f40a1474b9f2b13483, type: 2}
+  _maxRound: 0
+  _currentRound: 0
   _playerList:
   - {fileID: 610873985}
   - {fileID: 1572967920}
