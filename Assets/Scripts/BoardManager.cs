@@ -48,7 +48,7 @@ public class BoardManager : Singleton<BoardManager>
             _playerDiceNumberList.Add(playerDiceNumber);
         }
 
-        _phaseMachine = gameObject.AddComponent<PhaseMachine>();
+        _phaseMachine = new PhaseMachine();
         _readyPhase = new GameReadyPhase(this);
         _playPhase = new GamePlayPhase(this);
         _endPhase = new GameEndPhase(this);
@@ -63,6 +63,14 @@ public class BoardManager : Singleton<BoardManager>
     private void Start()
     {
         StartBoardGame();
+    }
+
+    private void Update()
+    {
+        if (_phaseMachine != null && _phaseMachine.IsRunning)
+        {
+            _phaseMachine.UpdatePhase();
+        }
     }
 
     private void StartBoardGame()

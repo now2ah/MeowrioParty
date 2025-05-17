@@ -82,21 +82,31 @@ public class GameEndPhase : Phase
     }
 }
 
-public class PhaseMachine : MonoBehaviour
+public class PhaseMachine
 {
+    public bool IsRunning { get; private set; }
     Phase _currentPhase;
 
     public Phase CurrentPhase { get { return _currentPhase; } private set { } }
 
-    private void Update()
+    public PhaseMachine()
     {
-        _currentPhase.UpdatePhase();
+        IsRunning = false;
     }
 
     public void StartPhase(Phase phase)
     {
+        IsRunning = true;
         _currentPhase = phase;
         _currentPhase.EnterPhase();
+    }
+
+    public void UpdatePhase()
+    {
+        if (_currentPhase != null)
+        {
+            _currentPhase.UpdatePhase();
+        }
     }
 
     public void ChangePhase(Phase nextPhase)
