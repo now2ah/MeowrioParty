@@ -18,7 +18,7 @@ public class Dice : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    // ÁÖ»çÀ§¸¦ ±¼·Á °ªÀ» ¹İÈ¯
+    // ì£¼ì‚¬ìœ„ë¥¼ êµ´ë ¤ ê°’ì„ ë°˜í™˜
     public int Roll()
     {
         _diceValue = UnityEngine.Random.Range(minValue, maxValue + 1);

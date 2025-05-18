@@ -2,18 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-// COMMENT : ÇÃ·¹ÀÌ¾î ÀÌµ¿°ú °ü·ÃµÈ ·ÎÁ÷¸¸ Ã³¸®ÇÏ¸é µÊ
-// COMMENT : BoardManager°¡ °¡¾ßÇÒ TileÀ» ¾Ë·ÁÁÜ
+// COMMENT : í”Œë ˆì´ì–´ ì´ë™ê³¼ ê´€ë ¨ëœ ë¡œì§ë§Œ ì²˜ë¦¬í•˜ë©´ ë¨
+// COMMENT : BoardManagerê°€ ê°€ì•¼í•  Tileì„ ì•Œë ¤ì¤Œ
 
 public class Player : MonoBehaviour
 {
-    public int playerID; //ÀÏ´Ü publicÀ¸·Î¼±¾ğ¾ğ
+    public int playerID; //ì¼ë‹¨ publicìœ¼ë¡œì„ ì–¸ì–¸
     [SerializeField] private InputManagerSO _inputManager;
 
-    public Tile currentTile; // COMMENT: °ÔÀÓ ÁøÇà°ú °ü·ÃµÈ ºÎºĞÀÌ¹Ç·Î BoardManager°¡ °®°í ÀÖ¾î¾ß ÇÔ.
+    public Tile currentTile; // COMMENT: ê²Œì„ ì§„í–‰ê³¼ ê´€ë ¨ëœ ë¶€ë¶„ì´ë¯€ë¡œ BoardManagerê°€ ê°–ê³  ìˆì–´ì•¼ í•¨.
 
     [SerializeField] public Dice _dice;
-    [SerializeField] private List<GameObject> _diceNumberObjects = new List<GameObject>(); // Comment: ¾Æ·¡ º¯¼öµµ ºÒÇÊ¿ä
+    [SerializeField] private List<GameObject> _diceNumberObjects = new List<GameObject>(); // Comment: ì•„ë˜ ë³€ìˆ˜ë„ ë¶ˆí•„ìš”
 
     private bool _isMoving = false;
     [SerializeField] private float moveSpeed = 3f;
