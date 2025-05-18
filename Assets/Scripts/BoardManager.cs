@@ -34,8 +34,6 @@ public class BoardManager : Singleton<BoardManager>
         _maxRound = 2;
         _currentRound = 0;
         _currentPlayerIndex = 0;
-        //players = new List<Player>();
-        //initialize board
         _currentPlayer = null;
 
         //player 순서 정하는 list 초기화
@@ -52,12 +50,6 @@ public class BoardManager : Singleton<BoardManager>
         _readyPhase = new GameReadyPhase(this);
         _playPhase = new GamePlayPhase(this);
         _endPhase = new GameEndPhase(this);
-
-        inputManager.OnConfirmButtonPerformed += InputManager_OnConfirmButtonPerformed;
-
-        //temporary code before applying network feature
-        inputManager.OnPlayer0DiceButtonPerformed += InputManager_OnPlayer0DiceButtonPerformed;
-        inputManager.OnPlayer1DiceButtonPerformed += InputManager_OnPlayer1DiceButtonPerformed;
     }
 
     private void Start()
@@ -78,25 +70,6 @@ public class BoardManager : Singleton<BoardManager>
         _phaseMachine.StartPhase(_readyPhase);
     }
 
-    //temporary code before applying network feature
-    private void InputManager_OnPlayer0DiceButtonPerformed(object sender, bool e)
-    {
-        if (_phaseMachine.IsPhase(_readyPhase))
-        {
-            ProcessDiceForTurnOrderButton(0);
-        }
-    }
-
-    //temporary code before applying network feature
-    private void InputManager_OnPlayer1DiceButtonPerformed(object sender, bool e)
-    {
-        if (_phaseMachine.IsPhase(_readyPhase))
-        {
-            ProcessDiceForTurnOrderButton(1);
-        }
-    }
-
-    //temporary code before applying network feature
     private void ProcessDiceForTurnOrderButton(int playerIndex)
     {
         if (_playerDiceNumberList[playerIndex].Item1 == -1)
@@ -147,15 +120,6 @@ public class BoardManager : Singleton<BoardManager>
         _currentPlayer = _playerList[0];
 
         TurnOnDiceOnCurrentPlayer();    // 플레이어의 턴 시작 시점에 주사위 켜기
-    }
-
-
-    private void InputManager_OnConfirmButtonPerformed(object sender, bool e)
-    {
-        if (_phaseMachine.IsPhase(_playPhase))
-        {
-            ProcessConfirmButton();
-        }
     }
 
     private void ProcessConfirmButton()
@@ -219,5 +183,21 @@ public class BoardManager : Singleton<BoardManager>
             player.TurnOffDice();
         }
         _currentPlayer.TurnOnDice();
+    }
+
+    public void OnPlayersInput(Player player)
+    {
+        if (_phaseMachine.IsPhase(_readyPhase))
+        {
+            ProcessDiceForTurnOrderButton(player.playerID);
+        }
+        else if (_phaseMachine.IsPhase(_playPhase) && IsPlayersTurn(player))
+        {
+            ProcessConfirmButton();
+        }
+    }
+    private bool IsPlayersTurn(Player player)
+    {
+        return player == _currentPlayer;
     }
 }

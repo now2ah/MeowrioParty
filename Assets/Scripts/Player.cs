@@ -7,6 +7,9 @@ using DG.Tweening;
 
 public class Player : MonoBehaviour
 {
+    public int playerID; //일단 public으로선언언
+    [SerializeField] private InputManagerSO _inputManager;
+
     public Tile currentTile; // COMMENT: 게임 진행과 관련된 부분이므로 BoardManager가 갖고 있어야 함.
 
     [SerializeField] public Dice _dice;
@@ -16,6 +19,15 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed = 3f;
 
     public bool IsMoving { get { return _isMoving; } }
+
+    private void OnEnable()
+    {
+        _inputManager.OnDiceButtonPerformed += OnDiceInputReceived;
+    }
+    private void OnDisable()
+    {
+        _inputManager.OnDiceButtonPerformed -= OnDiceInputReceived;
+    }
 
     void Start()
     {
@@ -67,5 +79,14 @@ public class Player : MonoBehaviour
     public void TurnOffDice()
     {
         _dice.gameObject.SetActive(false);
+    }
+
+    private void OnDiceInputReceived(int receivedID)
+    {
+        if (receivedID != playerID)
+        {
+            return;
+        }
+        BoardManager.Instance.OnPlayersInput(this);
     }
 }
