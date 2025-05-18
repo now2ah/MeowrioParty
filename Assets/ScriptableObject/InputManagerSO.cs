@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,16 +10,13 @@ public class InputManagerSO : ScriptableObject
 
     private InputAction _confirmAction;
 
-    private InputAction _player0DiceAction;
-    private InputAction _player1DiceAction;
-
     public event EventHandler<bool> OnConfirmButtonStarted;
     public event EventHandler<bool> OnConfirmButtonPerformed;
     public event EventHandler<bool> OnConfirmButtonCancelded;
 
-    //temporary code for milestone 1
-    public event EventHandler<bool> OnPlayer0DiceButtonPerformed;
-    public event EventHandler<bool> OnPlayer1DiceButtonPerformed;
+    public event Action<int> OnDiceButtonPerformed;
+    private Dictionary<int, InputAction> _playerDiceActions = new(); //일단 플레이어별로 인풋액션 만들고 서버 붙이면 단일 Action으로 수정
+    
 
     private void OnEnable()
     {
@@ -33,13 +31,17 @@ public class InputManagerSO : ScriptableObject
 
         _confirmAction.Enable();
 
-        //temporary for milestone 1
-        _player0DiceAction = _inputActionAsset.FindAction("Player0Dice");
-        _player1DiceAction = _inputActionAsset.FindAction("Player1Dice");
-        _player0DiceAction.performed += _player0DiceAction_performed;
-        _player1DiceAction.performed += _player1DiceAction_performed;
-        _player0DiceAction.Enable();
-        _player1DiceAction.Enable();
+        for (int i = 0; i < 2; i++)
+        {
+            int capturedID = i;
+            var action = _inputActionAsset.FindAction($"Player{capturedID}Dice");
+            if (action != null)
+            {
+                action.performed += ctx => OnDiceButtonPerformed?.Invoke(capturedID);
+                action.Enable();
+                _playerDiceActions[capturedID] = action;
+            }
+        }
     }
 
     private void OnDisable()
@@ -50,11 +52,12 @@ public class InputManagerSO : ScriptableObject
 
         _confirmAction.Disable();
 
-        //temporary for milestone 1
-        _player0DiceAction.performed -= _player0DiceAction_performed;
-        _player1DiceAction.performed -= _player1DiceAction_performed;
-        _player0DiceAction.Disable();
-        _player1DiceAction.Disable();
+        foreach (var playerAction in _playerDiceActions)
+        {
+            playerAction.Value.Disable();
+            playerAction.Value.performed -= ctx => OnDiceButtonPerformed?.Invoke(playerAction.Key);
+        }
+        _playerDiceActions.Clear(); // 일단 비우는 함수 작성해줌
     }
 
     private void OnConfirmAction_started(InputAction.CallbackContext context)
@@ -70,14 +73,5 @@ public class InputManagerSO : ScriptableObject
     private void OnConfirmAction_canceled(InputAction.CallbackContext context)
     {
         OnConfirmButtonCancelded?.Invoke(this, context.ReadValueAsButton());
-    }
-    private void _player0DiceAction_performed(InputAction.CallbackContext context)
-    {
-        OnPlayer0DiceButtonPerformed?.Invoke(this, context.ReadValueAsButton());
-    }
-
-    private void _player1DiceAction_performed(InputAction.CallbackContext context)
-    {
-        OnPlayer1DiceButtonPerformed?.Invoke(this, context.ReadValueAsButton());
     }
 }

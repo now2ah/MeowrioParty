@@ -771,6 +771,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb2358e472cfa67488a73a1ef38ec11e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerID: 0
+  _inputManager: {fileID: 11400000, guid: d47f0c20fe52b0f40a1474b9f2b13483, type: 2}
   currentTile: {fileID: 0}
   _dice: {fileID: 4703905502264224665}
   _diceNumberObjects:

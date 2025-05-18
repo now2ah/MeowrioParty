@@ -12,20 +12,20 @@ public class BoardManager : Singleton<BoardManager>
 {
     public InputManagerSO inputManager;
 
-    [SerializeField] private int _maxRound; //Å×½ºÆ®¸¦ À§ÇØ ÀÎ½ºÆåÅÍ ³ëÃâ ÃßÈÄ ¼öÁ¤ ¿¹Á¤
+    [SerializeField] private int _maxRound; //í…ŒìŠ¤íŠ¸ë¥¼ ìœ„í•´ ì¸ìŠ¤í™í„° ë…¸ì¶œ ì¶”í›„ ìˆ˜ì • ì˜ˆì •
     [SerializeField] private int _currentRound;
     [SerializeField] private List<Player> _playerList;
     [SerializeField] private Board _board;
     [SerializeField] private Player _currentPlayer;
 
-    private int _currentPlayerIndex; // ÇöÀç ¿òÁ÷ÀÌ°í ÀÖ´Â ÇÃ·¹ÀÌ¾îÀÇ ÀÎµ¦½º
+    private int _currentPlayerIndex; // í˜„ì¬ ì›€ì§ì´ê³  ìˆëŠ” í”Œë ˆì´ì–´ì˜ ì¸ë±ìŠ¤
     private List<(int, Player)> _playerDiceNumberList = new List<(int, Player)>();
     private PhaseMachine _phaseMachine;
     private GameReadyPhase _readyPhase;
     private GamePlayPhase _playPhase;
     private GameEndPhase _endPhase;
 
-    public Board Board { get { return _board; } }   //_board¸¦ Å¬·¡½º ¿ÜºÎ¿¡¼­ ¾µ ¼ö ÀÖµµ·Ï ÇÏ´Â Property
+    public Board Board { get { return _board; } }   //_boardë¥¼ í´ë˜ìŠ¤ ì™¸ë¶€ì—ì„œ ì“¸ ìˆ˜ ìˆë„ë¡ í•˜ëŠ” Property
 
     public override void Awake()
     {
@@ -34,11 +34,9 @@ public class BoardManager : Singleton<BoardManager>
         _maxRound = 2;
         _currentRound = 0;
         _currentPlayerIndex = 0;
-        //players = new List<Player>();
-        //initialize board
         _currentPlayer = null;
 
-        //player ¼ø¼­ Á¤ÇÏ´Â list ÃÊ±âÈ­
+        //player ìˆœì„œ ì •í•˜ëŠ” list ì´ˆê¸°í™”
         for (int i = 0; i < _playerList.Count; ++i)
         {
             (int, Player) playerDiceNumber;
@@ -52,12 +50,6 @@ public class BoardManager : Singleton<BoardManager>
         _readyPhase = new GameReadyPhase(this);
         _playPhase = new GamePlayPhase(this);
         _endPhase = new GameEndPhase(this);
-
-        inputManager.OnConfirmButtonPerformed += InputManager_OnConfirmButtonPerformed;
-
-        //temporary code before applying network feature
-        inputManager.OnPlayer0DiceButtonPerformed += InputManager_OnPlayer0DiceButtonPerformed;
-        inputManager.OnPlayer1DiceButtonPerformed += InputManager_OnPlayer1DiceButtonPerformed;
     }
 
     private void Start()
@@ -78,25 +70,6 @@ public class BoardManager : Singleton<BoardManager>
         _phaseMachine.StartPhase(_readyPhase);
     }
 
-    //temporary code before applying network feature
-    private void InputManager_OnPlayer0DiceButtonPerformed(object sender, bool e)
-    {
-        if (_phaseMachine.IsPhase(_readyPhase))
-        {
-            ProcessDiceForTurnOrderButton(0);
-        }
-    }
-
-    //temporary code before applying network feature
-    private void InputManager_OnPlayer1DiceButtonPerformed(object sender, bool e)
-    {
-        if (_phaseMachine.IsPhase(_readyPhase))
-        {
-            ProcessDiceForTurnOrderButton(1);
-        }
-    }
-
-    //temporary code before applying network feature
     private void ProcessDiceForTurnOrderButton(int playerIndex)
     {
         if (_playerDiceNumberList[playerIndex].Item1 == -1)
@@ -146,25 +119,16 @@ public class BoardManager : Singleton<BoardManager>
         _phaseMachine.ChangePhase(_playPhase);
         _currentPlayer = _playerList[0];
 
-        TurnOnDiceOnCurrentPlayer();    // ÇÃ·¹ÀÌ¾îÀÇ ÅÏ ½ÃÀÛ ½ÃÁ¡¿¡ ÁÖ»çÀ§ ÄÑ±â
-    }
-
-
-    private void InputManager_OnConfirmButtonPerformed(object sender, bool e)
-    {
-        if (_phaseMachine.IsPhase(_playPhase))
-        {
-            ProcessConfirmButton();
-        }
+        TurnOnDiceOnCurrentPlayer();    // í”Œë ˆì´ì–´ì˜ í„´ ì‹œì‘ ì‹œì ì— ì£¼ì‚¬ìœ„ ì¼œê¸°
     }
 
     private void ProcessConfirmButton()
     {
         _currentPlayer = _playerList[_currentPlayerIndex];
 
-        _currentPlayer.TurnOffDice(); // ÁÖ»çÀ§ ²ô±â
-        int playersDiceNum = _currentPlayer.RollDice(); // ÁÖ»çÀ§ ±¼¸®±â
-        StartCoroutine(SendTileCo(_currentPlayer, playersDiceNum)); // ÀÌµ¿ ½ÃÀÛ
+        _currentPlayer.TurnOffDice(); // ì£¼ì‚¬ìœ„ ë„ê¸°
+        int playersDiceNum = _currentPlayer.RollDice(); // ì£¼ì‚¬ìœ„ êµ´ë¦¬ê¸°
+        StartCoroutine(SendTileCo(_currentPlayer, playersDiceNum)); // ì´ë™ ì‹œì‘
 
         _currentPlayerIndex++;
 
@@ -185,7 +149,7 @@ public class BoardManager : Singleton<BoardManager>
     {
         int tileIndex = player.currentTile.tileIndex;
 
-        for (int i = 0; i < diceValue; i++) //ÇÑ Å¸ÀÏ¾¿ -> ³ªÁß¿¡ °¥¸²±æ °í·Á
+        for (int i = 0; i < diceValue; i++) //í•œ íƒ€ì¼ì”© -> ë‚˜ì¤‘ì— ê°ˆë¦¼ê¸¸ ê³ ë ¤
         {
             int nextIndex = (tileIndex + 1) % _board.tiles.Length;
             Tile nextTile = _board.tiles[nextIndex];
@@ -203,21 +167,37 @@ public class BoardManager : Singleton<BoardManager>
             player.TurnOffDiceNumber();
         }
 
-        // ÀÌµ¿ÀÌ ³¡³­ µÚ ´ÙÀ½ ÇÃ·¹ÀÌ¾î ÁÖ»çÀ§ ÀÚµ¿ ÄÑ±â
+        // ì´ë™ì´ ëë‚œ ë’¤ ë‹¤ìŒ í”Œë ˆì´ì–´ ì£¼ì‚¬ìœ„ ìë™ ì¼œê¸°
         if (_currentRound < _maxRound)
         {
-            _currentPlayer = _playerList[_currentPlayerIndex]; // ´ÙÀ½ ÇÃ·¹ÀÌ¾î °»½Å
+            _currentPlayer = _playerList[_currentPlayerIndex]; // ë‹¤ìŒ í”Œë ˆì´ì–´ ê°±ì‹ 
             TurnOnDiceOnCurrentPlayer();
         }
     }
 
     private void TurnOnDiceOnCurrentPlayer()
     {
-        // ¸ğµç ÇÃ·¹ÀÌ¾îÀÇ ÁÖ»çÀ§ ²ô°í, ÇöÀç ÇÃ·¹ÀÌ¾î °Í¸¸ Å´
+        // ëª¨ë“  í”Œë ˆì´ì–´ì˜ ì£¼ì‚¬ìœ„ ë„ê³ , í˜„ì¬ í”Œë ˆì´ì–´ ê²ƒë§Œ í‚´
         foreach (Player player in _playerList)
         {
             player.TurnOffDice();
         }
         _currentPlayer.TurnOnDice();
+    }
+
+    public void OnPlayersInput(Player player)
+    {
+        if (_phaseMachine.IsPhase(_readyPhase))
+        {
+            ProcessDiceForTurnOrderButton(player.playerID);
+        }
+        else if (_phaseMachine.IsPhase(_playPhase) && IsPlayersTurn(player))
+        {
+            ProcessConfirmButton();
+        }
+    }
+    private bool IsPlayersTurn(Player player)
+    {
+        return player == _currentPlayer;
     }
 }
