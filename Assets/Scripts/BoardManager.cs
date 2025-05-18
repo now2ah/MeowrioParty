@@ -145,6 +145,8 @@ public class BoardManager : Singleton<BoardManager>
 
         _phaseMachine.ChangePhase(_playPhase);
         _currentPlayer = _playerList[0];
+
+        TurnOnDiceOnCurrentPlayer();    // 플레이어의 턴 시작 시점에 주사위 켜기
     }
 
 
@@ -156,11 +158,38 @@ public class BoardManager : Singleton<BoardManager>
         }
     }
 
+    //private void ProcessConfirmButton()
+    //{
+    //    _currentPlayer = _playerList[_currentPlayerIndex];
+    //    //_currentPlayer._dice.gameObject.SetActive(false);
+    //    ProcessTurn(_currentPlayer);
+    //    _currentPlayerIndex++;
+
+    //    if (_currentPlayerIndex == _playerList.Count)
+    //    {
+    //        _currentPlayerIndex = 0;
+    //        _currentRound++;
+    //    }
+
+    //    if (_currentRound == _maxRound)
+    //    {
+    //        _phaseMachine.ChangePhase(_endPhase);
+    //    }
+    //}
+
+    //private void ProcessTurn(Player currentPlayer)
+    //{
+    //    int playersDiceNum = _currentPlayer.RollDice(); //주사위 던지기
+    //    StartCoroutine(SendTileCo(currentPlayer, playersDiceNum)); //움직여
+    //}
     private void ProcessConfirmButton()
     {
         _currentPlayer = _playerList[_currentPlayerIndex];
-        _currentPlayer._dice.gameObject.SetActive(false);
-        ProcessTurn(_currentPlayer);
+
+        _currentPlayer.TurnOffDice(); // 주사위 끄기
+        int playersDiceNum = _currentPlayer.RollDice(); // 주사위 굴리기
+        StartCoroutine(SendTileCo(_currentPlayer, playersDiceNum)); // 이동 시작
+
         _currentPlayerIndex++;
 
         if (_currentPlayerIndex == _playerList.Count)
@@ -175,11 +204,6 @@ public class BoardManager : Singleton<BoardManager>
         }
     }
 
-    private void ProcessTurn(Player currentPlayer)
-    {
-        int playersDiceNum = _currentPlayer.RollDice(); //주사위 던지기
-        StartCoroutine(SendTileCo(currentPlayer, playersDiceNum)); //움직여
-    }
 
     private IEnumerator SendTileCo(Player player, int diceValue)
     {
@@ -191,6 +215,7 @@ public class BoardManager : Singleton<BoardManager>
             Tile nextTile = _board.tiles[nextIndex];
 
             player.MoveTo(nextTile);
+            player.TurnOnDiceNumber(diceValue - i);
             tileIndex = nextIndex;
 
             while (player.IsMoving)
@@ -199,6 +224,24 @@ public class BoardManager : Singleton<BoardManager>
             }
 
             yield return new WaitForSeconds(0.1f);
+            player.TurnOffDiceNumber();
         }
+
+        // 이동이 끝난 뒤 다음 플레이어 주사위 자동 켜기
+        if (_currentRound < _maxRound)
+        {
+            _currentPlayer = _playerList[_currentPlayerIndex]; // 다음 플레이어 갱신
+            TurnOnDiceOnCurrentPlayer();
+        }
+    }
+
+    private void TurnOnDiceOnCurrentPlayer()
+    {
+        // 모든 플레이어의 주사위 끄고, 현재 플레이어 것만 킴
+        foreach (Player player in _playerList)
+        {
+            player.TurnOffDice();
+        }
+        _currentPlayer.TurnOnDice();
     }
 }

@@ -23,7 +23,7 @@ public class Player : MonoBehaviour
     }
     public int RollDice()
     {
-        _dice.gameObject.SetActive(true);
+        _dice.gameObject.SetActive(false);
         return _dice.Roll();
     }
 
@@ -41,5 +41,35 @@ public class Player : MonoBehaviour
                         currentTile = nextTile;
                     });
         }
-    } 
+    }
+    public void TurnOnDiceNumber(int index)
+    {
+        foreach (var diceNumberObject in _diceNumberObjects)
+        {
+            diceNumberObject.SetActive(false);
+        }
+        if (_diceNumberObjects[index - 1] != null)
+        {
+            _diceNumberObjects[index - 1].SetActive(true);
+        }
+
+    }
+    public void TurnOffDiceNumber()
+    {
+        foreach (var diceNumberObject in _diceNumberObjects)
+        {
+            diceNumberObject.SetActive(false);
+        }
+
+    }
+    public void TurnOnDice()
+    {
+        _dice.gameObject.SetActive(true);
+        Animator diceAnimator = _dice.GetComponent<Animator>();
+        diceAnimator.speed = 20.0f;
+    }
+    public void TurnOffDice()
+    {
+        _dice.gameObject.SetActive(false);
+    }
 }
