@@ -158,30 +158,6 @@ public class BoardManager : Singleton<BoardManager>
         }
     }
 
-    //private void ProcessConfirmButton()
-    //{
-    //    _currentPlayer = _playerList[_currentPlayerIndex];
-    //    //_currentPlayer._dice.gameObject.SetActive(false);
-    //    ProcessTurn(_currentPlayer);
-    //    _currentPlayerIndex++;
-
-    //    if (_currentPlayerIndex == _playerList.Count)
-    //    {
-    //        _currentPlayerIndex = 0;
-    //        _currentRound++;
-    //    }
-
-    //    if (_currentRound == _maxRound)
-    //    {
-    //        _phaseMachine.ChangePhase(_endPhase);
-    //    }
-    //}
-
-    //private void ProcessTurn(Player currentPlayer)
-    //{
-    //    int playersDiceNum = _currentPlayer.RollDice(); //주사위 던지기
-    //    StartCoroutine(SendTileCo(currentPlayer, playersDiceNum)); //움직여
-    //}
     private void ProcessConfirmButton()
     {
         _currentPlayer = _playerList[_currentPlayerIndex];
