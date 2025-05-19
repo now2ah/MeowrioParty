@@ -115,7 +115,7 @@ public class BoardManager : NetSingleton<BoardManager>
         if (_playerDiceNumberList[playerIndex].Item1 == -1)
         {
             int playersDiceNum = _playerList[playerIndex].RollDice();
-            AddToPlayerOrderList(playerIndex, playersDiceNum);
+            AddToPlayerOrderListRpc(playerIndex, playersDiceNum);
         }
 
         if (IsAllPlayerRolledDiceForOrder())
@@ -125,7 +125,8 @@ public class BoardManager : NetSingleton<BoardManager>
         }
     }
 
-    private void AddToPlayerOrderList(int playerIndex, int diceValue)
+    [Rpc(SendTo.Server)]
+    private void AddToPlayerOrderListRpc(int playerIndex, int diceValue)
     {
         (int, Player) playerDiceNumber;
 
