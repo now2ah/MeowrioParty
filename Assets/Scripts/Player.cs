@@ -23,6 +23,11 @@ public class Player : MonoBehaviour
 
     private Animator _animator;
 
+    private void Awake()
+    {
+        _animator = GetComponent<Animator>();
+    }
+
     private void OnEnable()
     {
         _inputManager.OnDiceButtonPerformed += OnDiceInputReceived;
@@ -35,8 +40,8 @@ public class Player : MonoBehaviour
     void Start()
     {
         DOTween.Init(false, true, LogBehaviour.Verbose).SetCapacity(200, 50);
-        _animator = GetComponent<Animator>();
     }
+
     public int RollDice()
     {
         _dice.gameObject.SetActive(false);
