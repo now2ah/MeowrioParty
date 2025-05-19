@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System;
 // COMMENT : 플레이어 이동과 관련된 로직만 처리하면 됨
 // COMMENT : BoardManager가 가야할 Tile을 알려줌
 
@@ -20,6 +21,8 @@ public class Player : MonoBehaviour
 
     public bool IsMoving { get { return _isMoving; } }
 
+    private Animator _animator;
+
     private void OnEnable()
     {
         _inputManager.OnDiceButtonPerformed += OnDiceInputReceived;
@@ -32,10 +35,12 @@ public class Player : MonoBehaviour
     void Start()
     {
         DOTween.Init(false, true, LogBehaviour.Verbose).SetCapacity(200, 50);
+        _animator = GetComponent<Animator>();
     }
     public int RollDice()
     {
         _dice.gameObject.SetActive(false);
+        _animator.SetTrigger("Jump");
         return _dice.Roll();
     }
 
@@ -44,13 +49,20 @@ public class Player : MonoBehaviour
         if (!_isMoving)
         {
             _isMoving = true;
+            _animator.SetBool("isMoving", true);
             Vector3 endPos = nextTile.transform.position;
+            Vector3 direction = (endPos - transform.position).normalized;
+            direction.y = 0f;
+            transform.DOLookAt(endPos, 0.2f);
+
             transform.DOMove(endPos, moveSpeed)
                     .SetEase(Ease.Linear)
                     .OnComplete(() =>
                     {
                         _isMoving = false;
                         currentTile = nextTile;
+
+                        _animator.SetBool("isMoving", false);
                     });
         }
     }
@@ -88,5 +100,5 @@ public class Player : MonoBehaviour
             return;
         }
         BoardManager.Instance.OnPlayersInput(this);
-    }
+    }    
 }
