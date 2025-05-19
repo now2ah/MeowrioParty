@@ -1,14 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public enum GamePhase
-{
-    GameReady,
-    GamePlay,
-    GameEnd
-}
-public class BoardManager : Singleton<BoardManager>
+
+public class BoardManager : NetSingleton<BoardManager>
 {
     public InputManagerSO inputManager;
 
@@ -26,6 +22,11 @@ public class BoardManager : Singleton<BoardManager>
     private GameEndPhase _endPhase;
 
     public Board Board { get { return _board; } }   //_board를 클래스 외부에서 쓸 수 있도록 하는 Property
+
+    //temporary
+    public List<GameObject> characterList;
+
+    private int _localPlayerNumber;
 
     public override void Awake()
     {
@@ -46,23 +47,62 @@ public class BoardManager : Singleton<BoardManager>
             _playerDiceNumberList.Add(playerDiceNumber);
         }
 
-        _phaseMachine = new PhaseMachine();
-        _readyPhase = new GameReadyPhase(this);
-        _playPhase = new GamePlayPhase(this);
-        _endPhase = new GameEndPhase(this);
+        _phaseMachine = gameObject.AddComponent<PhaseMachine>();
+        _readyPhase = new GameReadyPhase(this, EGamePhase.GameReady);
+        _playPhase = new GamePlayPhase(this, EGamePhase.GamePlay);
+        _endPhase = new GameEndPhase(this, EGamePhase.GameEnd);
     }
 
     private void Start()
     {
+        NetworkManager.Singleton.OnConnectionEvent += (networkManager, connectionEventData) =>
+        {
+            Debug.Log($"Connected : {connectionEventData.ClientId} {connectionEventData.EventType}");
+        };
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        ulong playerNumber = NetworkManager.Singleton.LocalClientId;
+
+        //if client connected
+        if (NetworkManager.Singleton.IsHost)
+        {
+            //player 0
+            _localPlayerNumber = 0;
+        }
+        else if (NetworkManager.Singleton.IsClient)
+        {
+            //player 1
+            _localPlayerNumber = 1;
+        }
+
+        if (IsServer)
+            NetworkManager.Singleton.OnClientConnectedCallback += Singleton_OnClientConnectedCallback;
+
         StartBoardGame();
     }
 
-    private void Update()
+    private void Singleton_OnClientConnectedCallback(ulong obj)
     {
-        if (_phaseMachine != null && _phaseMachine.IsRunning)
+        //if all clients are connected
+        //need to be changed later (hard coding)
+        if (NetworkManager.Singleton.ConnectedClientsList.Count == 2)
         {
-            _phaseMachine.UpdatePhase();
+            CreatePlayersRpc();
         }
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void CreatePlayersRpc()
+    {
+        GameObject player0Obj = Instantiate(characterList[0], Vector3.zero, Quaternion.identity);
+        Player player0 = player0Obj.GetComponent<Player>();
+        _playerList[0] = player0;
+
+        GameObject player1Obj = Instantiate(characterList[1], Vector3.zero, Quaternion.identity);
+        Player player1 = player1Obj.GetComponent<Player>();
+        _playerList[1] = player1;
     }
 
     private void StartBoardGame()
@@ -185,17 +225,21 @@ public class BoardManager : Singleton<BoardManager>
         _currentPlayer.TurnOnDice();
     }
 
-    public void OnPlayersInput(Player player)
+    public void OnPlayersInput(Player player/*, int receivedID*/)
     {
-        if (_phaseMachine.IsPhase(_readyPhase))
+        //if (_localPlayerNumber == receivedID)
         {
-            ProcessDiceForTurnOrderButton(player.playerID);
-        }
-        else if (_phaseMachine.IsPhase(_playPhase) && IsPlayersTurn(player))
-        {
-            ProcessConfirmButton();
+            if (_phaseMachine.IsPhase(_readyPhase))
+            {
+                ProcessDiceForTurnOrderButton(player.playerID);
+            }
+            else if (_phaseMachine.IsPhase(_playPhase) && IsPlayersTurn(player))
+            {
+                ProcessConfirmButton();
+            }
         }
     }
+
     private bool IsPlayersTurn(Player player)
     {
         return player == _currentPlayer;
