@@ -127,7 +127,8 @@ public class PhaseMachine : NetworkBehaviour
         _phase.EnterPhase();
     }
 
-    public void ChangePhase(Phase nextPhase)
+
+    public void ChangePhaseRpc(Phase nextPhase)
     {
         _phase.ExitPhase();
         _phase = nextPhase;

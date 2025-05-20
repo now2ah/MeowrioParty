@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -10,12 +11,17 @@ public class BoardManager : NetSingleton<BoardManager>
 
     [SerializeField] private int _maxRound; //테스트를 위해 인스펙터 노출 추후 수정 예정
     [SerializeField] private int _currentRound;
-    [SerializeField] private List<Player> _playerList;
+
+    [SerializeField] private Dictionary<ulong, Player> _connectedClients = new Dictionary<ulong, Player>(); //연결된 클라이언트들
+    [SerializeField] private NetworkList<ulong> _trunOrder; //순서 정해서 여기에 넣기 
+
     [SerializeField] private Board _board;
-    [SerializeField] private Player _currentPlayer;
+    //[SerializeField] private Player _currentPlayer;
+    [SerializeField] private ulong _currentPlayerId;
 
     private int _currentPlayerIndex; // 현재 움직이고 있는 플레이어의 인덱스
-    private List<(int, Player)> _playerDiceNumberList = new List<(int, Player)>();
+    private Dictionary<ulong, int> _playerDiceNumberList = new(); //순서뽑을 때 필요한 tempDic
+
     private PhaseMachine _phaseMachine;
     private GameReadyPhase _readyPhase;
     private GamePlayPhase _playPhase;
@@ -25,6 +31,7 @@ public class BoardManager : NetSingleton<BoardManager>
 
     //temporary
     public List<GameObject> characterList;
+    private Dictionary<ulong, int> _clientPrefabMap = new();
 
     private int _localPlayerNumber;
 
@@ -35,17 +42,8 @@ public class BoardManager : NetSingleton<BoardManager>
         _maxRound = 2;
         _currentRound = 0;
         _currentPlayerIndex = 0;
-        _currentPlayer = null;
 
-        //player 순서 정하는 list 초기화
-        for (int i = 0; i < _playerList.Count; ++i)
-        {
-            (int, Player) playerDiceNumber;
-
-            playerDiceNumber.Item1 = -1;
-            playerDiceNumber.Item2 = _playerList[i];
-            _playerDiceNumberList.Add(playerDiceNumber);
-        }
+        _trunOrder = new NetworkList<ulong>();
 
         _phaseMachine = gameObject.AddComponent<PhaseMachine>();
         _readyPhase = new GameReadyPhase(this, EGamePhase.GameReady);
@@ -53,23 +51,23 @@ public class BoardManager : NetSingleton<BoardManager>
         _endPhase = new GameEndPhase(this, EGamePhase.GameEnd);
     }
 
-    private void Start()
-    {
-        NetworkManager.Singleton.OnConnectionEvent += (networkManager, connectionEventData) =>
-        {
-            Debug.Log($"Connected : {connectionEventData.ClientId} {connectionEventData.EventType}");
-        };
-    }
+    // private void Start()
+    // {
+    //     NetworkManager.Singleton.OnConnectionEvent += (networkManager, connectionEventData) =>
+    //     {
+    //         Debug.Log($"Connected : {connectionEventData.ClientId} {connectionEventData.EventType}");
+    //     };
+    // }
 
     public override void OnNetworkSpawn()
     {
-        ulong playerNumber = NetworkManager.Singleton.LocalClientId;
+        //ulong playerNumber = NetworkManager.Singleton.LocalClientId;
 
         //if client connected
         if (NetworkManager.Singleton.IsHost)
         {
             //player 0
-            _localPlayerNumber = 0;
+           // _localPlyerNumber = 0;
         }
         else if (NetworkManager.Singleton.IsClient)
         {
@@ -77,117 +75,132 @@ public class BoardManager : NetSingleton<BoardManager>
             _localPlayerNumber = 1;
         }
 
-        if (IsServer)
-            NetworkManager.Singleton.OnClientConnectedCallback += Singleton_OnClientConnectedCallback;
+        // if (IsServer)
+        // {
+            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnectedCallback;
+        //}
 
-        StartBoardGame();
-    }
-
-    private void Singleton_OnClientConnectedCallback(ulong obj)
-    {
-        //if all clients are connected
-        //need to be changed later (hard coding)
-        if (NetworkManager.Singleton.ConnectedClientsList.Count == 2)
-        {
-            CreatePlayersRpc();
-        }
-    }
-
-    [Rpc(SendTo.ClientsAndHost)]
-    private void CreatePlayersRpc()
-    {
-        GameObject player0Obj = Instantiate(characterList[0], Vector3.zero, Quaternion.identity);
-        Player player0 = player0Obj.GetComponent<Player>();
-        _playerList[0] = player0;
-
-        GameObject player1Obj = Instantiate(characterList[1], Vector3.zero, Quaternion.identity);
-        Player player1 = player1Obj.GetComponent<Player>();
-        _playerList[1] = player1;
-    }
-
-    private void StartBoardGame()
-    {
         _phaseMachine.StartPhase(_readyPhase);
     }
 
-    private void ProcessDiceForTurnOrderButton(int playerIndex)
+    //[Rpc(SendTo.Server)]
+    private void OnClientConnectedCallback(ulong clientId)
     {
-        if (_playerDiceNumberList[playerIndex].Item1 == -1)
-        {
-            int playersDiceNum = _playerList[playerIndex].RollDice();
-            AddToPlayerOrderListRpc(playerIndex, playersDiceNum);
-        }
+        if (!IsServer) return;
 
-        if (IsAllPlayerRolledDiceForOrder())
-        {
-            SetTurnOrder();
-            _phaseMachine.ChangePhase(_playPhase);
-        }
+        ulong PclientId = NetworkManager.Singleton.LocalClientId;
+
+        int prefabIndex = _connectedClients.Count;
+        GameObject playerObj = Instantiate(characterList[prefabIndex], Vector3.zero, Quaternion.identity);
+        playerObj.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
+        _connectedClients[clientId] = playerObj.GetComponent<Player>();
+        _playerDiceNumberList[clientId] = -1; //주사위 안 굴림
+        // //if all clients are connected
+        // //need to be changed later (hard coding)
+        // if (NetworkManager.Singleton.ConnectedClientsList.Count == 2)
+        // {
+
+        //     // int prefabIndex = _connectedClients.Count;
+
+        //     // GameObject playerObj = Instantiate(characterList[prefabIndex], Vector3.zero, Quaternion.identity);
+        //     // playerObj.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
+
+        //     // _connectedClients[clientId] = playerObj.GetComponent<Player>();
+
+        //     // _playerDiceNumberList[clientId] = -1; //주사위 안 굴림
+
+        // }
+        Debug.Log(_connectedClients.Count);
+    }
+    [ServerRpc(RequireOwnership = false)]
+    public void RegisterCharacterServerRpc(int selectedIndex, ServerRpcParams rpcParams = default)
+    {
+        ulong clientId = rpcParams.Receive.SenderClientId;
+        _clientPrefabMap[clientId] = selectedIndex;
     }
 
-    [Rpc(SendTo.Server)]
-    private void AddToPlayerOrderListRpc(int playerIndex, int diceValue)
+    [ServerRpc] //클 -> 서 주사위 굴려줘
+    public void RequestRollDiceServerRpc(ServerRpcParams rpcParams = default)
     {
-        (int, Player) playerDiceNumber;
+        ulong clientId = rpcParams.Receive.SenderClientId;
 
-        playerDiceNumber.Item1 = diceValue;
-        playerDiceNumber.Item2 = _playerList[playerIndex];
-
-        _playerDiceNumberList[playerIndex] = playerDiceNumber;
-    }
-
-    //if all player rolled dice
-    bool IsAllPlayerRolledDiceForOrder()
-    {
-        for (int i = 0; i < _playerDiceNumberList.Count; ++i)
+        if (_phaseMachine.CurrentPhase == EGamePhase.GameReady)
         {
-            if (_playerDiceNumberList[i].Item1 == -1)
-                return false;
+            int diceValue = UnityEngine.Random.Range(1, 7);
+            _playerDiceNumberList[clientId] = diceValue;
+
+            ShowDiceClientRpc(clientId, diceValue);
+
+            if (_playerDiceNumberList.All(p => p.Value != -1))
+            {
+                SetTurnOrder();
+                _phaseMachine.ChangePhaseRpc(_playPhase);
+                _currentPlayerId = _trunOrder[0];
+
+                //TurnOnDiceOnCurrentPlayer();    // 플레이어의 턴 시작 시점에 주사위 켜기
+            }
+        }
+        if (_phaseMachine.CurrentPhase == EGamePhase.GamePlay)
+        {
+            if (!IsPlayersTurn(clientId)) return;
+            //굴리고 이동 
+
+            int diceValue = UnityEngine.Random.Range(1, 7);
+            ShowDiceClientRpc(clientId, diceValue);
+            StartCoroutine(SendTileCo(clientId, diceValue));
         }
 
-        return true;
     }
 
+    [Rpc(SendTo.Everyone)]
+    private void ShowDiceClientRpc(ulong clientId, int diceValue)
+    {
+        if (NetworkManager.Singleton.LocalClientId == clientId) //내꺼만
+        {
+            _connectedClients.TryGetValue(clientId, out Player player); //되나?..
+            player._dice.gameObject.SetActive(true);
+            player._dice.PlayDiceAnimationClient(diceValue);
+        }
+
+    }
     private void SetTurnOrder()
     {
-        _playerDiceNumberList.Sort((a, b) => b.Item1.CompareTo(a.Item1));
+        var sorted = _playerDiceNumberList.OrderByDescending(p => p.Value).ToList();
 
-        for (int i = 0; i < _playerDiceNumberList.Count; i++)
+        _trunOrder.Clear();
+        foreach (var tempDic in sorted)
         {
-            _playerList[i] = _playerDiceNumberList[i].Item2;
-        }
-
-        _phaseMachine.ChangePhase(_playPhase);
-        _currentPlayer = _playerList[0];
-
-        TurnOnDiceOnCurrentPlayer();    // 플레이어의 턴 시작 시점에 주사위 켜기
-    }
-
-    private void ProcessConfirmButton()
-    {
-        _currentPlayer = _playerList[_currentPlayerIndex];
-
-        _currentPlayer.TurnOffDice(); // 주사위 끄기
-        int playersDiceNum = _currentPlayer.RollDice(); // 주사위 굴리기
-        StartCoroutine(SendTileCo(_currentPlayer, playersDiceNum)); // 이동 시작
-
-        _currentPlayerIndex++;
-
-        if (_currentPlayerIndex == _playerList.Count)
-        {
-            _currentPlayerIndex = 0;
-            _currentRound++;
-        }
-
-        if (_currentRound == _maxRound)
-        {
-            _phaseMachine.ChangePhase(_endPhase);
+            _trunOrder.Add(tempDic.Key);
         }
     }
 
+    // private void ProcessConfirmButton()
+    // {
+    //     _currentPlayerId = _playerList[_currentPlayerIndex];
 
-    private IEnumerator SendTileCo(Player player, int diceValue)
+    //     _currentPlayerId.TurnOffDice(); // 주사위 끄기
+    //     int playersDiceNum = _currentPlayerId.RollDice(); // 주사위 굴리기
+    //     StartCoroutine(SendTileCo(_currentPlayerId, playersDiceNum)); // 이동 시작
+
+    //     _currentPlayerIndex++;
+
+    //     if (_currentPlayerIndex == _playerList.Count)
+    //     {
+    //         _currentPlayerIndex = 0;
+    //         _currentRound++;
+    //     }
+
+    //     if (_currentRound == _maxRound)
+    //     {
+    //         _phaseMachine.ChangePhaseRpc(_endPhase);
+    //     }
+    // }
+
+
+    private IEnumerator SendTileCo(ulong playerId, int diceValue)
     {
+        Player player = _connectedClients[playerId];
+
         int tileIndex = player.currentTile.tileIndex;
 
         for (int i = 0; i < diceValue; i++) //한 타일씩 -> 나중에 갈림길 고려
@@ -207,42 +220,37 @@ public class BoardManager : NetSingleton<BoardManager>
             yield return new WaitForSeconds(0.1f);
             player.TurnOffDiceNumber();
         }
-
-        // 이동이 끝난 뒤 다음 플레이어 주사위 자동 켜기
-        if (_currentRound < _maxRound)
-        {
-            _currentPlayer = _playerList[_currentPlayerIndex]; // 다음 플레이어 갱신
-            TurnOnDiceOnCurrentPlayer();
-        }
+        NextTurn();
     }
-
-    private void TurnOnDiceOnCurrentPlayer()
+    private void NextTurn()
     {
-        // 모든 플레이어의 주사위 끄고, 현재 플레이어 것만 킴
-        foreach (Player player in _playerList)
+        _currentPlayerIndex++;
+        if (_currentPlayerIndex >= _trunOrder.Count)
         {
-            player.TurnOffDice();
-        }
-        _currentPlayer.TurnOnDice();
-    }
-
-    public void OnPlayersInput(Player player/*, int receivedID*/)
-    {
-        //if (_localPlayerNumber == receivedID)
-        {
-            if (_phaseMachine.IsPhase(_readyPhase))
+            _currentPlayerIndex = 0;
+            _currentRound++;
+            if (_currentRound >= _maxRound)
             {
-                ProcessDiceForTurnOrderButton(player.playerID);
-            }
-            else if (_phaseMachine.IsPhase(_playPhase) && IsPlayersTurn(player))
-            {
-                ProcessConfirmButton();
+                _phaseMachine.ChangePhaseRpc(_endPhase);
+                return;
             }
         }
     }
 
-    private bool IsPlayersTurn(Player player)
+    // public void OnPlayersInput()
+    // {
+    //     if (_phaseMachine.IsPhase(_readyPhase))
+    //     {
+    //         ProcessDiceForTurnOrderButton(_localPlayerNumber);
+    //     }
+    //     else if (_phaseMachine.IsPhase(_playPhase) && IsPlayersTurn(_localPlayerNumber))
+    //     {
+    //         ProcessConfirmButton();
+    //     }
+    // }
+
+    private bool IsPlayersTurn(ulong clientId)
     {
-        return player == _currentPlayer;
+        return clientId == _currentPlayerId;
     }
 }

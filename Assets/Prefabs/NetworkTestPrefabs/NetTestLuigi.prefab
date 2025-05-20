@@ -861,8 +861,8 @@ GameObject:
   - component: {fileID: 5304221399635269514}
   - component: {fileID: 5798041432711524303}
   - component: {fileID: 2303765227932102518}
-  - component: {fileID: 4532040618021073130}
   - component: {fileID: 8293379854018032003}
+  - component: {fileID: 4532040618021073130}
   m_Layer: 0
   m_Name: NetTestLuigi
   m_TagString: Untagged
@@ -962,30 +962,6 @@ CapsuleCollider:
   m_Height: 1.7418051
   m_Direction: 1
   m_Center: {x: 0, y: 0.8380599, z: 0.018182546}
---- !u!114 &4532040618021073130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1686880860600399186}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb2358e472cfa67488a73a1ef38ec11e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerID: 1
-  _inputManager: {fileID: 11400000, guid: d47f0c20fe52b0f40a1474b9f2b13483, type: 2}
-  currentTile: {fileID: 0}
-  _dice: {fileID: 8301906482109085832}
-  _diceNumberObjects:
-  - {fileID: 7535626434851895289}
-  - {fileID: 5916438473805022610}
-  - {fileID: 5629142843169785355}
-  - {fileID: 7466726235499288063}
-  - {fileID: 8355366743039998324}
-  - {fileID: 7576538332623048827}
-  moveSpeed: 3
 --- !u!114 &8293379854018032003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -993,7 +969,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1686880860600399186}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
@@ -1011,6 +987,31 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &4532040618021073130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1686880860600399186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb2358e472cfa67488a73a1ef38ec11e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  playerID: 1
+  _inputManager: {fileID: 11400000, guid: d47f0c20fe52b0f40a1474b9f2b13483, type: 2}
+  currentTile: {fileID: 0}
+  _dice: {fileID: 8301906482109085832}
+  _diceNumberObjects:
+  - {fileID: 7535626434851895289}
+  - {fileID: 5916438473805022610}
+  - {fileID: 5629142843169785355}
+  - {fileID: 7466726235499288063}
+  - {fileID: 8355366743039998324}
+  - {fileID: 7576538332623048827}
+  moveSpeed: 3
 --- !u!1 &1854675282673894403
 GameObject:
   m_ObjectHideFlags: 0
