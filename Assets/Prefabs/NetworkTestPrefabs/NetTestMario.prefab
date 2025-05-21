@@ -2388,6 +2388,7 @@ GameObject:
   - component: {fileID: 2901805762319138318}
   - component: {fileID: 5409618754797890112}
   - component: {fileID: 3761846564083091350}
+  - component: {fileID: 6330585106149215780}
   m_Layer: 0
   m_Name: NetTestMario
   m_TagString: Untagged
@@ -2586,6 +2587,21 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 0
   SlerpPosition: 0
+--- !u!114 &6330585106149215780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3229872934675508115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 723349993674084317}
 --- !u!1 &3454982103157592275
 GameObject:
   m_ObjectHideFlags: 0
