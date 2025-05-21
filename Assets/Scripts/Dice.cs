@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
 public class Dice : MonoBehaviour
@@ -18,12 +19,18 @@ public class Dice : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    // 주사위를 굴려 값을 반환
-    public int Roll()
+    // // 주사위를 굴려 값을 반환
+    // public int Roll()
+    // {
+    //     _diceValue = UnityEngine.Random.Range(minValue, maxValue + 1);
+    //     Debug.Log(_diceValue);
+    //     return _diceValue;
+    // }
+
+    //[Rpc(SendTo.Everyone)]
+    public void PlayDiceAnimationClient(int diceValue) //일단 값 받아와봄봄
     {
-        _diceValue = UnityEngine.Random.Range(minValue, maxValue + 1);
-        Debug.Log(_diceValue);
-        return _diceValue;
+        StartCoroutine(RollCoroutine());
     }
 
     IEnumerator RollCoroutine(Action callback = null)

@@ -31,17 +31,17 @@ public class InputManagerSO : ScriptableObject
 
         _confirmAction.Enable();
 
-        for (int i = 0; i < 2; i++)
-        {
-            int capturedID = i;
-            var action = _inputActionAsset.FindAction($"Player{capturedID}Dice");
-            if (action != null)
-            {
-                action.performed += ctx => OnDiceButtonPerformed?.Invoke(capturedID);
-                action.Enable();
-                _playerDiceActions[capturedID] = action;
-            }
-        }
+        // for (int i = 0; i < 2; i++)
+        // {
+        //     int capturedID = i;
+        //     var action = _inputActionAsset.FindAction($"Player{capturedID}Dice");
+        //     if (action != null)
+        //     {
+        //         action.performed += ctx => OnDiceButtonPerformed?.Invoke(capturedID);
+        //         action.Enable();
+        //         _playerDiceActions[capturedID] = action;
+        //     }
+        // }
     }
 
     private void OnDisable()
@@ -52,11 +52,11 @@ public class InputManagerSO : ScriptableObject
 
         _confirmAction.Disable();
 
-        foreach (var playerAction in _playerDiceActions)
-        {
-            playerAction.Value.Disable();
-            playerAction.Value.performed -= ctx => OnDiceButtonPerformed?.Invoke(playerAction.Key);
-        }
+        // foreach (var playerAction in _playerDiceActions)
+        // {
+        //     playerAction.Value.Disable();
+        //     playerAction.Value.performed -= ctx => OnDiceButtonPerformed?.Invoke(playerAction.Key);
+        // }
         _playerDiceActions.Clear(); // 일단 비우는 함수 작성해줌
     }
 

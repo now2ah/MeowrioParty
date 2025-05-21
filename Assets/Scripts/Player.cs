@@ -1,14 +1,15 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-using System;
+using Unity.Netcode;
 // COMMENT : 플레이어 이동과 관련된 로직만 처리하면 됨
 // COMMENT : BoardManager가 가야할 Tile을 알려줌
 
-public class Player : MonoBehaviour
+public class Player : NetworkBehaviour
 {
-    public int playerID; //일단 public으로선언언
+    public NetworkVariable<ulong> ClientId;
+
+    public int playerID; //일단 public으로선언
     [SerializeField] private InputManagerSO _inputManager;
 
     public Tile currentTile; // COMMENT: 게임 진행과 관련된 부분이므로 BoardManager가 갖고 있어야 함.
@@ -30,11 +31,11 @@ public class Player : MonoBehaviour
 
     private void OnEnable()
     {
-        _inputManager.OnDiceButtonPerformed += OnDiceInputReceived;
+        _inputManager.OnConfirmButtonPerformed += OnDiceInputReceived;
     }
     private void OnDisable()
     {
-        _inputManager.OnDiceButtonPerformed -= OnDiceInputReceived;
+        _inputManager.OnConfirmButtonPerformed -= OnDiceInputReceived;
     }
 
     void Start()
@@ -42,12 +43,12 @@ public class Player : MonoBehaviour
         DOTween.Init(false, true, LogBehaviour.Verbose).SetCapacity(200, 50);
     }
 
-    public int RollDice()
-    {
-        _dice.gameObject.SetActive(false);
-        _animator.SetTrigger("Jump");
-        return _dice.Roll();
-    }
+    // public int RollDice()
+    // {
+    //     _dice.gameObject.SetActive(false);
+    //     _animator.SetTrigger("Jump");
+    //     return _dice.Roll();
+    // }
 
     public void MoveTo(Tile nextTile)
     {
@@ -71,6 +72,7 @@ public class Player : MonoBehaviour
                     });
         }
     }
+
     public void TurnOnDiceNumber(int index)
     {
         TurnOffDiceNumber();
@@ -98,12 +100,17 @@ public class Player : MonoBehaviour
         _dice.gameObject.SetActive(false);
     }
 
-    private void OnDiceInputReceived(int receivedID)
+    private void OnDiceInputReceived(object sender, bool isPressed)
     {
-        if (receivedID != playerID)
+        if (!isPressed)
         {
             return;
         }
-        BoardManager.Instance.OnPlayersInput(this);
-    }    
+
+        if (IsOwner)
+        {
+            BoardManager.Instance.RequestRollDiceServerRpc(NetworkManager.Singleton.LocalClientId);
+            
+        }
+    }
 }
