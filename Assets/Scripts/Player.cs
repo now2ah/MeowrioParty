@@ -7,6 +7,8 @@ using Unity.Netcode;
 
 public class Player : NetworkBehaviour
 {
+    public NetworkVariable<ulong> ClientId;
+
     public int playerID; //일단 public으로선언
     [SerializeField] private InputManagerSO _inputManager;
 
@@ -70,6 +72,7 @@ public class Player : NetworkBehaviour
                     });
         }
     }
+
     public void TurnOnDiceNumber(int index)
     {
         TurnOffDiceNumber();
@@ -103,10 +106,11 @@ public class Player : NetworkBehaviour
         {
             return;
         }
+
         if (IsOwner)
         {
-            BoardManager.Instance.RequestRollDiceServerRpc();
+            BoardManager.Instance.RequestRollDiceServerRpc(NetworkManager.Singleton.LocalClientId);
             
         }
-    }    
+    }
 }
