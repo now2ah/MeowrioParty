@@ -4,11 +4,19 @@ using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
+public enum GameState
+{
+    GameReady,
+    GamePlay,
+    GameEnd,
+
+}
 
 public class BoardManager : NetSingleton<BoardManager>
 {
     public InputManagerSO inputManager;
 
+    private GameState _currentState;
     [SerializeField] private int _maxRound; //테스트를 위해 인스펙터 노출 추후 수정 예정
     [SerializeField] private int _currentRound;
 
@@ -21,11 +29,6 @@ public class BoardManager : NetSingleton<BoardManager>
 
     private int _currentPlayerIndex; // 현재 움직이고 있는 플레이어의 인덱스
     private Dictionary<ulong, int> _playerDiceNumberList = new(); //순서뽑을 때 필요한 tempDic
-
-    private PhaseMachine _phaseMachine;
-    private GameReadyPhase _readyPhase;
-    private GamePlayPhase _playPhase;
-    private GameEndPhase _endPhase;
 
     public Board Board { get { return _board; } }   //_board를 클래스 외부에서 쓸 수 있도록 하는 Property
 
@@ -44,20 +47,7 @@ public class BoardManager : NetSingleton<BoardManager>
         _currentPlayerIndex = 0;
 
         _trunOrder = new NetworkList<ulong>();
-
-        _phaseMachine = gameObject.AddComponent<PhaseMachine>();
-        _readyPhase = new GameReadyPhase(this, EGamePhase.GameReady);
-        _playPhase = new GamePlayPhase(this, EGamePhase.GamePlay);
-        _endPhase = new GameEndPhase(this, EGamePhase.GameEnd);
     }
-
-    // private void Start()
-    // {
-    //     NetworkManager.Singleton.OnConnectionEvent += (networkManager, connectionEventData) =>
-    //     {
-    //         Debug.Log($"Connected : {connectionEventData.ClientId} {connectionEventData.EventType}");
-    //     };
-    // }
 
     public override void OnNetworkSpawn()
     {
@@ -67,7 +57,7 @@ public class BoardManager : NetSingleton<BoardManager>
         if (NetworkManager.Singleton.IsHost)
         {
             //player 0
-           // _localPlyerNumber = 0;
+            // _localPlyerNumber = 0;
         }
         else if (NetworkManager.Singleton.IsClient)
         {
@@ -75,12 +65,8 @@ public class BoardManager : NetSingleton<BoardManager>
             _localPlayerNumber = 1;
         }
 
-        // if (IsServer)
-        // {
-            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnectedCallback;
-        //}
+        NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnectedCallback;
 
-        _phaseMachine.StartPhase(_readyPhase);
     }
 
     //[Rpc(SendTo.Server)]
@@ -95,21 +81,6 @@ public class BoardManager : NetSingleton<BoardManager>
         playerObj.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
         _connectedClients[clientId] = playerObj.GetComponent<Player>();
         _playerDiceNumberList[clientId] = -1; //주사위 안 굴림
-        // //if all clients are connected
-        // //need to be changed later (hard coding)
-        // if (NetworkManager.Singleton.ConnectedClientsList.Count == 2)
-        // {
-
-        //     // int prefabIndex = _connectedClients.Count;
-
-        //     // GameObject playerObj = Instantiate(characterList[prefabIndex], Vector3.zero, Quaternion.identity);
-        //     // playerObj.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
-
-        //     // _connectedClients[clientId] = playerObj.GetComponent<Player>();
-
-        //     // _playerDiceNumberList[clientId] = -1; //주사위 안 굴림
-
-        // }
         Debug.Log(_connectedClients.Count);
     }
     [ServerRpc(RequireOwnership = false)]
@@ -124,7 +95,7 @@ public class BoardManager : NetSingleton<BoardManager>
     {
         ulong clientId = rpcParams.Receive.SenderClientId;
 
-        if (_phaseMachine.CurrentPhase == EGamePhase.GameReady)
+        if (_currentState == GameState.GameReady)
         {
             int diceValue = UnityEngine.Random.Range(1, 7);
             _playerDiceNumberList[clientId] = diceValue;
@@ -134,13 +105,13 @@ public class BoardManager : NetSingleton<BoardManager>
             if (_playerDiceNumberList.All(p => p.Value != -1))
             {
                 SetTurnOrder();
-                _phaseMachine.ChangePhaseRpc(_playPhase);
+                _currentState = GameState.GamePlay;
                 _currentPlayerId = _trunOrder[0];
 
                 //TurnOnDiceOnCurrentPlayer();    // 플레이어의 턴 시작 시점에 주사위 켜기
             }
         }
-        if (_phaseMachine.CurrentPhase == EGamePhase.GamePlay)
+        if (_currentState == GameState.GamePlay)
         {
             if (!IsPlayersTurn(clientId)) return;
             //굴리고 이동 
@@ -231,7 +202,7 @@ public class BoardManager : NetSingleton<BoardManager>
             _currentRound++;
             if (_currentRound >= _maxRound)
             {
-                _phaseMachine.ChangePhaseRpc(_endPhase);
+                _currentState = GameState.GameEnd;
                 return;
             }
         }
