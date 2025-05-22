@@ -33,6 +33,10 @@ public class BoardManager : NetSingleton<BoardManager>
     //temporary
     public List<GameObject> characterPrefabList;
 
+    private Dictionary<ulong, PlayerData> _playerDataMap = new();
+    private Dictionary<ulong, PlayerController> _playerCtrlMap = new();
+
+
     public override void Awake()
     {
         base.Awake();
@@ -45,6 +49,7 @@ public class BoardManager : NetSingleton<BoardManager>
 
     public override void OnNetworkSpawn()
     {
+        if (IsOwner) inputManager.OnConfirmButtonPerformed += GetInput;
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnectedCallback;
 
         if (IsServer)
@@ -78,11 +83,16 @@ public class BoardManager : NetSingleton<BoardManager>
 
         int prefabIndex = NetworkManager.Singleton.ConnectedClientsList.Count - 1;
         Vector3 spawnPos = _spawnPointList[prefabIndex].transform.position;
+
         GameObject playerObj = Instantiate(characterPrefabList[prefabIndex], spawnPos, Quaternion.identity);
         playerObj.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
 
-        Player player = playerObj.GetComponent<Player>();
-        player.currentTile = _board.tiles[0];
+        PlayerController playerCtrl = playerObj.GetComponent<PlayerController>();
+        playerCtrl.currentTile = _board.tiles[0];
+
+        _playerCtrlMap[clientId] = playerCtrl;
+        _playerDataMap[clientId] = new PlayerData(clientId);
+
         _playerDiceNumberList[clientId] = -1;
     }
 
@@ -111,12 +121,12 @@ public class BoardManager : NetSingleton<BoardManager>
                 //Player들 시작 타일로 이동
                 foreach (var connectedClient in NetworkManager.Singleton.ConnectedClients)
                 {
-                    connectedClient.Value.PlayerObject.transform.position = _board.tiles[0].transform.position;
+                    _playerCtrlMap[connectedClient.Key].SetStartTile(_board.tiles[0]);
                 }
 
                 //첫번째 턴 Player의 정면 카메라 On
                 //플레이어의 턴 시작 시점에 주사위 켜기
-                TogglePlayerDiceRpc(_currentPlayerId, true);
+                _playerCtrlMap[_currentPlayerId].ToggleDice(true);
             }
         }
         else if (_currentState.Value == GameState.GamePlay)
@@ -125,10 +135,9 @@ public class BoardManager : NetSingleton<BoardManager>
             //굴리고 이동 
 
             int diceValue = UnityEngine.Random.Range(1, 7);
-
             TogglePlayerDiceRpc(clientId, false);
 
-            StartCoroutine(SendTileCo(_turnOrder[_currentPlayerIndex], diceValue));
+            StartCoroutine(SendTileCo(clientId, diceValue));
         }
     }
 
@@ -141,8 +150,10 @@ public class BoardManager : NetSingleton<BoardManager>
     [Rpc(SendTo.ClientsAndHost)]
     private void TogglePlayerDiceRpc(ulong clientId, bool isOn)
     {
-        var player = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.GetComponent<Player>();
-        player._dice.gameObject.SetActive(isOn);
+        if (_playerCtrlMap.TryGetValue(clientId, out var ctrl))
+        {
+            ctrl.ToggleDice(isOn);
+        }
     }
 
     private void SetTurnOrder()
@@ -161,25 +172,28 @@ public class BoardManager : NetSingleton<BoardManager>
 
     private IEnumerator SendTileCo(ulong playerId, int diceValue)
     {
-        var player = NetworkManager.Singleton.ConnectedClients[playerId].PlayerObject.GetComponent<Player>();
-        int tileIndex = player.currentTile.tileIndex;
+        PlayerData data = _playerDataMap[playerId];
+        PlayerController controller = _playerCtrlMap[playerId];
+
+        int tileIndex = data.currentTile.tileIndex;
 
         for (int i = 0; i < diceValue; i++) //한 타일씩 -> 나중에 갈림길 고려
         {
             int nextIndex = (tileIndex + 1) % _board.tiles.Length;
             Tile nextTile = _board.tiles[nextIndex];
 
-            player.MoveTo(nextTile);
-            player.TurnOnDiceNumber(diceValue - i);
+            data.MoveTo(nextTile);
+            controller.MoveTo(nextTile);
+            controller.TurnOnDiceNumber(diceValue - i);
             tileIndex = nextIndex;
 
-            while (player.IsMoving)
+            while (controller.IsMoving)
             {
                 yield return null;
             }
 
             yield return new WaitForSeconds(0.1f);
-            player.TurnOffDiceNumber();
+            controller.TurnOffDiceNumber();
         }
         NextTurn();
     }
@@ -202,4 +216,13 @@ public class BoardManager : NetSingleton<BoardManager>
         _currentPlayerId = _turnOrder[_currentPlayerIndex];
         TogglePlayerDiceRpc(_currentPlayerId, true);
     }
+
+    private void GetInput(object sender, bool isPressed)
+    {
+        if (!isPressed) return;
+        
+            RequestRollDiceServerRpc(NetworkManager.Singleton.LocalClientId);
+        
+    }
+
 }

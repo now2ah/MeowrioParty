@@ -2386,9 +2386,9 @@ GameObject:
   - component: {fileID: 723349993674084317}
   - component: {fileID: 2387587530733659823}
   - component: {fileID: 2901805762319138318}
-  - component: {fileID: 5409618754797890112}
   - component: {fileID: 3761846564083091350}
   - component: {fileID: 6330585106149215780}
+  - component: {fileID: 6148883761638605962}
   m_Layer: 0
   m_Name: NetTestMario
   m_TagString: Untagged
@@ -2514,33 +2514,6 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &5409618754797890112
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3229872934675508115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb2358e472cfa67488a73a1ef38ec11e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  ClientId:
-    m_InternalValue: 0
-  playerID: 0
-  _inputManager: {fileID: 11400000, guid: d47f0c20fe52b0f40a1474b9f2b13483, type: 2}
-  currentTile: {fileID: 0}
-  _dice: {fileID: 3213107265269356082}
-  _diceNumberObjects:
-  - {fileID: 3149836543614511487}
-  - {fileID: 6886338694760228292}
-  - {fileID: 6535724409507307081}
-  - {fileID: 5915221195117900789}
-  - {fileID: 6100573736490078114}
-  - {fileID: 4614322704570294832}
-  moveSpeed: 3
 --- !u!114 &3761846564083091350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2602,6 +2575,28 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   TransitionStateInfoList: []
   m_Animator: {fileID: 723349993674084317}
+--- !u!114 &6148883761638605962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3229872934675508115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbcaac42a8f9f2841a6cd5773ee5eb66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _diceObj: {fileID: 3213107265269356082}
+  _diceNumberObjects:
+  - {fileID: 3149836543614511487}
+  - {fileID: 6886338694760228292}
+  - {fileID: 6535724409507307081}
+  - {fileID: 5915221195117900789}
+  - {fileID: 6100573736490078114}
+  - {fileID: 4614322704570294832}
+  currentTile: {fileID: 0}
+  moveSpeed: 3
 --- !u!1 &3454982103157592275
 GameObject:
   m_ObjectHideFlags: 0
