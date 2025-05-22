@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public enum GameState
@@ -20,11 +19,9 @@ public class BoardManager : NetSingleton<BoardManager>
     [SerializeField] private int _maxRound;
     [SerializeField] private int _currentRound;
 
-    [SerializeField] private Dictionary<ulong, Player> _connectedClients = new Dictionary<ulong, Player>(); //연결된 클라이언트들
     [SerializeField] private NetworkList<ulong> _turnOrder; //순서 정해서 여기에 넣기 
 
     [SerializeField] private Board _board;
-    //[SerializeField] private Player _currentPlayer;
     [SerializeField] private ulong _currentPlayerId;
     [SerializeField] private bool _canInput = false;
 
@@ -33,11 +30,8 @@ public class BoardManager : NetSingleton<BoardManager>
 
     [SerializeField] private List<GameObject> _spawnPointList;
 
-
-
     //temporary
-    public List<GameObject> characterList;
-    private Dictionary<ulong, int> _clientPrefabMap = new();
+    public List<GameObject> characterPrefabList;
 
     public override void Awake()
     {
@@ -84,22 +78,12 @@ public class BoardManager : NetSingleton<BoardManager>
 
         int prefabIndex = NetworkManager.Singleton.ConnectedClientsList.Count - 1;
         Vector3 spawnPos = _spawnPointList[prefabIndex].transform.position;
-        GameObject playerObj = Instantiate(characterList[prefabIndex], spawnPos, Quaternion.identity);
+        GameObject playerObj = Instantiate(characterPrefabList[prefabIndex], spawnPos, Quaternion.identity);
         playerObj.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
 
         Player player = playerObj.GetComponent<Player>();
-        player.ClientId.Value = clientId;
         player.currentTile = _board.tiles[0];
-        _connectedClients[clientId] = player;
-        _playerDiceNumberList[clientId] = -1; //주사위 안 굴림
-        Debug.Log(_connectedClients.Count);
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    public void RegisterCharacterServerRpc(int selectedIndex, ServerRpcParams rpcParams = default)
-    {
-        ulong clientId = rpcParams.Receive.SenderClientId;
-        _clientPrefabMap[clientId] = selectedIndex;
+        _playerDiceNumberList[clientId] = -1;
     }
 
     [Rpc(SendTo.Server)] //클 -> 서 주사위 굴려줘
@@ -125,9 +109,9 @@ public class BoardManager : NetSingleton<BoardManager>
                 _currentPlayerId = _turnOrder[0];
 
                 //Player들 시작 타일로 이동
-                foreach(var clientPair in _connectedClients)
+                foreach (var connectedClient in NetworkManager.Singleton.ConnectedClients)
                 {
-                    clientPair.Value.gameObject.transform.position = _board.tiles[0].transform.position;
+                    connectedClient.Value.PlayerObject.transform.position = _board.tiles[0].transform.position;
                 }
 
                 //첫번째 턴 Player의 정면 카메라 On
@@ -151,59 +135,25 @@ public class BoardManager : NetSingleton<BoardManager>
     [Rpc(SendTo.Server)]
     private void RollDiceSequenceRpc(ulong clientId, int diceValue)
     {
-        _connectedClients.TryGetValue(clientId, out Player player); //되나?..
-
         TogglePlayerDiceRpc(clientId, false);
     }
 
     [Rpc(SendTo.ClientsAndHost)]
     private void TogglePlayerDiceRpc(ulong clientId, bool isOn)
     {
-        Player[] players = GameObject.FindObjectsByType<Player>(FindObjectsSortMode.None);
-
-        foreach (Player player in players)
-        {
-            if (player.ClientId.Value == clientId)
-            {
-                player._dice.gameObject.SetActive(isOn);
-                //숫자 스프라이트 뿅
-            }
-        }
+        var player = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.GetComponent<Player>();
+        player._dice.gameObject.SetActive(isOn);
     }
 
     private void SetTurnOrder()
     {
         var sorted = _playerDiceNumberList.OrderByDescending(p => p.Value).ToList();
-
         _turnOrder.Clear();
         foreach (var tempDic in sorted)
         {
             _turnOrder.Add(tempDic.Key);
         }
     }
-
-    // private void ProcessConfirmButton()
-    // {
-    //     _currentPlayerId = _playerList[_currentPlayerIndex];
-
-    //     _currentPlayerId.TurnOffDice(); // 주사위 끄기
-    //     int playersDiceNum = _currentPlayerId.RollDice(); // 주사위 굴리기
-    //     StartCoroutine(SendTileCo(_currentPlayerId, playersDiceNum)); // 이동 시작
-
-    //     _currentPlayerIndex++;
-
-    //     if (_currentPlayerIndex == _playerList.Count)
-    //     {
-    //         _currentPlayerIndex = 0;
-    //         _currentRound++;
-    //     }
-
-    //     if (_currentRound == _maxRound)
-    //     {
-    //         _phaseMachine.ChangePhaseRpc(_endPhase);
-    //     }
-    // }
-
     private bool IsPlayersTurn(ulong clientId)
     {
         return clientId == _currentPlayerId;
@@ -211,8 +161,7 @@ public class BoardManager : NetSingleton<BoardManager>
 
     private IEnumerator SendTileCo(ulong playerId, int diceValue)
     {
-        Player player = _connectedClients[playerId];
-
+        var player = NetworkManager.Singleton.ConnectedClients[playerId].PlayerObject.GetComponent<Player>();
         int tileIndex = player.currentTile.tileIndex;
 
         for (int i = 0; i < diceValue; i++) //한 타일씩 -> 나중에 갈림길 고려
@@ -251,18 +200,6 @@ public class BoardManager : NetSingleton<BoardManager>
         }
 
         _currentPlayerId = _turnOrder[_currentPlayerIndex];
+        TogglePlayerDiceRpc(_currentPlayerId, true);
     }
-
-    // public void OnPlayersInput()
-    // {
-    //     if (_phaseMachine.IsPhase(_readyPhase))
-    //     {
-    //         ProcessDiceForTurnOrderButton(_localPlayerNumber);
-    //     }
-    //     else if (_phaseMachine.IsPhase(_playPhase) && IsPlayersTurn(_localPlayerNumber))
-    //     {
-    //         ProcessConfirmButton();
-    //     }
-    // }
-
 }
