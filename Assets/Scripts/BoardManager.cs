@@ -100,7 +100,7 @@ public class BoardManager : NetSingleton<BoardManager>
             Debug.Log("cliendId : " + clientId + ", diceValue : " + diceValue);
 
             //주사위 숫자 연출 (주사위 off / 숫자 Sprite 출력)
-            TogglePlayerDiceRpc(clientId, false);
+            RollDiceSequenceRpc(clientId, diceValue);
 
             if (_playerDiceNumberList.All(p => p.Value != -1))
             {
@@ -130,6 +130,12 @@ public class BoardManager : NetSingleton<BoardManager>
 
             StartCoroutine(SendTileCo(_turnOrder[_currentPlayerIndex], diceValue));
         }
+    }
+
+    [Rpc(SendTo.Server)]
+    private void RollDiceSequenceRpc(ulong clientId, int diceValue)
+    {
+        TogglePlayerDiceRpc(clientId, false);
     }
 
     [Rpc(SendTo.ClientsAndHost)]
