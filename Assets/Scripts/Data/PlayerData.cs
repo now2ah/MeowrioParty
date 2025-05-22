@@ -10,6 +10,7 @@ public class PlayerData
     public PlayerData(ulong clinetID)
     {
         _clientId = clinetID;
+        
     }
     public void MoveTo(Tile nextTile)
     {

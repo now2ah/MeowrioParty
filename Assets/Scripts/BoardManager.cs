@@ -23,7 +23,7 @@ public class BoardManager : NetSingleton<BoardManager>
 
     [SerializeField] private Board _board;
     [SerializeField] private ulong _currentPlayerId;
-    [SerializeField] private bool _canInput = false;
+    private NetworkVariable<bool> _canInput = new NetworkVariable<bool>(false);
 
     private int _currentPlayerIndex; // 현재 움직이고 있는 플레이어의 인덱스
     private Dictionary<ulong, int> _playerDiceNumberList = new(); //순서뽑을 때 필요한 tempDic
@@ -49,16 +49,15 @@ public class BoardManager : NetSingleton<BoardManager>
 
     public override void OnNetworkSpawn()
     {
-        if (IsOwner) inputManager.OnConfirmButtonPerformed += GetInput;
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnectedCallback;
 
         if (IsServer)
         {
             _currentState.Value = GameState.GameReady;
+
         }
-
         CameraManager.Instance.ChangeCamera(0);
-
+        inputManager.OnConfirmButtonPerformed += GetInput;
         StartOpeningSequence();
     }
 
@@ -72,7 +71,8 @@ public class BoardManager : NetSingleton<BoardManager>
         CameraManager.Instance.ChangeCamera(1);
         yield return new WaitForSeconds(2);
 
-        _canInput = true;
+        if(IsServer)
+            _canInput.Value = true;
         //주사위를 On 시킨다
     }
 
@@ -88,10 +88,10 @@ public class BoardManager : NetSingleton<BoardManager>
         playerObj.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
 
         PlayerController playerCtrl = playerObj.GetComponent<PlayerController>();
-        playerCtrl.currentTile = _board.tiles[0];
 
         _playerCtrlMap[clientId] = playerCtrl;
         _playerDataMap[clientId] = new PlayerData(clientId);
+        _playerDataMap[clientId].currentTile = _board.tiles[0];
 
         _playerDiceNumberList[clientId] = -1;
     }
@@ -99,7 +99,7 @@ public class BoardManager : NetSingleton<BoardManager>
     [Rpc(SendTo.Server)] //클 -> 서 주사위 굴려줘
     public void RequestRollDiceServerRpc(ulong clientId)
     {
-        if (!_canInput)
+        if (!_canInput.Value)
             return;
 
         if (_currentState.Value == GameState.GameReady)
@@ -126,16 +126,16 @@ public class BoardManager : NetSingleton<BoardManager>
 
                 //첫번째 턴 Player의 정면 카메라 On
                 //플레이어의 턴 시작 시점에 주사위 켜기
-                _playerCtrlMap[_currentPlayerId].ToggleDice(true);
+                _playerCtrlMap[_currentPlayerId].ToggleDiceRpc(true);
             }
         }
         else if (_currentState.Value == GameState.GamePlay)
         {
-            if (!IsPlayersTurn(clientId)) return;
+            if (!IsPlayersTurn(clientId) || !_canInput.Value) return;
             //굴리고 이동 
-
+            _canInput.Value = false;
             int diceValue = UnityEngine.Random.Range(1, 7);
-            TogglePlayerDiceRpc(clientId, false);
+            TogglePlayerDice(clientId, false);
 
             StartCoroutine(SendTileCo(clientId, diceValue));
         }
@@ -144,15 +144,15 @@ public class BoardManager : NetSingleton<BoardManager>
     [Rpc(SendTo.Server)]
     private void RollDiceSequenceRpc(ulong clientId, int diceValue)
     {
-        TogglePlayerDiceRpc(clientId, false);
+        TogglePlayerDice(clientId, false);
     }
 
-    [Rpc(SendTo.ClientsAndHost)]
-    private void TogglePlayerDiceRpc(ulong clientId, bool isOn)
+
+    private void TogglePlayerDice(ulong clientId, bool isOn)
     {
         if (_playerCtrlMap.TryGetValue(clientId, out var ctrl))
         {
-            ctrl.ToggleDice(isOn);
+            ctrl.ToggleDiceRpc(isOn);
         }
     }
 
@@ -184,7 +184,7 @@ public class BoardManager : NetSingleton<BoardManager>
 
             data.MoveTo(nextTile);
             controller.MoveTo(nextTile);
-            controller.TurnOnDiceNumber(diceValue - i);
+            controller.TurnOnDiceNumberRpc(diceValue - i);
             tileIndex = nextIndex;
 
             while (controller.IsMoving)
@@ -193,9 +193,10 @@ public class BoardManager : NetSingleton<BoardManager>
             }
 
             yield return new WaitForSeconds(0.1f);
-            controller.TurnOffDiceNumber();
+            controller.TurnOffDiceNumberRpc();
         }
         NextTurn();
+        _canInput.Value = true;
     }
 
     private void NextTurn()
@@ -214,15 +215,15 @@ public class BoardManager : NetSingleton<BoardManager>
         }
 
         _currentPlayerId = _turnOrder[_currentPlayerIndex];
-        TogglePlayerDiceRpc(_currentPlayerId, true);
+        TogglePlayerDice(_currentPlayerId, true);
     }
 
     private void GetInput(object sender, bool isPressed)
     {
         if (!isPressed) return;
         
-            RequestRollDiceServerRpc(NetworkManager.Singleton.LocalClientId);
-        
+        RequestRollDiceServerRpc(NetworkManager.Singleton.LocalClientId);
+        Debug.Log(NetworkManager.Singleton.LocalClientId);
     }
 
 }

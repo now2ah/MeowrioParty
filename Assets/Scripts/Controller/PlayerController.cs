@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using Unity.Netcode;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
-    [SerializeField] private Dice _diceObj;
+    [SerializeField] private DiceController _diceObj;
     [SerializeField] private List<GameObject> _diceNumberObjects = new List<GameObject>();
 
     private Animator _animator;
 
-    public Tile currentTile; // COMMENT: 게임 진행과 관련된 부분이므로 BoardManager가 갖고 있어야 함.
     public bool IsMoving { get; private set; }
     [SerializeField] private float moveSpeed = 3f;
 
@@ -38,15 +38,13 @@ public class PlayerController : MonoBehaviour
                     .OnComplete(() =>
                     {
                         IsMoving = false;
-                        currentTile = nextTile;
-
                         _animator.SetBool("isMoving", false);
                     });
         }
     }
-    public void TurnOnDiceNumber(int index)
+    public void TurnOnDiceNumberRpc(int index)
     {
-        TurnOffDiceNumber();
+        TurnOffDiceNumberRpc();
 
         if (_diceNumberObjects[index - 1] != null)
         {
@@ -54,7 +52,7 @@ public class PlayerController : MonoBehaviour
         }
 
     }
-    public void TurnOffDiceNumber()
+    public void TurnOffDiceNumberRpc()
     {
         foreach (var diceNumberObject in _diceNumberObjects)
         {
@@ -63,15 +61,14 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    
-    public void ToggleDice(bool isOn)
+    [Rpc(SendTo.Everyone)]
+    public void ToggleDiceRpc(bool isOn)
     {
         _diceObj.gameObject.SetActive(isOn);
     }
 
     public void SetStartTile(Tile tile)
     {
-        currentTile = tile;
         gameObject.transform.position = tile.gameObject.transform.position;
     }
 
