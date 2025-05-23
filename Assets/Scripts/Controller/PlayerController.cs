@@ -42,9 +42,10 @@ public class PlayerController : NetworkBehaviour
                     });
         }
     }
+    [Rpc(SendTo.ClientsAndHost)]
     public void TurnOnDiceNumberRpc(int index)
     {
-        TurnOffDiceNumberRpc();
+        //TurnOffDiceNumberRpc();
 
         if (_diceNumberObjects[index - 1] != null)
         {
@@ -52,6 +53,8 @@ public class PlayerController : NetworkBehaviour
         }
 
     }
+
+    [Rpc(SendTo.ClientsAndHost)]
     public void TurnOffDiceNumberRpc()
     {
         foreach (var diceNumberObject in _diceNumberObjects)
