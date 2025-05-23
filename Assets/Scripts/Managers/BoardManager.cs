@@ -21,9 +21,10 @@ public class BoardManager : NetSingleton<BoardManager>
 
     [SerializeField] private NetworkList<ulong> _turnOrder; //순서 정해서 여기에 넣기 
 
-    [SerializeField] private Board _board;
+    //[SerializeField] private Board _board;
+    [SerializeField] private TileController[] _tileControllers;
     [SerializeField] private ulong _currentPlayerId;
-    [SerializeField] private bool _canInput = false;
+    private NetworkVariable<bool> _canInput = new NetworkVariable<bool>(false);
 
     private int _currentPlayerIndex; // 현재 움직이고 있는 플레이어의 인덱스
     private Dictionary<ulong, int> _playerDiceNumberList = new(); //순서뽑을 때 필요한 tempDic
@@ -33,6 +34,12 @@ public class BoardManager : NetSingleton<BoardManager>
     //temporary
     public List<GameObject> characterPrefabList;
 
+    private Dictionary<ulong, PlayerData> _playerDataMap = new();
+    private Dictionary<ulong, PlayerController> _playerCtrlMap = new();
+    private Dictionary<int, TileController> _tileCtrlMap = new();
+    private Dictionary<int, Tile> _tileDataMap = new();
+
+
     public override void Awake()
     {
         base.Awake();
@@ -41,6 +48,15 @@ public class BoardManager : NetSingleton<BoardManager>
         _currentRound = 0;
         _currentPlayerIndex = 0;
         _turnOrder = new NetworkList<ulong>();
+        
+        //Test용 초기화
+        for (int i = 0; i < _tileControllers.Length; i++)
+        {
+            Tile tile = new WrapTile();
+            _tileDataMap[i] = tile;
+
+            _tileCtrlMap[i] = _tileControllers[i];
+        }
     }
 
     public override void OnNetworkSpawn()
@@ -50,10 +66,10 @@ public class BoardManager : NetSingleton<BoardManager>
         if (IsServer)
         {
             _currentState.Value = GameState.GameReady;
+
         }
-
         CameraManager.Instance.ChangeCamera(0);
-
+        inputManager.OnConfirmButtonPerformed += GetInput;
         StartOpeningSequence();
     }
 
@@ -67,7 +83,8 @@ public class BoardManager : NetSingleton<BoardManager>
         CameraManager.Instance.ChangeCamera(1);
         yield return new WaitForSeconds(2);
 
-        _canInput = true;
+        if(IsServer)
+            _canInput.Value = true;
         //주사위를 On 시킨다
     }
 
@@ -78,18 +95,23 @@ public class BoardManager : NetSingleton<BoardManager>
 
         int prefabIndex = NetworkManager.Singleton.ConnectedClientsList.Count - 1;
         Vector3 spawnPos = _spawnPointList[prefabIndex].transform.position;
+
         GameObject playerObj = Instantiate(characterPrefabList[prefabIndex], spawnPos, Quaternion.identity);
         playerObj.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
 
-        Player player = playerObj.GetComponent<Player>();
-        player.currentTile = _board.tiles[0];
+        PlayerController playerCtrl = playerObj.GetComponent<PlayerController>();
+
+        _playerCtrlMap[clientId] = playerCtrl;
+        _playerDataMap[clientId] = new PlayerData(clientId);
+        _playerDataMap[clientId].currentTile = _tileDataMap[0];
+
         _playerDiceNumberList[clientId] = -1;
     }
 
     [Rpc(SendTo.Server)] //클 -> 서 주사위 굴려줘
     public void RequestRollDiceServerRpc(ulong clientId)
     {
-        if (!_canInput)
+        if (!_canInput.Value)
             return;
 
         if (_currentState.Value == GameState.GameReady)
@@ -111,38 +133,39 @@ public class BoardManager : NetSingleton<BoardManager>
                 //Player들 시작 타일로 이동
                 foreach (var connectedClient in NetworkManager.Singleton.ConnectedClients)
                 {
-                    connectedClient.Value.PlayerObject.transform.position = _board.tiles[0].transform.position;
+                    _playerCtrlMap[connectedClient.Key].TransportPlayer(_tileControllers[0]);
                 }
 
                 //첫번째 턴 Player의 정면 카메라 On
                 //플레이어의 턴 시작 시점에 주사위 켜기
-                TogglePlayerDiceRpc(_currentPlayerId, true);
+                _playerCtrlMap[_currentPlayerId].ToggleDiceRpc(true);
             }
         }
         else if (_currentState.Value == GameState.GamePlay)
         {
-            if (!IsPlayersTurn(clientId)) return;
+            if (!IsPlayersTurn(clientId) || !_canInput.Value) return;
             //굴리고 이동 
-
+            _canInput.Value = false;
             int diceValue = UnityEngine.Random.Range(1, 7);
+            TogglePlayerDice(clientId, false);
 
-            TogglePlayerDiceRpc(clientId, false);
-
-            StartCoroutine(SendTileCo(_turnOrder[_currentPlayerIndex], diceValue));
+            StartCoroutine(SendTileCo(clientId, diceValue));
         }
     }
 
     [Rpc(SendTo.Server)]
     private void RollDiceSequenceRpc(ulong clientId, int diceValue)
     {
-        TogglePlayerDiceRpc(clientId, false);
+        TogglePlayerDice(clientId, false);
     }
 
-    [Rpc(SendTo.ClientsAndHost)]
-    private void TogglePlayerDiceRpc(ulong clientId, bool isOn)
+
+    private void TogglePlayerDice(ulong clientId, bool isOn)
     {
-        var player = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.GetComponent<Player>();
-        player._dice.gameObject.SetActive(isOn);
+        if (_playerCtrlMap.TryGetValue(clientId, out var ctrl))
+        {
+            ctrl.ToggleDiceRpc(isOn);
+        }
     }
 
     private void SetTurnOrder()
@@ -161,27 +184,40 @@ public class BoardManager : NetSingleton<BoardManager>
 
     private IEnumerator SendTileCo(ulong playerId, int diceValue)
     {
-        var player = NetworkManager.Singleton.ConnectedClients[playerId].PlayerObject.GetComponent<Player>();
-        int tileIndex = player.currentTile.tileIndex;
+        PlayerData data = _playerDataMap[playerId];
+        PlayerController controller = _playerCtrlMap[playerId];
+
+        int tileIndex = data.currentTile.tileIndex;
 
         for (int i = 0; i < diceValue; i++) //한 타일씩 -> 나중에 갈림길 고려
         {
-            int nextIndex = (tileIndex + 1) % _board.tiles.Length;
-            Tile nextTile = _board.tiles[nextIndex];
+            int nextIndex = (tileIndex + 1) % _tileDataMap.Count;
+            TileController nextTileObj = _tileCtrlMap[nextIndex];
+            Tile nextTile = _tileDataMap[nextIndex];
 
-            player.MoveTo(nextTile);
-            player.TurnOnDiceNumber(diceValue - i);
+            data.MoveTo(nextTile);
+            controller.MoveTo(nextTileObj);
+            controller.TurnOnDiceNumberRpc(diceValue - i);
             tileIndex = nextIndex;
 
-            while (player.IsMoving)
+            while (controller.IsMoving)
             {
                 yield return null;
             }
-
             yield return new WaitForSeconds(0.1f);
-            player.TurnOffDiceNumber();
+            controller.TurnOffDiceNumberRpc();
+        }
+        //tile effect 발현 - 수정 필요 
+        if (_tileDataMap[tileIndex] is WrapTile)
+        {
+            controller.TransportPlayer(_tileControllers[2]); //임의로 3번째 타일로 이동시킴
+        }
+        else
+        {
+            _tileDataMap[tileIndex].TileEvent(data, 2);
         }
         NextTurn();
+        _canInput.Value = true;
     }
 
     private void NextTurn()
@@ -200,6 +236,16 @@ public class BoardManager : NetSingleton<BoardManager>
         }
 
         _currentPlayerId = _turnOrder[_currentPlayerIndex];
-        TogglePlayerDiceRpc(_currentPlayerId, true);
+        TogglePlayerDice(_currentPlayerId, true);
     }
+
+    //Input도 나중에 아예 분리해내면 좋을 것 같습니다.
+    private void GetInput(object sender, bool isPressed)
+    {
+        if (!isPressed) return;
+
+        RequestRollDiceServerRpc(NetworkManager.Singleton.LocalClientId);
+        Debug.Log(NetworkManager.Singleton.LocalClientId);
+    }
+
 }
