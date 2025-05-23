@@ -1,4 +1,6 @@
 
+using System.Diagnostics;
+
 public class PlayerData
 {
     private ulong _clientId;
@@ -10,15 +12,21 @@ public class PlayerData
     public PlayerData(ulong clinetID)
     {
         _clientId = clinetID;
-        
+
     }
     public void MoveTo(Tile nextTile)
     {
         currentTile = nextTile;
     }
 
-    public void AddCoins(int coinCnt)
+    public void UpdateCoinCnt(int coinCnt)
     {
+        Debug.Print("myCoin");
         Coins += coinCnt;
     }
+    public void UpdateStarCnt(int starCnt)
+    {
+        Stars += starCnt;
+    }
+
 }

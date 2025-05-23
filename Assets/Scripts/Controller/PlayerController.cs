@@ -24,7 +24,7 @@ public class PlayerController : NetworkBehaviour
     }
 
 
-    public void MoveTo(Tile nextTile)
+    public void MoveTo(TileController nextTile)
     {
         if (!IsMoving)
         {
@@ -70,7 +70,7 @@ public class PlayerController : NetworkBehaviour
         _diceObj.gameObject.SetActive(isOn);
     }
 
-    public void SetStartTile(Tile tile)
+    public void TransportPlayer(TileController tile)
     {
         gameObject.transform.position = tile.gameObject.transform.position;
     }

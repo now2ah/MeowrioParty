@@ -21,7 +21,8 @@ public class BoardManager : NetSingleton<BoardManager>
 
     [SerializeField] private NetworkList<ulong> _turnOrder; //순서 정해서 여기에 넣기 
 
-    [SerializeField] private Board _board;
+    //[SerializeField] private Board _board;
+    [SerializeField] private TileController[] _tileControllers;
     [SerializeField] private ulong _currentPlayerId;
     private NetworkVariable<bool> _canInput = new NetworkVariable<bool>(false);
 
@@ -35,6 +36,8 @@ public class BoardManager : NetSingleton<BoardManager>
 
     private Dictionary<ulong, PlayerData> _playerDataMap = new();
     private Dictionary<ulong, PlayerController> _playerCtrlMap = new();
+    private Dictionary<int, TileController> _tileCtrlMap = new();
+    private Dictionary<int, Tile> _tileDataMap = new();
 
 
     public override void Awake()
@@ -45,6 +48,15 @@ public class BoardManager : NetSingleton<BoardManager>
         _currentRound = 0;
         _currentPlayerIndex = 0;
         _turnOrder = new NetworkList<ulong>();
+        
+        //Test용 초기화
+        for (int i = 0; i < _tileControllers.Length; i++)
+        {
+            Tile tile = new WrapTile();
+            _tileDataMap[i] = tile;
+
+            _tileCtrlMap[i] = _tileControllers[i];
+        }
     }
 
     public override void OnNetworkSpawn()
@@ -91,7 +103,7 @@ public class BoardManager : NetSingleton<BoardManager>
 
         _playerCtrlMap[clientId] = playerCtrl;
         _playerDataMap[clientId] = new PlayerData(clientId);
-        _playerDataMap[clientId].currentTile = _board.tiles[0];
+        _playerDataMap[clientId].currentTile = _tileDataMap[0];
 
         _playerDiceNumberList[clientId] = -1;
     }
@@ -121,7 +133,7 @@ public class BoardManager : NetSingleton<BoardManager>
                 //Player들 시작 타일로 이동
                 foreach (var connectedClient in NetworkManager.Singleton.ConnectedClients)
                 {
-                    _playerCtrlMap[connectedClient.Key].SetStartTile(_board.tiles[0]);
+                    _playerCtrlMap[connectedClient.Key].TransportPlayer(_tileControllers[0]);
                 }
 
                 //첫번째 턴 Player의 정면 카메라 On
@@ -179,11 +191,12 @@ public class BoardManager : NetSingleton<BoardManager>
 
         for (int i = 0; i < diceValue; i++) //한 타일씩 -> 나중에 갈림길 고려
         {
-            int nextIndex = (tileIndex + 1) % _board.tiles.Length;
-            Tile nextTile = _board.tiles[nextIndex];
+            int nextIndex = (tileIndex + 1) % _tileDataMap.Count;
+            TileController nextTileObj = _tileCtrlMap[nextIndex];
+            Tile nextTile = _tileDataMap[nextIndex];
 
             data.MoveTo(nextTile);
-            controller.MoveTo(nextTile);
+            controller.MoveTo(nextTileObj);
             controller.TurnOnDiceNumberRpc(diceValue - i);
             tileIndex = nextIndex;
 
@@ -191,9 +204,17 @@ public class BoardManager : NetSingleton<BoardManager>
             {
                 yield return null;
             }
-
             yield return new WaitForSeconds(0.1f);
             controller.TurnOffDiceNumberRpc();
+        }
+        //tile effect 발현 - 수정 필요 
+        if (_tileDataMap[tileIndex] is WrapTile)
+        {
+            controller.TransportPlayer(_tileControllers[2]); //임의로 3번째 타일로 이동시킴
+        }
+        else
+        {
+            _tileDataMap[tileIndex].TileEvent(data, 2);
         }
         NextTurn();
         _canInput.Value = true;
@@ -218,10 +239,11 @@ public class BoardManager : NetSingleton<BoardManager>
         TogglePlayerDice(_currentPlayerId, true);
     }
 
+    //Input도 나중에 아예 분리해내면 좋을 것 같습니다.
     private void GetInput(object sender, bool isPressed)
     {
         if (!isPressed) return;
-        
+
         RequestRollDiceServerRpc(NetworkManager.Singleton.LocalClientId);
         Debug.Log(NetworkManager.Singleton.LocalClientId);
     }
