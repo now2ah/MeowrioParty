@@ -18,11 +18,9 @@ public class BoardManager : NetSingleton<BoardManager>
     [SerializeField] private NetworkVariable<GameState> _currentState;
     [SerializeField] private int _maxRound;
     [SerializeField] private int _currentRound;
-
     [SerializeField] private NetworkList<ulong> _turnOrder; //순서 정해서 여기에 넣기 
 
-    //[SerializeField] private Board _board;
-    [SerializeField] private TileController[] _tileControllers;
+    [SerializeField] private Board _board;
     [SerializeField] private ulong _currentPlayerId;
     private NetworkVariable<bool> _canInput = new NetworkVariable<bool>(false);
 
@@ -48,14 +46,29 @@ public class BoardManager : NetSingleton<BoardManager>
         _currentRound = 0;
         _currentPlayerIndex = 0;
         _turnOrder = new NetworkList<ulong>();
-        
-        //Test용 초기화
-        for (int i = 0; i < _tileControllers.Length; i++)
-        {
-            Tile tile = new WrapTile();
-            _tileDataMap[i] = tile;
 
-            _tileCtrlMap[i] = _tileControllers[i];
+        //Test용 초기화
+        for (int i = 0; i < _board.tileControllers.Length; i++)
+        {
+            switch (_board.tileControllers[i].tileType)
+            {
+                case ETileType.CoinTile:
+                    _tileDataMap[i] = new CoinTile(i);;
+                    _tileCtrlMap[i] = _board.tileControllers[i];
+                    break;
+                case ETileType.StarTile:
+                    _tileDataMap[i] = new StarTile(i);
+                    _tileCtrlMap[i] = _board.tileControllers[i];
+                    break;
+                case ETileType.WarpTile:
+                    _tileDataMap[i] = new WarpTile(i);
+                    _tileCtrlMap[i] = _board.tileControllers[i];
+                    break;
+                default:
+                    _tileDataMap[i] = new CoinTile(i);
+                    _tileCtrlMap[i] = _board.tileControllers[i];
+                    break;
+            }
         }
     }
 
@@ -83,7 +96,7 @@ public class BoardManager : NetSingleton<BoardManager>
         CameraManager.Instance.ChangeCamera(1);
         yield return new WaitForSeconds(2);
 
-        if(IsServer)
+        if (IsServer)
             _canInput.Value = true;
         //주사위를 On 시킨다
     }
@@ -133,7 +146,7 @@ public class BoardManager : NetSingleton<BoardManager>
                 //Player들 시작 타일로 이동
                 foreach (var connectedClient in NetworkManager.Singleton.ConnectedClients)
                 {
-                    _playerCtrlMap[connectedClient.Key].TransportPlayer(_tileControllers[0]);
+                    _playerCtrlMap[connectedClient.Key].TransportPlayer(_tileCtrlMap[0]);
                 }
 
                 //첫번째 턴 Player의 정면 카메라 On
@@ -208,9 +221,9 @@ public class BoardManager : NetSingleton<BoardManager>
             controller.TurnOffDiceNumberRpc();
         }
         //tile effect 발현 - 수정 필요 
-        if (_tileDataMap[tileIndex] is WrapTile)
+        if (_tileDataMap[tileIndex] is WarpTile)
         {
-            controller.TransportPlayer(_tileControllers[2]); //임의로 3번째 타일로 이동시킴
+            controller.TransportPlayer(_tileCtrlMap[2]); //임의로 3번째 타일로 이동시킴
         }
         else
         {

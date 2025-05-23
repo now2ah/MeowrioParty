@@ -21,13 +21,22 @@ public class CoinTile : Tile
 }
 public class StarTile : Tile
 {
+    public StarTile(int index)
+    {
+        tileIndex = index;
+    }
     public override void TileEvent(PlayerData playerData, int star)
     {
         playerData.UpdateStarCnt(star);
     }
 }
-public class WrapTile : Tile
+public class WarpTile : Tile
 {
+    public WarpTile(int index)
+    {
+        tileIndex = index;
+    }
+
     public override void TileEvent(PlayerData playerData, int coin)
     {
         playerData.UpdateCoinCnt(coin);

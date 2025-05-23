@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class Board :MonoBehaviour
+
+public class Board : MonoBehaviour
 {
-    public Tile[] tiles;
+    public TileController[] tileControllers;
 }
