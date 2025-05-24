@@ -1,11 +1,14 @@
 using System;
+using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
-// TODO: º¸µå ¸Å´ÏÀú¿¡°Ô °á°ú Àü¼Û°ú º¸»ó Ã³¸®ÇÏ¶ó°í º¸³¾·Á¸é ¹Ì´Ï °ÔÀÓ »óÅÂ¸¦ °ü¸®ÇÏ°í ÀÖ´Â ¹Ì´Ï °ÔÀÓ ¸Å´ÏÀú°¡ ÇÊ¿äÇÒ°Å °°À½
-// ¹Ì´Ï °ÔÀÓ ¸Å´ÏÀú·Î º¸µå ¸Å´ÏÀú°¡ ÇÏ´ø°Å Ã³·³ ready»óÅÂ¿Í end »óÅÂÀÏ ¶§ ÀÔ·ÂÀ» ¸·°í ¿¬ÃâÀ» º¸¿©Áà¾ß ÇÔ
-
-public class MiniGameManager : MonoBehaviour
+public class MiniGameManager : NetworkBehaviour
 {
+    public InputManagerSO inputManager;
+    private PlayerController controller;
+
+
     private float _finishLineX;
     private float _baseSpeed;
     private float _maxSpeed;
@@ -17,12 +20,13 @@ public class MiniGameManager : MonoBehaviour
     [SerializeField] private Transform _miniGameStartPos;
     private Vector3 _originalPos;
 
-    [SerializeField] private KeyCode _inputKey = KeyCode.A;
 
     public bool isMiniFinished = false;
 
     private Animator _animator;
     private float _defaultAnimSpeed;
+
+    private bool isReady = false;
 
     private void Awake()
     {
@@ -33,46 +37,46 @@ public class MiniGameManager : MonoBehaviour
         _deceleration = 5.0f;
         _currentSpeed = 0.0f;
 
-        _animator = GetComponent<Animator>();
-        _defaultAnimSpeed = _animator.speed;
-
-        _originalPos = transform.position;
-
-        if (_miniGameStartPos != null )
-        {
-            transform.position = _miniGameStartPos.position;
-            transform.rotation = _miniGameStartPos.rotation;
-        }        
     }
-    private void Start()
+    public override void OnNetworkSpawn()
     {
+        if (!IsOwner) return;
+        StartCoroutine(WaitAndInitialize());
+        
+    }
+    private IEnumerator WaitAndInitialize()
+    {
+        yield return new WaitUntil(() => NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject() != null);
+        controller = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject()
+            ?.GetComponent<PlayerController>();
+
+        _animator = controller.gameObject.GetComponent<Animator>();
+        _defaultAnimSpeed = _animator.speed;
         _animator.SetBool("isMoving", true);
+
+        _originalPos = controller.transform.position;
+        controller.transform.position = _miniGameStartPos.position;
+        controller.transform.rotation = _miniGameStartPos.rotation;
+
+        inputManager.OnConfirmButtonPerformed += GetInput;
+
+        isReady = true;
+
     }
 
     private void Update()
     {
-        if (isMiniFinished)
-        {
-            return;
-        }
-        PressedButton();
+        if (!isReady || isMiniFinished) return;
         Deceleration();
         Move();
-        CheckFinish();
-    } 
-
-    private void PressedButton()
-    {        
-        if (Input.GetKeyDown(_inputKey))
-        {
-            Accelerate();
-        }
     }
 
     private void Accelerate()
     {
+
         _currentSpeed += _acceleration;
         _currentSpeed = Mathf.Clamp(_currentSpeed, _baseSpeed, _maxSpeed);
+
     }
 
     private void Deceleration()
@@ -83,8 +87,8 @@ public class MiniGameManager : MonoBehaviour
 
     private void Move()
     {
-        // ÇÃ·¹ÀÌ¾îÀÇ º¸¿©Áö´Â ºÎºĞ
-        transform.Translate(Vector3.forward * _currentSpeed * Time.deltaTime);
+        // í”Œë ˆì´ì–´ì˜ ë³´ì—¬ì§€ëŠ” ë¶€ë¶„
+        controller.transform.Translate(Vector3.forward * _currentSpeed * Time.deltaTime);
         UpdateAnimatorSpeed();
     }
 
@@ -100,11 +104,11 @@ public class MiniGameManager : MonoBehaviour
         {
             isMiniFinished = true;
             _currentSpeed = 0.0f;
-            Debug.Log(gameObject.name + "°á½Â¼± µµÂø");
-            // ¾Ö´Ï¸ŞÀÌ¼Ç ¿¬Ãâ
+            Debug.Log(gameObject.name + "ê²°ìŠ¹ì„  ë„ì°©");
+            // ì• ë‹ˆë©”ì´ì…˜ ì—°ì¶œ
             _animator.SetBool("isMoving", false);
             _animator.speed = _defaultAnimSpeed;
-            // ¹Ì´Ï°ÔÀÓ ¸Å´ÏÀú·Î °ÔÀÓ ³¡³µ´Ù´Â°É ¾Ë¸²
+            // ë¯¸ë‹ˆê²Œì„ ë§¤ë‹ˆì €ë¡œ ê²Œì„ ëë‚¬ë‹¤ëŠ”ê±¸ ì•Œë¦¼
             ReturnToOriginalPos();
         }
     }
@@ -113,6 +117,13 @@ public class MiniGameManager : MonoBehaviour
     {
         transform.position = _originalPos;
         transform.rotation = Quaternion.identity;
-        Debug.Log("¿ø·¡ À§Ä¡ º¹±Í");
+        Debug.Log("ì›ë˜ ìœ„ì¹˜ ë³µê·€");
+    }
+    
+    private void GetInput(object sender, bool isPressed)
+    {
+        if (!isPressed || !IsOwner) return;
+
+        Accelerate();
     }
 }

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum GameState
 {
     GameReady,
     GamePlay,
     GameEnd,
+    MiniGame
 }
 
 public class BoardManager : NetSingleton<BoardManager>
@@ -33,7 +35,7 @@ public class BoardManager : NetSingleton<BoardManager>
     public List<GameObject> characterPrefabList;
 
     private Dictionary<ulong, PlayerData> _playerDataMap = new();
-    private Dictionary<ulong, PlayerController> _playerCtrlMap = new();
+    public Dictionary<ulong, PlayerController> _playerCtrlMap = new();
 
     public override void Awake()
     {
@@ -195,6 +197,7 @@ public class BoardManager : NetSingleton<BoardManager>
         }
 
         _board.tileControllers[tileIndex].TileEvent(data, controller);
+        yield return new WaitForSeconds(2f);
         NextTurn();
     }
     private void NextTurn()
@@ -202,17 +205,33 @@ public class BoardManager : NetSingleton<BoardManager>
         _canInput.Value = true;
         _currentPlayerIndex++;
 
-        if (_currentPlayerIndex >= _turnOrder.Count)
+        if (_currentPlayerIndex == _turnOrder.Count)
         {
             _currentPlayerIndex = 0;
             _currentRound++;
-            if (_currentRound >= _maxRound)
+            if (_currentRound > _maxRound)
             {
                 _currentState.Value = GameState.GameEnd;
                 return;
             }
+            StartMiniGame();
         }
         _currentPlayerId = _turnOrder[_currentPlayerIndex];
+    }
+    private void StartMiniGame()
+    {
+        _currentState.Value = GameState.MiniGame;
+        NetworkManager.Singleton.SceneManager.LoadScene("TapRaceScene", LoadSceneMode.Additive);
+    }
+    private void StopMiniGame()
+    {
+        if (_currentRound > _maxRound)
+        {
+            _currentState.Value = GameState.GameEnd;
+            return;
+        }
+        _currentState.Value = GameState.GamePlay;
+        //NetworkManager.Singleton.SceneManager.UnloadScene("TapRaceScene");
         TogglePlayerDice(_currentPlayerId, true);
     }
 
