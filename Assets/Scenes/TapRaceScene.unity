@@ -175,10 +175,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  inputManager: {fileID: 11400000, guid: d47f0c20fe52b0f40a1474b9f2b13483, type: 2}
-  _currentSpeed: 0
-  _miniGameStartPos: {fileID: 932456565}
-  isMiniFinished: 0
+  _miniGameStartPos:
+  - {fileID: 1029981129}
+  - {fileID: 353635148}
+  _miniGameFinishPos: {fileID: 1489022779}
+  _miniGamePlayerPrefab: {fileID: 3229872934675508115, guid: 1684922f8e236c040b14e674c635546c, type: 3}
 --- !u!4 &196240094
 Transform:
   m_ObjectHideFlags: 0

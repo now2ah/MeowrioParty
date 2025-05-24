@@ -37,6 +37,8 @@ public class BoardManager : NetSingleton<BoardManager>
     private Dictionary<ulong, PlayerData> _playerDataMap = new();
     public Dictionary<ulong, PlayerController> _playerCtrlMap = new();
 
+    private bool _isMiniGameFinished = false;
+
     public override void Awake()
     {
         base.Awake();
@@ -223,7 +225,8 @@ public class BoardManager : NetSingleton<BoardManager>
         _currentState.Value = GameState.MiniGame;
         NetworkManager.Singleton.SceneManager.LoadScene("TapRaceScene", LoadSceneMode.Additive);
     }
-    private void StopMiniGame()
+
+    public void StopMiniGame()
     {
         if (_currentRound > _maxRound)
         {
@@ -233,6 +236,29 @@ public class BoardManager : NetSingleton<BoardManager>
         _currentState.Value = GameState.GamePlay;
         //NetworkManager.Singleton.SceneManager.UnloadScene("TapRaceScene");
         TogglePlayerDice(_currentPlayerId, true);
+    }
+
+    public void OnMiniGamePlayerFinished(ulong clientId)
+    {
+        if (_isMiniGameFinished) return;
+
+        _isMiniGameFinished = true;
+
+        Debug.Log($"미니게임 우승자: {clientId}");
+
+        // UI 연출 추가
+        EndMiniGame();
+    }
+
+    private void EndMiniGame()
+    {
+        Debug.Log("미니게임 종료 처리!");
+
+        // 씬 언로드, 보상 지급, 다음 라운드 시작 등 처리
+        //NetworkManager.SceneManager.UnloadScene("TapRaceScene");
+
+        // 씬 언로드 후 상태 변경
+        StopMiniGame();
     }
 
     //Input도 나중에 아예 분리해내면 좋을 것 같습니다.

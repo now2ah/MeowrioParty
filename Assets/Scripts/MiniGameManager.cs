@@ -1,129 +1,70 @@
-using System;
 using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MiniGameManager : NetworkBehaviour
 {
-    public InputManagerSO inputManager;
-    private PlayerController controller;
+    [SerializeField] private Transform[] _miniGameStartPos;
+    [SerializeField] private Transform _miniGameFinishPos;
+    [SerializeField] private GameObject _miniGamePlayerPrefab;
+    private ulong _winnerClientId;
+    private bool _isFinished = false;
 
-
-    private float _finishLineX;
-    private float _baseSpeed;
-    private float _maxSpeed;
-    private float _acceleration;
-    private float _deceleration;
-
-    [SerializeField] private float _currentSpeed;
-
-    [SerializeField] private Transform _miniGameStartPos;
-    private Vector3 _originalPos;
-
-
-    public bool isMiniFinished = false;
-
-    private Animator _animator;
-    private float _defaultAnimSpeed;
-
-    private bool isReady = false;
-
-    private void Awake()
-    {
-        _finishLineX = 30.0f;
-        _baseSpeed = 1.0f;
-        _maxSpeed = 10.0f;
-        _acceleration = 3.0f;
-        _deceleration = 5.0f;
-        _currentSpeed = 0.0f;
-
-    }
     public override void OnNetworkSpawn()
     {
         if (!IsOwner) return;
-        StartCoroutine(WaitAndInitialize());
-        
-    }
-    private IEnumerator WaitAndInitialize()
-    {
-        yield return new WaitUntil(() => NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject() != null);
-        controller = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject()
-            ?.GetComponent<PlayerController>();
 
-        _animator = controller.gameObject.GetComponent<Animator>();
-        _defaultAnimSpeed = _animator.speed;
-        _animator.SetBool("isMoving", true);
-
-        _originalPos = controller.transform.position;
-        controller.transform.position = _miniGameStartPos.position;
-        controller.transform.rotation = _miniGameStartPos.rotation;
-
-        inputManager.OnConfirmButtonPerformed += GetInput;
-
-        isReady = true;
-
+        StartCoroutine(SpawnAllPlayers());
     }
 
-    private void Update()
+
+    private IEnumerator SpawnAllPlayers()
     {
-        if (!isReady || isMiniFinished) return;
-        Deceleration();
-        Move();
-    }
+        // 모든 클라이언트가 연결될 때까지 대기
+        yield return new WaitUntil(() => NetworkManager.Singleton.ConnectedClients.Count >= _miniGameStartPos.Length);
 
-    private void Accelerate()
-    {
-
-        _currentSpeed += _acceleration;
-        _currentSpeed = Mathf.Clamp(_currentSpeed, _baseSpeed, _maxSpeed);
-
-    }
-
-    private void Deceleration()
-    {
-        _currentSpeed -= _deceleration * Time.deltaTime;
-        _currentSpeed = Mathf.Clamp(_currentSpeed, _baseSpeed, _maxSpeed);
-    }
-
-    private void Move()
-    {
-        // 플레이어의 보여지는 부분
-        controller.transform.Translate(Vector3.forward * _currentSpeed * Time.deltaTime);
-        UpdateAnimatorSpeed();
-    }
-
-    private void UpdateAnimatorSpeed()
-    {
-        float speedRatio = _currentSpeed / _baseSpeed;
-        _animator.speed = Mathf.Clamp(speedRatio, 0.5f, 2.0f);
-    }
-
-    private void CheckFinish()
-    {
-        if (transform.position.x >= _finishLineX)
+        int index = 0;
+        foreach (var kvp in NetworkManager.Singleton.ConnectedClients)
         {
-            isMiniFinished = true;
-            _currentSpeed = 0.0f;
-            Debug.Log(gameObject.name + "결승선 도착");
-            // 애니메이션 연출
-            _animator.SetBool("isMoving", false);
-            _animator.speed = _defaultAnimSpeed;
-            // 미니게임 매니저로 게임 끝났다는걸 알림
-            ReturnToOriginalPos();
+            ulong clientId = kvp.Key;
+            Vector3 pos = _miniGameStartPos[index].position;
+            Quaternion rot = _miniGameStartPos[index].rotation;
+
+            GameObject obj = Instantiate(_miniGamePlayerPrefab, pos, rot);
+            NetworkObject netObj = obj.GetComponent<NetworkObject>();
+
+            netObj.SpawnAsPlayerObject(clientId, true);
+
+            var playerController = obj.GetComponent<MiniGamePlayerController>();
+            Vector3 finishPos = _miniGameFinishPos.position;
+            playerController.SetFinishPosition(finishPos);
+
+            index++;
         }
     }
 
-    private void ReturnToOriginalPos()
+    // 서버에서 호출됨
+    public void OnPlayerFinished(ulong clientId)
     {
-        transform.position = _originalPos;
-        transform.rotation = Quaternion.identity;
-        Debug.Log("원래 위치 복귀");
-    }
-    
-    private void GetInput(object sender, bool isPressed)
-    {
-        if (!isPressed || !IsOwner) return;
+        if (_isFinished) return;
 
-        Accelerate();
+        _isFinished = true;
+        _winnerClientId = clientId;
+
+        Debug.Log("우승자: " + clientId);
+
+        StartCoroutine(CleanupMiniGame());
+    }
+
+    private IEnumerator CleanupMiniGame()
+    {
+        // 미니게임 플레이어 제거해야 됨       
+
+        // 씬 언로드
+        AsyncOperation unloadOp = SceneManager.UnloadSceneAsync("TapRaceScene");
+        yield return unloadOp;
+
+        Debug.Log("미니게임 씬 언로드 완료");
     }
 }
