@@ -70,6 +70,7 @@ public class PlayerController : NetworkBehaviour
         _diceObj.gameObject.SetActive(isOn);
     }
 
+
     public void TransportPlayer(TileController tile)
     {
         gameObject.transform.position = tile.gameObject.transform.position;
