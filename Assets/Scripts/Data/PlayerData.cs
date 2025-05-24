@@ -1,11 +1,9 @@
-
 using System.Diagnostics;
 
 public class PlayerData
 {
     private ulong _clientId;
-    public Tile currentTile;
-
+    public TileController currentTile;    
     public int Coins;
     public int Stars;
 
@@ -14,7 +12,7 @@ public class PlayerData
         _clientId = clinetID;
 
     }
-    public void MoveTo(Tile nextTile)
+    public void MoveTo(TileController nextTile)
     {
         currentTile = nextTile;
     }
