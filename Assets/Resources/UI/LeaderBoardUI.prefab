@@ -325,10 +325,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UIOpenAnim: {fileID: 0}
-  FirstPlayerNameTxt: {fileID: 5307663231934681208}
-  SeceondPlayerNameTxt: {fileID: 8745886561746279181}
-  ThirdPlayerNameTxt: {fileID: 5684055210340329743}
-  FourthPlayerNameTxt: {fileID: 3275484371970359558}
+  PlayerNameTxt:
+  - {fileID: 5307663231934681208}
+  - {fileID: 8745886561746279181}
+  - {fileID: 5684055210340329743}
+  - {fileID: 3275484371970359558}
   FirstPlayerImg: {fileID: 2308579142197770315}
   SecondPlayerImg: {fileID: 4543780267921954621}
   ThirdPlayerImg: {fileID: 2876620285830178483}

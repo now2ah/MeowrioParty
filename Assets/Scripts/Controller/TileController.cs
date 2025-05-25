@@ -23,10 +23,12 @@ public class TileController : MonoBehaviour
         {
             case ETileType.CoinPlusTile:
                 playerData.UpdateCoinCnt(eventParam);
+                LeaderBoardManager.Instance.UpdateCoin(playerData.ClientId, eventParam);
                 Debug.Log("Coinplus");
                 break;
             case ETileType.CoinMinusTile:
                 playerData.UpdateCoinCnt(-eventParam);
+                LeaderBoardManager.Instance.UpdateCoin(playerData.ClientId, -eventParam);
                 Debug.Log("CoinMinusTile");
                 break;
             case ETileType.StarTile:

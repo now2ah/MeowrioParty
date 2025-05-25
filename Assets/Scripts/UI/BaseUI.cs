@@ -53,7 +53,7 @@ public class BaseUI : MonoBehaviour
             m_OnClose?.Invoke();
         }
         m_OnClose = null;
-        //UIManager.Instance.CloseUI(this);
+        UIManager.Instance.CloseUI(this);
     }
 
     //닫기버튼 눌렀을 때 함수 

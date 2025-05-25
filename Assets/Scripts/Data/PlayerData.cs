@@ -2,14 +2,16 @@ using System.Diagnostics;
 
 public class PlayerData
 {
-    private ulong _clientId;
+    public ulong ClientId;
+    public string PlayerName;
     public TileController currentTile;    
     public int Coins;
     public int Stars;
 
+    public PlayerData(){}
     public PlayerData(ulong clinetID)
     {
-        _clientId = clinetID;
+        ClientId = clinetID;
 
     }
     public void MoveTo(TileController nextTile)

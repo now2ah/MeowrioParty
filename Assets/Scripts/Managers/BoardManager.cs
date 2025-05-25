@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
+using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -37,8 +38,6 @@ public class BoardManager : NetSingleton<BoardManager>
     private Dictionary<ulong, PlayerData> _playerDataMap = new();
     public Dictionary<ulong, PlayerController> _playerCtrlMap = new();
 
-    private bool _isMiniGameFinished = false;
-
     public override void Awake()
     {
         base.Awake();
@@ -46,7 +45,6 @@ public class BoardManager : NetSingleton<BoardManager>
         _maxRound = 2;
         _currentPlayerIndex = 0;
         _turnOrder = new NetworkList<ulong>();
-
     }
 
     public override void OnNetworkSpawn()
@@ -61,11 +59,13 @@ public class BoardManager : NetSingleton<BoardManager>
         }
         CameraManager.Instance.ChangeCamera(0);
         inputManager.OnConfirmButtonPerformed += GetInput;
-        StartOpeningSequence();
+        StartOpeningSequenceRpc();
     }
 
-    private void StartOpeningSequence()
+    [Rpc(SendTo.Everyone)]
+    private void StartOpeningSequenceRpc()
     {
+        UIManager.Instance.OpenNoticeUIEveryoneSecRpc("순서를 정해보죠!", 3f);
         StartCoroutine(OpeningCo());
     }
 
@@ -97,6 +97,8 @@ public class BoardManager : NetSingleton<BoardManager>
         _playerDataMap[clientId].currentTile = _board.tileControllers[0];
 
         _playerDiceNumberList[clientId] = -1;
+
+        LeaderBoardManager.Instance.AddPlayer(clientId,characterPrefabList[prefabIndex].name);
     }
 
     [Rpc(SendTo.Server)] //클 -> 서 주사위 굴려줘
@@ -115,7 +117,7 @@ public class BoardManager : NetSingleton<BoardManager>
             //주사위 숫자 연출 (주사위 off / 숫자 Sprite 출력)
             RollDiceSequenceRpc(clientId, diceValue);
 
-            if (_playerDiceNumberList.All(p => p.Value != -1))
+            if (_playerDiceNumberList.All(p => p.Value != -1)) 
             {
                 SetTurnOrder();
                 _currentState.Value = GameState.GamePlay;
@@ -128,19 +130,21 @@ public class BoardManager : NetSingleton<BoardManager>
                 }
 
                 //첫번째 턴 Player의 정면 카메라 On
-                //플레이어의 턴 시작 시점에 주사위 켜기
+                UIManager.Instance.OpenNoticeUIEveryoneSecRpc(_currentRound.Value + "라운드 시작~!",3f);
+                
                 _playerCtrlMap[_currentPlayerId].ToggleDiceRpc(true);
             }
         }
         else if (_currentState.Value == GameState.GamePlay)
         {
             if (!IsPlayersTurn(clientId) || !_canInput.Value) return;
+            UIManager.Instance.CloseCurrentFrontUIRpc();
             //굴리고 이동 
-            _canInput.Value = false;
             int diceValue = UnityEngine.Random.Range(1, 7);
             TogglePlayerDice(clientId, false);
 
             StartCoroutine(SendTileCo(clientId, diceValue));
+            _canInput.Value = false;
         }
     }
 
@@ -148,6 +152,7 @@ public class BoardManager : NetSingleton<BoardManager>
     private void RollDiceSequenceRpc(ulong clientId, int diceValue)
     {
         TogglePlayerDice(clientId, false);
+        _playerCtrlMap[clientId].TurnOnDiceNumberRpc(diceValue);
     }
 
 
@@ -218,10 +223,13 @@ public class BoardManager : NetSingleton<BoardManager>
             }
             StartMiniGame();
         }
+        if(_currentState.Value!=GameState.MiniGame)
+            UIManager.Instance.OpenNoticeUIEveryoneRpc("주사위를 굴리세요");
         _currentPlayerId = _turnOrder[_currentPlayerIndex];
     }
     private void StartMiniGame()
     {
+        UIManager.Instance.OpenNoticeUIEveryoneSecRpc("미니게임 시작!"+"\n"+"SPACE를 빠르게 눌러 먼저 도착하세요!^0^",5f);
         _currentState.Value = GameState.MiniGame;
         NetworkManager.Singleton.SceneManager.LoadScene("TapRaceScene", LoadSceneMode.Additive);
     }
@@ -242,13 +250,11 @@ public class BoardManager : NetSingleton<BoardManager>
 
     public void OnMiniGamePlayerFinished(ulong clientId)
     {
-        if (_isMiniGameFinished) return;
+        if (!IsServer) return;
+        UIManager.Instance.OpenNoticeUIEveryoneSecRpc("우승자는 " + OwnerClientId + " ㅊㅋㅊㅋ", 3f);
+        LeaderBoardManager.Instance.UpdateCoin(clientId, 1);
+        LeaderBoardManager.Instance.ShowLeaderBoardToAllClients();
 
-        _isMiniGameFinished = true;
-
-        Debug.Log($"미니게임 우승자: {clientId}");
-
-        // UI 연출 추가
         StopMiniGame();
     }
 
