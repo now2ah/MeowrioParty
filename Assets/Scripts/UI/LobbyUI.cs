@@ -15,13 +15,12 @@ public class LobbyUI : MonoBehaviour
     [Header("Display")]
     [SerializeField] private TMP_Text playerListText;
 
+    [Header("Connection Settings")]
+    [SerializeField] private TMP_InputField ipInputField;
+    [SerializeField] private TMP_InputField portInputField;
+
     private void Start()
     {
-        hostButton.onClick.AddListener(OnHostClicked);
-        clientButton.onClick.AddListener(OnClientClicked);
-        readyButton.onClick.AddListener(OnReadyClicked);
-        startButton.onClick.AddListener(OnStartClicked);
-
         readyButton.interactable = false;
         startButton.interactable = false;
 
@@ -44,6 +43,7 @@ public class LobbyUI : MonoBehaviour
 
     public void OnHostClicked()
     {
+        ApplyConnectionSettings();
         NetworkManager.Singleton.StartHost();
         readyButton.gameObject.SetActive(false);
         startButton.interactable = true;
@@ -51,9 +51,26 @@ public class LobbyUI : MonoBehaviour
 
     public void OnClientClicked()
     {
+        ApplyConnectionSettings();
         NetworkManager.Singleton.StartClient();
         readyButton.interactable = true;
         startButton.gameObject.SetActive(false);
+    }
+
+    private void ApplyConnectionSettings()
+    {
+        string ip = ipInputField.text;
+        ushort port = 7777; // default port
+
+        if (ushort.TryParse(portInputField.text, out ushort parsedPort))
+            port = parsedPort;
+
+        var unityTransport = NetworkManager.Singleton.GetComponent<Unity.Netcode.Transports.UTP.UnityTransport>();
+
+        if (unityTransport != null)
+        {
+            unityTransport.SetConnectionData(ip, port);
+        }
     }
 
     public void OnReadyClicked()
