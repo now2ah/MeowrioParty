@@ -9,7 +9,7 @@ public class LobbyManager : NetworkBehaviour
 {
     public static LobbyManager Instance;
 
-    private NetworkList<PlayerLobbyState> _playerStates;
+    public NetworkList<PlayerLobbyState> playerStates;
 
     public event Action OnPlayerListChanged;
 
@@ -17,13 +17,7 @@ public class LobbyManager : NetworkBehaviour
     {
         Instance = this;
 
-        _playerStates = new NetworkList<PlayerLobbyState>();
-    }
-
-    public override void OnDestroy()
-    {
-        // 최신 NetworkList는 Dispose 불필요하므로 제거 또는 단순 null 체크만
-        _playerStates = null;
+        playerStates = new NetworkList<PlayerLobbyState>();
     }
 
     public override void OnNetworkSpawn()
@@ -32,68 +26,50 @@ public class LobbyManager : NetworkBehaviour
         {
             NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
         }
-
-        _playerStates.OnListChanged += OnPlayerStatesChanged;
-    }
-
-    private void OnPlayerStatesChanged(NetworkListEvent<PlayerLobbyState> changeEvent)
-    {
-        NotifyPlayerListChanged();
+        // 바로 이벤트 바인딩
+        playerStates.OnListChanged += _ => OnPlayerListChanged?.Invoke();
     }
 
     private void OnClientConnected(ulong clientId)
     {
         if (IsServer)
         {
-            _playerStates.Add(new PlayerLobbyState
+            playerStates.Add(new PlayerLobbyState
             {
                 ClientId = clientId,
                 IsReady = false
             });
 
-            NotifyPlayerListChanged();
+            OnPlayerListChanged?.Invoke();
         }
     }
 
-    [ServerRpc(RequireOwnership = false)]
+    [Rpc(SendTo.Server)]
     public void SetReadyServerRpc(ulong clientId)
     {
-        for (int i = 0; i < _playerStates.Count; i++)
+        for (int i = 0; i < playerStates.Count; i++)
         {
-            if (_playerStates[i].ClientId == clientId)
+            if (playerStates[i].ClientId == clientId)
             {
-                _playerStates[i] = new PlayerLobbyState
+                playerStates[i] = new PlayerLobbyState
                 {
                     ClientId = clientId,
                     IsReady = true
                 };
             }
         }
-
-        NotifyPlayerListChanged();
-
-        //if (AllPlayersReady())
-        //{
-        //    NetworkManager.Singleton.SceneManager.LoadScene("Board", LoadSceneMode.Single);
-        //}
+        OnPlayerListChanged?.Invoke();
     }
 
-    public bool AllPlayersReady()
+    public bool IsAllPlayersReady()
     {
-        foreach (var state in _playerStates)
+        foreach (var state in playerStates)
         {
             if (!state.IsReady)
                 return false;
         }
         return true;
     }
-
-    private void NotifyPlayerListChanged()
-    {
-        OnPlayerListChanged?.Invoke();
-    }
-
-    public NetworkList<PlayerLobbyState> PlayerStates => _playerStates;
 
     [Serializable]
     public struct PlayerLobbyState : INetworkSerializable, IEquatable<PlayerLobbyState>

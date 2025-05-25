@@ -21,9 +21,14 @@ public class LobbyUI : MonoBehaviour
 
     private void Start()
     {
+        // 버튼 기능을 코드로 등록
+        hostButton.onClick.AddListener(OnHostClicked);
+        clientButton.onClick.AddListener(OnClientClicked);
+        readyButton.onClick.AddListener(OnReadyClicked);
+        startButton.onClick.AddListener(OnStartClicked);
+
         readyButton.interactable = false;
         startButton.interactable = false;
-
     }
     private void OnEnable()
     {
@@ -90,7 +95,7 @@ public class LobbyUI : MonoBehaviour
             LobbyManager.Instance.SetReadyServerRpc(myClientId);
 
             // 모든 플레이어가 준비되었는지 확인
-            if (LobbyManager.Instance.AllPlayersReady())
+            if (LobbyManager.Instance.IsAllPlayersReady())
             {
                 NetworkManager.Singleton.SceneManager.LoadScene("Board", UnityEngine.SceneManagement.LoadSceneMode.Single);
             }
@@ -104,7 +109,7 @@ public class LobbyUI : MonoBehaviour
     public void UpdatePlayerListUI()
     {
         playerListText.text = "";
-        foreach (var player in LobbyManager.Instance.PlayerStates)
+        foreach (var player in LobbyManager.Instance.playerStates)
         {
             playerListText.text += $"Player {player.ClientId} - {(player.IsReady ? "Ready" : "Not Ready")}\n";
         }
