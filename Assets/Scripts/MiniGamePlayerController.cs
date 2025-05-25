@@ -51,8 +51,9 @@ public class MiniGamePlayerController : NetworkBehaviour
             StartCoroutine(WaitUntilSceneReady());
         }
     }
-    private void OnDestroy()
+    public override void OnNetworkDespawn()
     {
+        Debug.Log("OnNetworkDespawn");
         _speedStage.OnValueChanged -= OnSpeedStageChanged;
 
         if (IsOwner && inputManager != null)
@@ -161,9 +162,9 @@ public class MiniGamePlayerController : NetworkBehaviour
             _animator.SetBool("isMoving", false);
             _animator.speed = _defaultAnimSpeed;
 
-            Debug.Log(gameObject.name + " °á½Â¼± µµÂø");
+            Debug.Log(gameObject.name + " Â°Ã¡Â½Ã‚Â¼Â± ÂµÂµÃ‚Ã¸");
 
-            // ¼­¹ö¿¡°Ô ¾Ë¸²
+            // Â¼Â­Â¹Ã¶Â¿Â¡Â°Ã” Â¾Ã‹Â¸Â²
             NotifyServerRaceFinishedServerRpc();
 
             OnMiniGameFinished?.Invoke();

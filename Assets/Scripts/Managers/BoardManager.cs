@@ -19,7 +19,7 @@ public class BoardManager : NetSingleton<BoardManager>
 
     [SerializeField] private NetworkVariable<GameState> _currentState;
     [SerializeField] private int _maxRound;
-    [SerializeField] private int _currentRound;
+    [SerializeField] private NetworkVariable<int> _currentRound;
     [SerializeField] private NetworkList<ulong> _turnOrder; //순서 정해서 여기에 넣기 
 
     [SerializeField] private Board _board;
@@ -44,7 +44,6 @@ public class BoardManager : NetSingleton<BoardManager>
         base.Awake();
 
         _maxRound = 2;
-        _currentRound = 0;
         _currentPlayerIndex = 0;
         _turnOrder = new NetworkList<ulong>();
 
@@ -57,6 +56,7 @@ public class BoardManager : NetSingleton<BoardManager>
         if (IsServer)
         {
             _currentState.Value = GameState.GameReady;
+            _currentRound.Value = 0;
 
         }
         CameraManager.Instance.ChangeCamera(0);
@@ -197,7 +197,6 @@ public class BoardManager : NetSingleton<BoardManager>
             yield return new WaitForSeconds(0.1f);
             controller.TurnOffDiceNumberRpc();
         }
-
         _board.tileControllers[tileIndex].TileEvent(data, controller);
         yield return new WaitForSeconds(2f);
         NextTurn();
@@ -210,8 +209,9 @@ public class BoardManager : NetSingleton<BoardManager>
         if (_currentPlayerIndex == _turnOrder.Count)
         {
             _currentPlayerIndex = 0;
-            _currentRound++;
-            if (_currentRound > _maxRound)
+            _currentRound.Value++;
+
+            if (_currentRound.Value > _maxRound)
             {
                 _currentState.Value = GameState.GameEnd;
                 return;
@@ -228,13 +228,15 @@ public class BoardManager : NetSingleton<BoardManager>
 
     public void StopMiniGame()
     {
-        if (_currentRound > _maxRound)
+        if (!IsServer) return;
+        if (_currentRound.Value > _maxRound)
         {
             _currentState.Value = GameState.GameEnd;
             return;
         }
         _currentState.Value = GameState.GamePlay;
-        //NetworkManager.Singleton.SceneManager.UnloadScene("TapRaceScene");
+        Scene scene = SceneManager.GetSceneByName("TapRaceScene");
+        NetworkManager.Singleton.SceneManager?.UnloadScene(scene);
         TogglePlayerDice(_currentPlayerId, true);
     }
 
@@ -247,19 +249,9 @@ public class BoardManager : NetSingleton<BoardManager>
         Debug.Log($"미니게임 우승자: {clientId}");
 
         // UI 연출 추가
-        EndMiniGame();
-    }
-
-    private void EndMiniGame()
-    {
-        Debug.Log("미니게임 종료 처리!");
-
-        // 씬 언로드, 보상 지급, 다음 라운드 시작 등 처리
-        //NetworkManager.SceneManager.UnloadScene("TapRaceScene");
-
-        // 씬 언로드 후 상태 변경
         StopMiniGame();
     }
+
 
     //Input도 나중에 아예 분리해내면 좋을 것 같습니다.
     private void GetInput(object sender, bool isPressed)

@@ -179,7 +179,9 @@ MonoBehaviour:
   - {fileID: 1029981129}
   - {fileID: 353635148}
   _miniGameFinishPos: {fileID: 1489022779}
-  _miniGamePlayerPrefab: {fileID: 3229872934675508115, guid: 1684922f8e236c040b14e674c635546c, type: 3}
+  _miniGamePlayerPrefab:
+  - {fileID: 1686880860600399186, guid: 6a9ee0c9cb67abf448b8f74fd9035ae8, type: 3}
+  - {fileID: 3229872934675508115, guid: 1684922f8e236c040b14e674c635546c, type: 3}
 --- !u!4 &196240094
 Transform:
   m_ObjectHideFlags: 0
