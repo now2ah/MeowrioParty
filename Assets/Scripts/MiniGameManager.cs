@@ -1,118 +1,47 @@
-using System;
+using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-// TODO: º¸µå ¸Å´ÏÀú¿¡°Ô °á°ú Àü¼Û°ú º¸»ó Ã³¸®ÇÏ¶ó°í º¸³¾·Á¸é ¹Ì´Ï °ÔÀÓ »óÅÂ¸¦ °ü¸®ÇÏ°í ÀÖ´Â ¹Ì´Ï °ÔÀÓ ¸Å´ÏÀú°¡ ÇÊ¿äÇÒ°Å °°À½
-// ¹Ì´Ï °ÔÀÓ ¸Å´ÏÀú·Î º¸µå ¸Å´ÏÀú°¡ ÇÏ´ø°Å Ã³·³ ready»óÅÂ¿Í end »óÅÂÀÏ ¶§ ÀÔ·ÂÀ» ¸·°í ¿¬ÃâÀ» º¸¿©Áà¾ß ÇÔ
-
-public class MiniGameManager : MonoBehaviour
+public class MiniGameManager : NetworkBehaviour
 {
-    private float _finishLineX;
-    private float _baseSpeed;
-    private float _maxSpeed;
-    private float _acceleration;
-    private float _deceleration;
+    [SerializeField] private Transform[] _miniGameStartPos;
+    [SerializeField] private Transform _miniGameFinishPos;
+    [SerializeField] private GameObject[] _miniGamePlayerPrefab;
 
-    [SerializeField] private float _currentSpeed;
-
-    [SerializeField] private Transform _miniGameStartPos;
-    private Vector3 _originalPos;
-
-    [SerializeField] private KeyCode _inputKey = KeyCode.A;
-
-    public bool isMiniFinished = false;
-
-    private Animator _animator;
-    private float _defaultAnimSpeed;
-
-    private void Awake()
+    public override void OnNetworkSpawn()
     {
-        _finishLineX = 30.0f;
-        _baseSpeed = 1.0f;
-        _maxSpeed = 10.0f;
-        _acceleration = 3.0f;
-        _deceleration = 5.0f;
-        _currentSpeed = 0.0f;
+        if (!IsOwner) return;
 
-        _animator = GetComponent<Animator>();
-        _defaultAnimSpeed = _animator.speed;
-
-        _originalPos = transform.position;
-
-        if (_miniGameStartPos != null )
-        {
-            transform.position = _miniGameStartPos.position;
-            transform.rotation = _miniGameStartPos.rotation;
-        }        
-    }
-    private void Start()
-    {
-        _animator.SetBool("isMoving", true);
+        StartCoroutine(SpawnAllPlayers());
     }
 
-    private void Update()
-    {
-        if (isMiniFinished)
-        {
-            return;
-        }
-        PressedButton();
-        Deceleration();
-        Move();
-        CheckFinish();
-    } 
 
-    private void PressedButton()
-    {        
-        if (Input.GetKeyDown(_inputKey))
+    private IEnumerator SpawnAllPlayers()
+    {
+        // ëª¨ë“  í´ë¼ì´ì–¸íŠ¸ê°€ ì—°ê²°ë  ë•Œê¹Œì§€ ëŒ€ê¸°
+        yield return new WaitUntil(() => NetworkManager.Singleton.ConnectedClients.Count >= BoardManager.Instance._playerCtrlMap.Count);
+
+        int index = 0;
+        foreach (var kvp in NetworkManager.Singleton.ConnectedClients)
         {
-            Accelerate();
+            ulong clientId = kvp.Key;
+            Vector3 pos = _miniGameStartPos[index].position;
+            Quaternion rot = _miniGameStartPos[index].rotation;
+
+            GameObject obj = Instantiate(_miniGamePlayerPrefab[index], pos, rot);
+            NetworkObject netObj = obj.GetComponent<NetworkObject>();
+
+            netObj.SpawnAsPlayerObject(clientId, true);
+
+            obj.transform.SetParent(gameObject.transform);
+
+            var playerController = obj.GetComponent<MiniGamePlayerController>();
+            Vector3 finishPos = _miniGameFinishPos.position;
+            playerController.SetFinishPosition(finishPos);
+
+            index++;
         }
     }
 
-    private void Accelerate()
-    {
-        _currentSpeed += _acceleration;
-        _currentSpeed = Mathf.Clamp(_currentSpeed, _baseSpeed, _maxSpeed);
-    }
-
-    private void Deceleration()
-    {
-        _currentSpeed -= _deceleration * Time.deltaTime;
-        _currentSpeed = Mathf.Clamp(_currentSpeed, _baseSpeed, _maxSpeed);
-    }
-
-    private void Move()
-    {
-        // ÇÃ·¹ÀÌ¾îÀÇ º¸¿©Áö´Â ºÎºÐ
-        transform.Translate(Vector3.forward * _currentSpeed * Time.deltaTime);
-        UpdateAnimatorSpeed();
-    }
-
-    private void UpdateAnimatorSpeed()
-    {
-        float speedRatio = _currentSpeed / _baseSpeed;
-        _animator.speed = Mathf.Clamp(speedRatio, 0.5f, 2.0f);
-    }
-
-    private void CheckFinish()
-    {
-        if (transform.position.x >= _finishLineX)
-        {
-            isMiniFinished = true;
-            _currentSpeed = 0.0f;
-            Debug.Log(gameObject.name + "°á½Â¼± µµÂø");
-            // ¾Ö´Ï¸ÞÀÌ¼Ç ¿¬Ãâ
-            _animator.SetBool("isMoving", false);
-            _animator.speed = _defaultAnimSpeed;
-            // ¹Ì´Ï°ÔÀÓ ¸Å´ÏÀú·Î °ÔÀÓ ³¡³µ´Ù´Â°É ¾Ë¸²
-            ReturnToOriginalPos();
-        }
-    }
-
-    private void ReturnToOriginalPos()
-    {
-        transform.position = _originalPos;
-        transform.rotation = Quaternion.identity;
-        Debug.Log("¿ø·¡ À§Ä¡ º¹±Í");
-    }
 }

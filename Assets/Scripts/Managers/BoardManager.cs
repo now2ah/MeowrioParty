@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum GameState
 {
     GameReady,
     GamePlay,
     GameEnd,
+    MiniGame
 }
 
 public class BoardManager : NetSingleton<BoardManager>
@@ -17,7 +19,7 @@ public class BoardManager : NetSingleton<BoardManager>
 
     [SerializeField] private NetworkVariable<GameState> _currentState;
     [SerializeField] private int _maxRound;
-    [SerializeField] private int _currentRound;
+    [SerializeField] private NetworkVariable<int> _currentRound;
     [SerializeField] private NetworkList<ulong> _turnOrder; //순서 정해서 여기에 넣기 
 
     [SerializeField] private Board _board;
@@ -33,14 +35,15 @@ public class BoardManager : NetSingleton<BoardManager>
     public List<GameObject> characterPrefabList;
 
     private Dictionary<ulong, PlayerData> _playerDataMap = new();
-    private Dictionary<ulong, PlayerController> _playerCtrlMap = new();
+    public Dictionary<ulong, PlayerController> _playerCtrlMap = new();
+
+    private bool _isMiniGameFinished = false;
 
     public override void Awake()
     {
         base.Awake();
 
         _maxRound = 2;
-        _currentRound = 0;
         _currentPlayerIndex = 0;
         _turnOrder = new NetworkList<ulong>();
 
@@ -53,6 +56,7 @@ public class BoardManager : NetSingleton<BoardManager>
         if (IsServer)
         {
             _currentState.Value = GameState.GameReady;
+            _currentRound.Value = 0;
 
         }
         CameraManager.Instance.ChangeCamera(0);
@@ -193,8 +197,8 @@ public class BoardManager : NetSingleton<BoardManager>
             yield return new WaitForSeconds(0.1f);
             controller.TurnOffDiceNumberRpc();
         }
-
         _board.tileControllers[tileIndex].TileEvent(data, controller);
+        yield return new WaitForSeconds(2f);
         NextTurn();
     }
     private void NextTurn()
@@ -202,19 +206,52 @@ public class BoardManager : NetSingleton<BoardManager>
         _canInput.Value = true;
         _currentPlayerIndex++;
 
-        if (_currentPlayerIndex >= _turnOrder.Count)
+        if (_currentPlayerIndex == _turnOrder.Count)
         {
             _currentPlayerIndex = 0;
-            _currentRound++;
-            if (_currentRound >= _maxRound)
+            _currentRound.Value++;
+
+            if (_currentRound.Value > _maxRound)
             {
                 _currentState.Value = GameState.GameEnd;
                 return;
             }
+            StartMiniGame();
         }
         _currentPlayerId = _turnOrder[_currentPlayerIndex];
+    }
+    private void StartMiniGame()
+    {
+        _currentState.Value = GameState.MiniGame;
+        NetworkManager.Singleton.SceneManager.LoadScene("TapRaceScene", LoadSceneMode.Additive);
+    }
+
+    public void StopMiniGame()
+    {
+        if (!IsServer) return;
+        if (_currentRound.Value > _maxRound)
+        {
+            _currentState.Value = GameState.GameEnd;
+            return;
+        }
+        _currentState.Value = GameState.GamePlay;
+        Scene scene = SceneManager.GetSceneByName("TapRaceScene");
+        NetworkManager.Singleton.SceneManager?.UnloadScene(scene);
         TogglePlayerDice(_currentPlayerId, true);
     }
+
+    public void OnMiniGamePlayerFinished(ulong clientId)
+    {
+        if (_isMiniGameFinished) return;
+
+        _isMiniGameFinished = true;
+
+        Debug.Log($"미니게임 우승자: {clientId}");
+
+        // UI 연출 추가
+        StopMiniGame();
+    }
+
 
     //Input도 나중에 아예 분리해내면 좋을 것 같습니다.
     private void GetInput(object sender, bool isPressed)
