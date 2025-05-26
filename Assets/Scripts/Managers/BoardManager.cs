@@ -180,9 +180,7 @@ public class BoardManager : NetSingleton<BoardManager>
             _canInput.Value = false;
         }
     }
-
-
-
+    
     private void TogglePlayerDice(ulong clientId, bool isOn)
     {
         if (_playerCtrlMap.TryGetValue(clientId, out var ctrl))
@@ -233,6 +231,8 @@ public class BoardManager : NetSingleton<BoardManager>
         yield return new WaitForSeconds(2f);
         NextTurn();
     }
+
+
     private void NextTurn()
     {
         _canInput.Value = true;
