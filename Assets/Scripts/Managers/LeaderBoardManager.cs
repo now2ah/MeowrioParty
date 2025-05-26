@@ -1,67 +1,76 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Netcode;
 using UnityEngine;
 
-public class LeaderBoardManager : NetSingleton<LeaderBoardManager>
+public class PlayerScores
 {
-    private List<PlayerData> playerScores = new List<PlayerData>();
+    public int playerId;
+    public int Coins;
+    public int Stars;
 
-    public override void Awake()
+    public PlayerScores(int id, int a, int b)
     {
-        base.Awake();
+        playerId = id;
+        Coins = a;
+        Stars = b;
+    }
+}
 
-        if (NetworkManager.Singleton.IsServer)
+public class LeaderBoardManager : Singleton<LeaderBoardManager>
+{
+    private int clientCnt = 0;
+
+    private List<PlayerScores> playerScoreBoard = new();
+    [SerializeField] private Sprite[] _playerPortraits;
+
+    public void InitializeLeaderBoard(int size)
+    {
+        clientCnt = size;
+        for (int i = 0; i < size; i++)
         {
-            var networkObject = GetComponent<NetworkObject>();
-            networkObject.Spawn(true);      // NetworkObject가 부착된 BoardManager가 부착된 게임오브젝트 스폰
+            playerScoreBoard.Add(new PlayerScores(i, 0, 0));
         }
     }
-
-    public void AddPlayer(ulong clientId, string playerName)
-    {
-        if (!IsServer) return;
-        if (playerScores.Any(p => p.ClientId == clientId)) return;
-
-        playerScores.Add(new PlayerData
-        {
-            ClientId = clientId,
-            PlayerName = playerName,
-            Coins = 0,
-            Stars = 0
-        });
-    }
-
     public void UpdateCoin(ulong clientId, int addScore)
     {
-        var player = playerScores.FirstOrDefault(p => p.ClientId == clientId);
-        if (player != null)
-        {
-            player.Coins += addScore;
-            playerScores = playerScores.OrderByDescending(p => p.Coins).ToList();
-        }
-        Debug.Log("afterCoin : " + player.Coins);
+        int index = (int)clientId;
+        playerScoreBoard[index].Coins += addScore;
+
+        Debug.Log("afterCoin : " + playerScoreBoard[index].Coins);
+    }
+    public void UpdateStar(ulong clientId, int addScore)
+    {
+        int index = (int)clientId;
+        playerScoreBoard[index].Stars += addScore;
+
+        Debug.Log("afterStar : " + playerScoreBoard[index].Stars);
+    }
+    private List<PlayerScores> OrderingLeaderBoardClient()
+    {
+        return playerScoreBoard
+            .OrderByDescending(p => p.Stars)
+            .ThenByDescending(p => p.Coins)
+            .ToList();
     }
 
-    private string[] GetPlayerScoresNames()
+    public void UpdateLeaderBoardClient()
     {
-        string[] result = new string[playerScores.Count];
-
-        for (int i = 0; i < playerScores.Count; i++)
+        playerScoreBoard = OrderingLeaderBoardClient();
+        string[] starResult = new string[clientCnt];
+        string[] coinResult = new string[clientCnt];
+        Sprite[] sprResult = new Sprite[clientCnt];
+        for (int i = 0; i < clientCnt; i++)
         {
-            PlayerData player = playerScores[i];
-            result[i] = player.PlayerName + " 코인은 (" + player.Coins + ")";
+            PlayerScores ps = playerScoreBoard[i];
+            starResult[i] = ps.Stars.ToString();
+            coinResult[i] = ps.Coins.ToString();
+            sprResult[i] = _playerPortraits[ps.playerId];
         }
-
-        return result;
-    }
-
-
-    public void UpdateLeaderBoardClient(string[] showPlayerData)
-    {
         LeaderBoardUIData lbData = new LeaderBoardUIData
         {
-            PlayerNameTxt = showPlayerData,
+            StarCountTxt = starResult,
+            CoinCountTxt = coinResult,
+            PlayerSprs = sprResult
             // FirstPlayerSpr ~ FourthPlayerSpr는 필요 시 설정
         };
 
@@ -69,16 +78,16 @@ public class LeaderBoardManager : NetSingleton<LeaderBoardManager>
         StartCoroutine(UIManager.Instance.CloseFrontUISecCo(10f));
     }
 
-    public void ShowLeaderBoardToAllClients()
-    {
-        UpdateLeaderBoardClient(GetPlayerScoresNames());
-    }
+    // public void ShowLeaderBoardToAllClients()
+    // {
+    //     UpdateLeaderBoardClient(GetPlayerScoresNames());
+    // }
 
 
-    public void ResetLeaderboard()
-    {
-        playerScores.Clear();
-        UpdateLeaderBoardClient(new string[0]);
-    }
+    // public void ResetLeaderboard()
+    // {
+    //     playerScores.Clear();
+    //     UpdateLeaderBoardClient(new string[0]);
+    // }
 }
 

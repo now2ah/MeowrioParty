@@ -1,10 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
 
-public class UIManager : NetSingleton<UIManager>
+public class UIManager : Singleton<UIManager>
 {
     public Transform UICanvasTrs; //UI화면을 랜더링할 컨버스
     public Transform CloseUITrs; //닫을 때 비활성화 할 
@@ -14,17 +13,6 @@ public class UIManager : NetSingleton<UIManager>
     //열려있는, 닫혀있는 ui pool 나눠서 관리리
     private Dictionary<Type, GameObject> m_OpenUIPool = new Dictionary<Type, GameObject>();
     private Dictionary<Type, GameObject> m_ClosedUIPool = new Dictionary<Type, GameObject>();
-
-    public override void Awake()
-    {
-        base.Awake();
-
-        if (NetworkManager.Singleton.IsServer)
-        {
-            var networkObject = GetComponent<NetworkObject>();
-            networkObject.Spawn(true);  // NetworkObject가 부착된 UIManager가 부착된 게임오브젝트 스폰
-        }
-    }
 
     private BaseUI GetUI<T>(out bool isAlreadyOpen)
     {
@@ -116,8 +104,7 @@ public class UIManager : NetSingleton<UIManager>
         return m_FrontUI;
     }
 
-    [Rpc(SendTo.Everyone)]
-    public void CloseCurrentFrontUIRpc()
+    public void CloseCurrentFrontUI()
     {
         if (m_FrontUI != null) m_FrontUI.CloseUI();
     }
@@ -137,16 +124,8 @@ public class UIManager : NetSingleton<UIManager>
         OpenUI<NoticeUI>(noticeUIData);
     }
 
-    [Rpc(SendTo.Everyone)]
-    public void OpenNoticeUIEveryoneRpc(string message)
-    {
-        NoticeUIData noticeUIData = new NoticeUIData();
-        noticeUIData.currentNoticeTxt = message;
-        OpenUI<NoticeUI>(noticeUIData);
-    }
 
-    [Rpc(SendTo.Everyone)]
-    public void OpenNoticeUIEveryoneSecRpc(string message, float timer)
+    public void OpenNoticeUISec(string message, float timer)
     {
         StartCoroutine(OpenNoticeUIEveryoneSecCo(message, timer));
     }
@@ -173,7 +152,7 @@ public class UIManager : NetSingleton<UIManager>
     public IEnumerator CloseFrontUISecCo(float timer)
     {
         yield return new WaitForSeconds(timer);
-        CloseCurrentFrontUIRpc();
+        CloseCurrentFrontUI();
     }
 
 }

@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5965079851278823615}
-  - component: {fileID: 5002666977420383858}
   - component: {fileID: 5018980520160744883}
   m_Layer: 0
   m_Name: LeaderboardManager
@@ -33,31 +32,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5002666977420383858
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9034242934028518272}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3573683281
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!114 &5018980520160744883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,4 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24d6043a4068e9040a9091525d8d1073, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
+  _playerPortraits:
+  - {fileID: 21300000, guid: 69ad3de7f4e72eb41b284fe94ea10fcf, type: 3}
+  - {fileID: 21300000, guid: 18e808c669a396d43a91bbd46d302b76, type: 3}
+  - {fileID: 21300000, guid: 418bfc81c948f3d4c840d16841fecb85, type: 3}
+  - {fileID: 21300000, guid: b2044f221b3f03149b6fbb0dabbb9438, type: 3}
