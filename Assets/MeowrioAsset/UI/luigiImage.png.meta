@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: da3635ec366ea7e4bb68c9d8b5bcffd3
+guid: 795c88b667c50c443b874eab13558ff6
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -108,7 +108,51 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: luigiImage_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 379
+        width: 305
+        height: 378
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4226f79a121a00945b793d9f5580dcad
+      internalID: 953556257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: luigiImage_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1
+        width: 305
+        height: 378
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5c5f2bf4b3e18940ab664372a12736c
+      internalID: 169716833
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -122,7 +166,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      luigiImage_0: 953556257
+      luigiImage_1: 169716833
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

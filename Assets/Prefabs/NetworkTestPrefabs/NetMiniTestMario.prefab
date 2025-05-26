@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1046519846309893747}
   - component: {fileID: 8301565255541440887}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face05__MarioFaceMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5868570681010146703}
   - component: {fileID: 404999823522545472}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: MarioBoomerang__MarioBoomerangSuitsMat01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -194,7 +194,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7850421427640608078}
   - component: {fileID: 4202549795146820826}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Eyelid01__MarioFaceMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -282,7 +282,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5510036713332830221}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: FootR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -315,7 +315,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3216448846845395844}
   - component: {fileID: 3155553338477027072}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face07__MarioHigeMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -403,7 +403,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3259037150374574314}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -435,7 +435,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9160106966392187046}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: LegL1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -467,7 +467,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4447031674972211228}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ToeR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -499,7 +499,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6901482493488830766}
   - component: {fileID: 2414228425686534714}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face01__MarioHigeMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -587,7 +587,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2507518534264272265}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: MarioFace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -628,7 +628,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 88612443209645937}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -660,7 +660,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3674017821593132067}
   - component: {fileID: 7318468114575714098}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandL02__MarioHandMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -748,7 +748,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4704880434751503473}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Hip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -782,7 +782,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4759134825737462847}
   - component: {fileID: 5790916790348962712}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandL05__MarioHandMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -870,7 +870,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5887135475505411663}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandR00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -901,7 +901,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1393625549840000142}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -933,7 +933,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7071857419774749841}
   - component: {fileID: 8556950449172344524}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandL01__MarioHandMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1022,7 +1022,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1071950354937844958}
   - component: {fileID: 3458836347596294179}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face00__MarioHigeMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1110,7 +1110,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6214631147149372560}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandR05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1141,7 +1141,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2278256861027280296}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandR04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1172,7 +1172,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5328866033193925210}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ArmR2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1205,7 +1205,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1671642862313994101}
   - component: {fileID: 3786865004041547535}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face06__MarioFaceMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1294,7 +1294,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7635157755221038682}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1327,7 +1327,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5947401927510777283}
   - component: {fileID: 3230874222614395968}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandR05__MarioHandMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1416,7 +1416,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6513979195111794735}
   - component: {fileID: 8952840144527041286}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face01__MarioFaceMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1506,7 +1506,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9167579192989684636}
   - component: {fileID: 3967664100696662776}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Mario__MarioShoesMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1591,37 +1591,6 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.27643517, y: 0.00728447, z: 0.11592578}
     m_Extent: {x: 0.6926204, y: 0.24413553, z: 0.24119174}
   m_DirtyAABB: 0
---- !u!1 &2020558482263475928
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1427740441625574819}
-  m_Layer: 0
-  m_Name: MP_Dice_JT
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1427740441625574819
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2020558482263475928}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 8.653773, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4936413798133034452}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2049710881636348345
 GameObject:
   m_ObjectHideFlags: 0
@@ -1631,7 +1600,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7372436847823362612}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: LegL2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1663,7 +1632,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2574314197083843540}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandR06
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1695,7 +1664,7 @@ GameObject:
   m_Component:
   - component: {fileID: 199172800294653508}
   - component: {fileID: 4552934143358804834}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: MarioBoomerang__MarioBoomerangSuitsMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1795,7 +1764,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7493127856984495204}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: FootL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1828,7 +1797,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4063704164366150237}
   - component: {fileID: 8463243513271039062}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ForwardCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1902,7 +1871,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6165305153920099043}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face08
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1934,7 +1903,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6896301199409778070}
   - component: {fileID: 3457318435691214133}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandR01__MarioHandMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2022,7 +1991,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5577758715268404920}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Eyelid00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2053,7 +2022,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6242139017771620455}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Eyelid01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2084,7 +2053,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8233834799643318899}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: LegR2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2116,7 +2085,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8822142588390630686}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: JointRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2150,7 +2119,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3347024476319141549}
   - component: {fileID: 3852342998532194528}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Mario__MarioFaceMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2239,7 +2208,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4055391918150586914}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: MarioHandL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2268,81 +2237,6 @@ Transform:
   - {fileID: 5985125224667534086}
   m_Father: {fileID: 7635157755221038682}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &3149836543614511487
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7495385879192274723}
-  - component: {fileID: 4012502956710471093}
-  - component: {fileID: 6703620496765917902}
-  m_Layer: 0
-  m_Name: One
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &7495385879192274723
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3149836543614511487}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 8843076634026050321}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 150, y: 256}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &4012502956710471093
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3149836543614511487}
-  m_CullTransparentMesh: 1
---- !u!114 &6703620496765917902
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3149836543614511487}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 1769939207, guid: 7cfd565f8c6b8794b8389f35238e5011, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &3208709223535565375
 GameObject:
   m_ObjectHideFlags: 0
@@ -2352,7 +2246,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5179488161081791257}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face06
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2389,7 +2283,7 @@ GameObject:
   - component: {fileID: 3761846564083091350}
   - component: {fileID: 6330585106149215780}
   - component: {fileID: -6610123847036713621}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: NetMiniTestMario
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2409,8 +2303,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 328329925316279810}
-  - {fileID: 4049157603172138314}
   - {fileID: 5687279463109636555}
   - {fileID: 4241148210405079703}
   - {fileID: 1096481349639739362}
@@ -2599,7 +2491,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5574626325927001360}
   - component: {fileID: 2548259109164514392}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face02__MarioFaceMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2689,7 +2581,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4161652522998175287}
   - component: {fileID: 2008848075160641701}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face02__MarioHigeMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2777,7 +2669,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7140457841552330167}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ShoulderL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2800,77 +2692,6 @@ Transform:
   - {fileID: 1135326330288522674}
   m_Father: {fileID: 3178216245953461766}
   m_LocalEulerAnglesHint: {x: -89.16177, y: -111.66766, z: -174.92717}
---- !u!1 &3709470549271242736
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4049157603172138314}
-  - component: {fileID: 3463317309677080460}
-  - component: {fileID: 3213107265269356082}
-  m_Layer: 0
-  m_Name: Dice
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4049157603172138314
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3709470549271242736}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.063, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 5}
-  m_ConstrainProportionsScale: 1
-  m_Children:
-  - {fileID: 4936413798133034452}
-  - {fileID: 1169665968693474504}
-  - {fileID: 6374218096858171586}
-  - {fileID: 1321911463736873233}
-  m_Father: {fileID: 4733178886578494706}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &3463317309677080460
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3709470549271242736}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ad80d2b12d07a984e90f4997a12e2a0a, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
---- !u!114 &3213107265269356082
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3709470549271242736}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbfded1121da9454e9e26a25763518ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3779829589977492841
 GameObject:
   m_ObjectHideFlags: 0
@@ -2881,7 +2702,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9206429882737559341}
   - component: {fileID: 5426566886145872113}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face00__MarioFaceMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2970,7 +2791,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3069354177936247419}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3002,7 +2823,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6195514263296078593}
   - component: {fileID: 190897018360855768}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Mario__MarioBodyMat01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3101,7 +2922,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1794890249139812149}
   - component: {fileID: 5017704140133692346}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandL06__MarioHandMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3190,7 +3011,7 @@ GameObject:
   m_Component:
   - component: {fileID: 214709752862131600}
   - component: {fileID: 4843331150748927847}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandR04__MarioHandMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3278,7 +3099,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7362858098889552039}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3300,121 +3121,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2507518534264272265}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &4315907784962905237
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 328329925316279810}
-  - component: {fileID: 4978391310635254414}
-  - component: {fileID: 4613259257639508918}
-  - component: {fileID: 4567499238027324171}
-  - component: {fileID: 1631307848250296209}
-  m_Layer: 0
-  m_Name: Canvas
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &328329925316279810
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4315907784962905237}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 8843076634026050321}
-  m_Father: {fileID: 4733178886578494706}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 2}
-  m_SizeDelta: {x: 921, y: 723}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!223 &4978391310635254414
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4315907784962905237}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 2
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
-  m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
---- !u!114 &4613259257639508918
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4315907784962905237}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
-  m_ReferencePixelsPerUnit: 100
-  m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
-  m_PhysicalUnit: 3
-  m_FallbackScreenDPI: 96
-  m_DefaultSpriteDPI: 96
-  m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
---- !u!114 &4567499238027324171
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4315907784962905237}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
---- !u!114 &1631307848250296209
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4315907784962905237}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c052a0cd2eeca7941a27cc8487013df1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4439519613895679714
 GameObject:
   m_ObjectHideFlags: 0
@@ -3424,7 +3130,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1417108394314401211}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandR02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3455,7 +3161,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4125333817610350492}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Spine1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3478,81 +3184,6 @@ Transform:
   - {fileID: 3178216245953461766}
   m_Father: {fileID: 8822142588390630686}
   m_LocalEulerAnglesHint: {x: -24.207615, y: -63.2515, z: -94.81483}
---- !u!1 &4614322704570294832
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2714403573725295160}
-  - component: {fileID: 4504087388005298527}
-  - component: {fileID: 7059132075490922124}
-  m_Layer: 0
-  m_Name: Six
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &2714403573725295160
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4614322704570294832}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 8843076634026050321}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 150, y: 256}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &4504087388005298527
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4614322704570294832}
-  m_CullTransparentMesh: 1
---- !u!114 &7059132075490922124
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4614322704570294832}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 648121628, guid: 7cfd565f8c6b8794b8389f35238e5011, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &4628595202497991181
 GameObject:
   m_ObjectHideFlags: 0
@@ -3562,7 +3193,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5687279463109636555}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: AllRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3595,7 +3226,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4237962244871832054}
   - component: {fileID: 111908534424831378}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandR00__MarioHandMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3683,7 +3314,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 202164598863226682}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face07
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3715,7 +3346,7 @@ GameObject:
   m_Component:
   - component: {fileID: 643784222751167671}
   - component: {fileID: 3961063037802450442}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandR06__MarioHandMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3804,7 +3435,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8792154726403825996}
   - component: {fileID: 2601497808278451888}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandR02__MarioHandMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3892,7 +3523,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 558920769979665172}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandL01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3923,7 +3554,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3498932976677918454}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandR03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3955,7 +3586,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5590773195399663188}
   - component: {fileID: 4444259537006612745}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: MarioRaccoonDog__MarioRaccoonDogBodyMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4064,7 +3695,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3730598264575722940}
   - component: {fileID: 1221299329862837196}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandL00__MarioHandMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4152,7 +3783,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2257537760524423963}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ToeL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4174,81 +3805,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7493127856984495204}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -25.046902}
---- !u!1 &5915221195117900789
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5094715448406800458}
-  - component: {fileID: 9166084206683074445}
-  - component: {fileID: 5079553047542704952}
-  m_Layer: 0
-  m_Name: Four
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &5094715448406800458
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5915221195117900789}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 8843076634026050321}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 150, y: 256}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &9166084206683074445
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5915221195117900789}
-  m_CullTransparentMesh: 1
---- !u!114 &5079553047542704952
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5915221195117900789}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 1550325179, guid: 7cfd565f8c6b8794b8389f35238e5011, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &5979762052496438074
 GameObject:
   m_ObjectHideFlags: 0
@@ -4258,7 +3814,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3178216245953461766}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Spine2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4293,7 +3849,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5370701072445400866}
   - component: {fileID: 5127027663205206677}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face06__MarioHigeMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4381,7 +3937,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6833480023281344543}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandL04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4413,7 +3969,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7193521210921852320}
   - component: {fileID: 5996239712475714508}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face07__MarioFaceMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4493,81 +4049,6 @@ SkinnedMeshRenderer:
     m_Center: {x: 0, y: 0.10446963, z: 0.24292949}
     m_Extent: {x: 0.22235687, y: 0.22521064, z: 0.19348058}
   m_DirtyAABB: 0
---- !u!1 &6100573736490078114
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1066482984864830101}
-  - component: {fileID: 6329710787871821739}
-  - component: {fileID: 859988953875835383}
-  m_Layer: 0
-  m_Name: Five
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &1066482984864830101
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6100573736490078114}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 8843076634026050321}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 150, y: 256}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &6329710787871821739
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6100573736490078114}
-  m_CullTransparentMesh: 1
---- !u!114 &859988953875835383
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6100573736490078114}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 103508082, guid: 7cfd565f8c6b8794b8389f35238e5011, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &6104586241673711572
 GameObject:
   m_ObjectHideFlags: 0
@@ -4577,7 +4058,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7566635232716980728}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandL02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4609,7 +4090,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9152472632067365353}
   - component: {fileID: 7944962161649927662}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Mario__MarioBodyMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4712,7 +4193,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1772954860082106753}
   - component: {fileID: 6753839264486059574}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face08__MarioFaceMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4792,95 +4273,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.00003321469, y: 0.10564193, z: 0.24292949}
     m_Extent: {x: 0.24859053, y: 0.22403833, z: 0.19348058}
   m_DirtyAABB: 0
---- !u!1 &6230584560185798760
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1321911463736873233}
-  - component: {fileID: 3935947138258613929}
-  m_Layer: 0
-  m_Name: MP_DiceBlock_NUMS_GEO
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1321911463736873233
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6230584560185798760}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.000000037748947, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4049157603172138314}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!137 &3935947138258613929
-SkinnedMeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6230584560185798760}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 3
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: aa815bbe6a704f84b81e0aa965b38344, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  serializedVersion: 2
-  m_Quality: 0
-  m_UpdateWhenOffscreen: 0
-  m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: -6820788244791362149, guid: 2b3ff1dc4b92d8a4abb0d820e6083a40, type: 3}
-  m_Bones:
-  - {fileID: 1427740441625574819}
-  m_BlendShapeWeights: []
-  m_RootBone: {fileID: 1427740441625574819}
-  m_AABB:
-    m_Center: {x: 0.00007915497, y: 0.0121536255, z: 0.06277275}
-    m_Extent: {x: 8.665, y: 8.663914, z: 8.664921}
-  m_DirtyAABB: 0
 --- !u!1 &6260491572854662854
 GameObject:
   m_ObjectHideFlags: 0
@@ -4890,7 +4282,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2993256369007507534}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4922,7 +4314,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5211021839132353576}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4953,7 +4345,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 561980342237726778}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ArmL2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4985,7 +4377,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1135326330288522674}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ArmL1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5017,7 +4409,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9170037363655725997}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandL00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5049,7 +4441,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3080862064736960641}
   - component: {fileID: 8587393434798562292}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Mario__MarioMetalMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5130,81 +4522,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.48655212, y: 0.21025094, z: 0}
     m_Extent: {x: 0.39412618, y: 0.0754505, z: 0.17079492}
   m_DirtyAABB: 0
---- !u!1 &6535724409507307081
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1732792044031276416}
-  - component: {fileID: 2926188280961667568}
-  - component: {fileID: 1169815121296282709}
-  m_Layer: 0
-  m_Name: Three
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &1732792044031276416
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6535724409507307081}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 8843076634026050321}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 150, y: 256}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &2926188280961667568
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6535724409507307081}
-  m_CullTransparentMesh: 1
---- !u!114 &1169815121296282709
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6535724409507307081}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 874951531, guid: 7cfd565f8c6b8794b8389f35238e5011, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &6546510169904937481
 GameObject:
   m_ObjectHideFlags: 0
@@ -5214,7 +4531,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5985125224667534086}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandL06
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5236,95 +4553,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4055391918150586914}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6562781383634212637
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6374218096858171586}
-  - component: {fileID: 5299413268280014227}
-  m_Layer: 0
-  m_Name: MP_DiceBlock_NUMS_Base_GEO
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6374218096858171586
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6562781383634212637}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.000000037748947, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4049157603172138314}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!137 &5299413268280014227
-SkinnedMeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6562781383634212637}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 3
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: aa815bbe6a704f84b81e0aa965b38344, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  serializedVersion: 2
-  m_Quality: 0
-  m_UpdateWhenOffscreen: 0
-  m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: -709404901647176973, guid: 2b3ff1dc4b92d8a4abb0d820e6083a40, type: 3}
-  m_Bones:
-  - {fileID: 1427740441625574819}
-  m_BlendShapeWeights: []
-  m_RootBone: {fileID: 1427740441625574819}
-  m_AABB:
-    m_Center: {x: 0.00008010864, y: 0.011130333, z: 0.062773705}
-    m_Extent: {x: 8.665001, y: 8.664938, z: 8.664924}
-  m_DirtyAABB: 0
 --- !u!1 &6627815574020606657
 GameObject:
   m_ObjectHideFlags: 0
@@ -5335,7 +4563,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1211633512965565744}
   - component: {fileID: 4352961954924076123}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face08__MarioHigeMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5424,7 +4652,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8824374834301809544}
   - component: {fileID: 7523901026723953763}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: MarioBoomerang__MarioBoomerangFaceMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5513,7 +4741,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6292840243791404230}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Eyeball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5535,113 +4763,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1024142464005692154}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6781964068517914526
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4936413798133034452}
-  m_Layer: 0
-  m_Name: Armature
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4936413798133034452
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6781964068517914526}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.000000037748947, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1427740441625574819}
-  m_Father: {fileID: 4049157603172138314}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6886338694760228292
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2700527012986542473}
-  - component: {fileID: 8443009236386404494}
-  - component: {fileID: 1635235386021159461}
-  m_Layer: 0
-  m_Name: Two
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &2700527012986542473
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6886338694760228292}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 8843076634026050321}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 150, y: 256}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &8443009236386404494
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6886338694760228292}
-  m_CullTransparentMesh: 1
---- !u!114 &1635235386021159461
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6886338694760228292}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: -7035059, guid: 7cfd565f8c6b8794b8389f35238e5011, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &6898368680334688995
 GameObject:
   m_ObjectHideFlags: 0
@@ -5651,7 +4772,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8755886469914751852}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: MarioHandR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5690,7 +4811,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7557187406943335492}
   - component: {fileID: 7423067069115229616}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face03__MarioHigeMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5779,7 +4900,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4440505954366861309}
   - component: {fileID: 4201021533423683270}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face03__MarioFaceMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5869,7 +4990,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1096481349639739362}
   - component: {fileID: 8255604372014492506}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Eyelid00__MarioFaceMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5958,7 +5079,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4241148210405079703}
   - component: {fileID: 7075110770236499921}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Eyeball__MarioEyeMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6037,87 +5158,6 @@ SkinnedMeshRenderer:
     m_Center: {x: 0, y: 0.17009939, z: 0.22679383}
     m_Extent: {x: 0.13468523, y: 0.08497618, z: 0.025773741}
   m_DirtyAABB: 0
---- !u!1 &7575780108919605698
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8843076634026050321}
-  - component: {fileID: 7597517844459461455}
-  - component: {fileID: 6371835403422361629}
-  m_Layer: 0
-  m_Name: Panel
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &8843076634026050321
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7575780108919605698}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7495385879192274723}
-  - {fileID: 2700527012986542473}
-  - {fileID: 1732792044031276416}
-  - {fileID: 5094715448406800458}
-  - {fileID: 1066482984864830101}
-  - {fileID: 2714403573725295160}
-  m_Father: {fileID: 328329925316279810}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &7597517844459461455
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7575780108919605698}
-  m_CullTransparentMesh: 1
---- !u!114 &6371835403422361629
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7575780108919605698}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &7603003929378376071
 GameObject:
   m_ObjectHideFlags: 0
@@ -6128,7 +5168,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5709789621329920385}
   - component: {fileID: 6502021808414690259}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face05__MarioHigeMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6216,7 +5256,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7016947053952297790}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandL03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6247,7 +5287,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1641857231381635489}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ArmR1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6280,7 +5320,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3870169909079598880}
   - component: {fileID: 2883831771472546848}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: MarioRaccoonDog__MarioRaccoonDogHairMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6369,7 +5409,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3143609040105418666}
   - component: {fileID: 8236123634168608067}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: MarioBoomerang__MarioBoomerangBodyMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6477,7 +5517,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1064499992345336274}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: LegR1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6510,7 +5550,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1856608560174029656}
   - component: {fileID: 4196722864353260931}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandR03__MarioHandMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6598,7 +5638,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8102966620555409277}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6629,7 +5669,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6444688085684001730}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandL05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6661,7 +5701,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2271476245031359164}
   - component: {fileID: 4478431538593850185}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face04__MarioHigeMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6749,7 +5789,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1168282948380325025}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandR01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6771,95 +5811,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8755886469914751852}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &8766111469434181424
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1169665968693474504}
-  - component: {fileID: 3870136105750574691}
-  m_Layer: 0
-  m_Name: MP_DiceBlock_GEO
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1169665968693474504
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8766111469434181424}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.000000037748947, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4049157603172138314}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!137 &3870136105750574691
-SkinnedMeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8766111469434181424}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 3
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: aa815bbe6a704f84b81e0aa965b38344, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  serializedVersion: 2
-  m_Quality: 0
-  m_UpdateWhenOffscreen: 0
-  m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: -7329755672835649735, guid: 2b3ff1dc4b92d8a4abb0d820e6083a40, type: 3}
-  m_Bones:
-  - {fileID: 1427740441625574819}
-  m_BlendShapeWeights: []
-  m_RootBone: {fileID: 1427740441625574819}
-  m_AABB:
-    m_Center: {x: 0.000834465, y: 0.016777992, z: 0.062562466}
-    m_Extent: {x: 7.6582527, y: 7.6582527, z: 7.658253}
-  m_DirtyAABB: 0
 --- !u!1 &8800171444166049241
 GameObject:
   m_ObjectHideFlags: 0
@@ -6870,7 +5821,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6597697741720976135}
   - component: {fileID: 3431530207239843285}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Face04__MarioFaceMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6960,7 +5911,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3772845898409103764}
   - component: {fileID: 5779208816646974549}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandL03__MarioHandMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7048,7 +5999,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1024142464005692154}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: MarioEye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7083,7 +6034,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7757145224865664414}
   - component: {fileID: 6826698650563144135}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandL04__MarioHandMat00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7171,7 +6122,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 990611296049740011}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ShoulderR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
