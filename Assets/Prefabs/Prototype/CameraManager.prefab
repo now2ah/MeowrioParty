@@ -28,8 +28,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 214931700585841973}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.043619405, y: 0, z: 0, w: 0.9990483}
-  m_LocalPosition: {x: 0, y: 1, z: -9}
+  m_LocalRotation: {x: -0.00017897447, y: -0.9779661, z: 0.20876192, w: -0.00087559724}
+  m_LocalPosition: {x: -18.176506, y: 0.8313713, z: 13.8165245}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -66,11 +66,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.1
-  far clip plane: 5000
-  field of view: 60
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60.000004
   orthographic: 0
-  orthographic size: 10
+  orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -170,6 +170,37 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 0}
+--- !u!1 &2157338694473961165
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5053905006953984979}
+  m_Layer: 0
+  m_Name: FocusObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5053905006953984979
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2157338694473961165}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 663943167039211580}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5227898324358821237
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,6 +232,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3770244978903609625}
+  - {fileID: 5053905006953984979}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5731243408510700762
@@ -215,15 +247,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fc8fb5b930401e4db75d870e3e9c322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _focusObject: {fileID: 2157338694473961165}
   _currentLiveCamera: {fileID: 0}
-  _fov: 60
-  _boardCamera: {fileID: 0}
-  _boardCameraStartPosition: {x: 0, y: 6, z: -6}
-  _boardCameraStartRotation: {x: 55, y: 0, z: 0}
-  _playerFocusCamera: {fileID: 0}
-  _playerFocusCameraStartPosition: {x: 0, y: 0, z: 0}
-  _playerFocusCameraStartRotation: {x: 0, y: 0, z: 0}
-  _playerMoveCamera: {fileID: 0}
-  _playerMoveCameraStartPosition: {x: 0, y: 6, z: -6}
-  _playerMoveCameraStartRotation: {x: 55, y: 0, z: 0}
   _virtualCameraList: []

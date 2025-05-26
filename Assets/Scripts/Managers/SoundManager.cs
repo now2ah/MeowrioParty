@@ -12,13 +12,17 @@ public class SoundManager : Singleton<SoundManager>
     private Dictionary<BGMType, AudioClip> _bgmClips = new Dictionary<BGMType, AudioClip>();
     private Dictionary<SFXType, AudioClip> _sfxClips = new Dictionary<SFXType, AudioClip>();
 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    public static void InitSoundManager()
-    {
-        GameObject obj = new GameObject("SoundManager");
-        Instance=obj.AddComponent<SoundManager>();
-        DontDestroyOnLoad(obj);
+    private bool _isInitialized = false;
 
+
+    public void Init()
+    {
+        if (_isInitialized)
+        {
+            return;
+        }
+
+        GameObject obj = SoundManager.Instance.gameObject;
         GameObject bgmObj = new GameObject("BGM");
         SoundManager.Instance._bgmSource = bgmObj.AddComponent<AudioSource>();
         bgmObj.transform.SetParent(obj.transform);
@@ -28,7 +32,7 @@ public class SoundManager : Singleton<SoundManager>
         sfxObj.transform.SetParent(obj.transform);
 
         AudioClip[] BGMClips = Resources.LoadAll<AudioClip>("Sound/BGM");
-        foreach(AudioClip clip in BGMClips)
+        foreach (AudioClip clip in BGMClips)
         {
             try
             {
@@ -53,15 +57,28 @@ public class SoundManager : Singleton<SoundManager>
                 Debug.LogWarning("bgm enum ÇÊ¿ä : " + clip.name);
             }
         }
+
+        _isInitialized = true;
+
     }
     public void PlayBGM(BGMType type)
     {
+        if (_isInitialized)
+        {
+            Init();
+        }
+
         _bgmSource.clip = _bgmClips[type];
         _bgmSource.loop = true;
         _bgmSource.Play();
     }
     public void PlaySFX(SFXType type)
     {
+        if (_isInitialized)
+        {
+            Init();
+        }
+
         _sfxSource.PlayOneShot(_sfxClips[type]);
     }
 }

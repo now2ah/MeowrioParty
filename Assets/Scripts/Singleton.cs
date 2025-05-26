@@ -3,12 +3,32 @@ using Unity.Netcode;
 
 public class Singleton<T> : MonoBehaviour where T : Component
 {
-    public static T Instance;
+    private static T s_instance;
+
+    public static T Instance
+    {
+        get
+        {
+            if (s_instance != null)
+            {
+                return s_instance;
+            }
+
+            s_instance = GameObject.FindFirstObjectByType<T>();
+            if (s_instance == null)
+            {
+                var go = new GameObject($"{typeof(T).Name}");
+                go.AddComponent<T>();
+            }
+
+            return s_instance;
+        }
+    }
     public virtual void Awake()
     {
-        if (Instance == null)
+        if (s_instance == null)
         {
-            Instance = this as T;
+            s_instance = this as T;
         }
         else
         {
@@ -20,17 +40,38 @@ public class Singleton<T> : MonoBehaviour where T : Component
 
 public class NetSingleton<T> : NetworkBehaviour where T : Component
 {
-    public static T Instance;
+    private static T s_instance;
+
+    public static T Instance
+    {
+        get
+        {
+            if (s_instance != null)
+            {
+                return s_instance;
+            }
+
+            s_instance = GameObject.FindFirstObjectByType<T>();
+            if (s_instance == null)
+            {
+                var go = new GameObject($"{typeof(T).Name}");
+                go.AddComponent<T>();
+            }
+
+            return s_instance;
+        }
+    }
     public virtual void Awake()
     {
-        if (Instance == null)
+        if (s_instance == null)
         {
-            Instance = this as T;
+            s_instance = this as T;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
-        DontDestroyOnLoad(gameObject);
+        
     }
 }
