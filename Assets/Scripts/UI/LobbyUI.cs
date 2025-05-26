@@ -19,6 +19,8 @@ public class LobbyUI : MonoBehaviour
     [SerializeField] private TMP_InputField ipInputField;
     [SerializeField] private TMP_InputField portInputField;
 
+    public LobbyManager LobbyManager { get; set; }
+
     private void Start()
     {
         // 버튼 기능을 코드로 등록
@@ -38,12 +40,12 @@ public class LobbyUI : MonoBehaviour
     private IEnumerator WaitAndRegister()
     {
         // LobbyManager가 초기화될 때까지 대기
-        while (LobbyManager.Instance == null)
+        while (LobbyManager == null)
         {
             yield return null;
         }
 
-        LobbyManager.Instance.OnPlayerListChanged += UpdatePlayerListUI;
+        LobbyManager.OnPlayerListChanged += UpdatePlayerListUI;
     }
 
     public void OnHostClicked()
@@ -81,13 +83,14 @@ public class LobbyUI : MonoBehaviour
     public void OnReadyClicked()
     {
         ulong myClientId = NetworkManager.Singleton.LocalClientId;
-        LobbyManager.Instance.SetReadyServerRpc(myClientId);
+        LobbyManager.SetReadyServerRpc(myClientId);
         readyButton.interactable = false;
     }
 
     public void OnStartClicked()
     {
-        NetworkManager.Singleton.SceneManager.LoadScene("Board", UnityEngine.SceneManagement.LoadSceneMode.Single);
+        LobbyManager.LoadNextScene();
+        
 
         //if (NetworkManager.Singleton.IsHost)
         //{
@@ -111,7 +114,7 @@ public class LobbyUI : MonoBehaviour
     public void UpdatePlayerListUI()
     {
         playerListText.text = "";
-        foreach (var player in LobbyManager.Instance.playerStates)
+        foreach (var player in LobbyManager.playerStates)
         {
             playerListText.text += $"Player {player.ClientId} - {(player.IsReady ? "Ready" : "Not Ready")}\n";
         }

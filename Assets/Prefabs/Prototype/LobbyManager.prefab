@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3622248728
+  GlobalObjectIdHash: 1299416550
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 8
@@ -71,3 +71,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  _leaderBoardManager: {fileID: 5018980520160744883, guid: 2f23094ed4e4b5f4e820228c120d9a88, type: 3}
+  _boardManager: {fileID: 3644771927464617429, guid: 06c5194a67ae5f8469521ac75c860983, type: 3}

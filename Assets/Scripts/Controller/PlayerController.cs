@@ -23,7 +23,6 @@ public class PlayerController : NetworkBehaviour
         DOTween.Init(false, true, LogBehaviour.Verbose).SetCapacity(200, 50);
     }
 
-
     public void MoveTo(TileController nextTile)
     {
         if (!IsMoving)

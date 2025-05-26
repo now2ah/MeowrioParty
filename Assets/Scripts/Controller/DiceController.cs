@@ -1,5 +1,6 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class DiceController : MonoBehaviour
+public class DiceController : NetworkBehaviour
 {
 }
