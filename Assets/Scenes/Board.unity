@@ -1388,6 +1388,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3644771927464617429, guid: 06c5194a67ae5f8469521ac75c860983, type: 3}
+      propertyPath: networkPrefabList
+      value: 
+      objectReference: {fileID: 11400000, guid: 97d757bf0e4c7fe40b652374ffa40a35, type: 2}
+    - target: {fileID: 3644771927464617429, guid: 06c5194a67ae5f8469521ac75c860983, type: 3}
       propertyPath: characterList.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -1591,79 +1595,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &2393696301632746130
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 165347549589773954, guid: dabdd04c2d33f8142822d291fc78b6c3, type: 3}
-      propertyPath: LogLevel
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 165347549589773954, guid: dabdd04c2d33f8142822d291fc78b6c3, type: 3}
-      propertyPath: NetworkConfig.PlayerPrefab
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 165347549589773954, guid: dabdd04c2d33f8142822d291fc78b6c3, type: 3}
-      propertyPath: NetworkConfig.Prefabs.NetworkPrefabsLists.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 165347549589773954, guid: dabdd04c2d33f8142822d291fc78b6c3, type: 3}
-      propertyPath: 'NetworkConfig.Prefabs.NetworkPrefabsLists.Array.data[0]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 97d757bf0e4c7fe40b652374ffa40a35, type: 2}
-    - target: {fileID: 295338832525315049, guid: dabdd04c2d33f8142822d291fc78b6c3, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 295338832525315049, guid: dabdd04c2d33f8142822d291fc78b6c3, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 295338832525315049, guid: dabdd04c2d33f8142822d291fc78b6c3, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 295338832525315049, guid: dabdd04c2d33f8142822d291fc78b6c3, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 295338832525315049, guid: dabdd04c2d33f8142822d291fc78b6c3, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 295338832525315049, guid: dabdd04c2d33f8142822d291fc78b6c3, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 295338832525315049, guid: dabdd04c2d33f8142822d291fc78b6c3, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 295338832525315049, guid: dabdd04c2d33f8142822d291fc78b6c3, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 295338832525315049, guid: dabdd04c2d33f8142822d291fc78b6c3, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 295338832525315049, guid: dabdd04c2d33f8142822d291fc78b6c3, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2741468308802919272, guid: dabdd04c2d33f8142822d291fc78b6c3, type: 3}
-      propertyPath: m_Name
-      value: NetworkManager
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: dabdd04c2d33f8142822d291fc78b6c3, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1674,7 +1605,6 @@ SceneRoots:
   - {fileID: 1691999655}
   - {fileID: 882153069}
   - {fileID: 1434021168}
-  - {fileID: 2393696301632746130}
   - {fileID: 2035150710}
   - {fileID: 1191071225}
   - {fileID: 1387963460}

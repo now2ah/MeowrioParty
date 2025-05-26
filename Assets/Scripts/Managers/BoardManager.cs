@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -38,6 +39,8 @@ public class BoardManager : NetSingleton<BoardManager>
     private Dictionary<ulong, PlayerData> _playerDataMap = new();
     public Dictionary<ulong, PlayerController> _playerCtrlMap = new();
 
+    public NetworkPrefabsList networkPrefabList;
+
     public override void Awake()
     {
         base.Awake();
@@ -47,19 +50,39 @@ public class BoardManager : NetSingleton<BoardManager>
         _turnOrder = new NetworkList<ulong>();
     }
 
+    private void Start()
+    {
+        if (IsServer)
+        {
+            var networkObject = GetComponent<NetworkObject>();
+            networkObject.Spawn(true);      // NetworkObject가 부착된 BoardManager가 부착된 게임오브젝트 스폰
+        }
+        //foreach(var prefab in networkPrefabList.PrefabList)
+        //{
+        //    NetworkManager.Singleton.AddNetworkPrefab(prefab.Prefab);
+        //}
+    }
+
     public override void OnNetworkSpawn()
     {
-        NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnectedCallback;
-
+        // 네트워크상에 스폰 시 초기값 설정 및 InitializePlayer에 개별 ClientID 전달
         if (IsServer)
         {
             _currentState.Value = GameState.GameReady;
             _currentRound.Value = 0;
 
+            foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
+            {
+                InitalizePlayerRpc(clientId); // 여기에 개별 ClientId 전달
+            }
         }
         CameraManager.Instance.ChangeCamera(0);
         inputManager.OnConfirmButtonPerformed += GetInput;
-        StartOpeningSequenceRpc();
+
+        if (IsServer)
+        {
+            StartOpeningSequenceRpc();
+        }
     }
 
     [Rpc(SendTo.Everyone)]
@@ -79,12 +102,14 @@ public class BoardManager : NetSingleton<BoardManager>
         //주사위를 On 시킨다
     }
 
-    private void OnClientConnectedCallback(ulong clientId)
+    [Rpc(SendTo.Server)]
+    // 씬 로드 시점에서 ClientID를 받아 플레이어 생성 
+    private void InitalizePlayerRpc(ulong clientId)
     {
         if (!IsServer)
             return;
 
-        int prefabIndex = NetworkManager.Singleton.ConnectedClientsList.Count - 1;
+        int prefabIndex = (int) NetworkManager.Singleton.LocalClientId;
         Vector3 spawnPos = _spawnPointList[prefabIndex].transform.position;
 
         GameObject playerObj = Instantiate(characterPrefabList[prefabIndex], spawnPos, Quaternion.identity);
