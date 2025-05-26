@@ -7,6 +7,17 @@ public class LeaderBoardManager : NetSingleton<LeaderBoardManager>
 {
     private List<PlayerData> playerScores = new List<PlayerData>();
 
+    public override void Awake()
+    {
+        base.Awake();
+
+        if (NetworkManager.Singleton.IsServer)
+        {
+            var networkObject = GetComponent<NetworkObject>();
+            networkObject.Spawn(true);      // NetworkObject가 부착된 BoardManager가 부착된 게임오브젝트 스폰
+        }
+    }
+
     public void AddPlayer(ulong clientId, string playerName)
     {
         if (!IsServer) return;

@@ -48,7 +48,7 @@ public class LobbyUI : MonoBehaviour
 
     public void OnHostClicked()
     {
-        ApplyConnectionSettings();
+        //ApplyConnectionSettings();
         NetworkManager.Singleton.StartHost();
         readyButton.gameObject.SetActive(false);
         startButton.interactable = true;
@@ -56,7 +56,7 @@ public class LobbyUI : MonoBehaviour
 
     public void OnClientClicked()
     {
-        ApplyConnectionSettings();
+        //ApplyConnectionSettings();
         NetworkManager.Singleton.StartClient();
         readyButton.interactable = true;
         startButton.gameObject.SetActive(false);
@@ -87,23 +87,25 @@ public class LobbyUI : MonoBehaviour
 
     public void OnStartClicked()
     {
-        if (NetworkManager.Singleton.IsHost)
-        {
-            ulong myClientId = NetworkManager.Singleton.LocalClientId;
+        NetworkManager.Singleton.SceneManager.LoadScene("Board", UnityEngine.SceneManagement.LoadSceneMode.Single);
 
-            // 호스트의 Ready 상태를 먼저 설정
-            LobbyManager.Instance.SetReadyServerRpc(myClientId);
+        //if (NetworkManager.Singleton.IsHost)
+        //{
+        //    ulong myClientId = NetworkManager.Singleton.LocalClientId;
 
-            // 모든 플레이어가 준비되었는지 확인
-            if (LobbyManager.Instance.IsAllPlayersReady())
-            {
-                NetworkManager.Singleton.SceneManager.LoadScene("Board", UnityEngine.SceneManagement.LoadSceneMode.Single);
-            }
-            else
-            {
-                Debug.Log("Not all players are ready yet.");
-            }
-        }
+        //    // 호스트의 Ready 상태를 먼저 설정
+        //    LobbyManager.Instance.SetReadyServerRpc(myClientId);
+
+        //    // 모든 플레이어가 준비되었는지 확인
+        //    if (LobbyManager.Instance.IsAllPlayersReady())
+        //    {
+        //        NetworkManager.Singleton.SceneManager.LoadScene("Board", UnityEngine.SceneManagement.LoadSceneMode.Single);
+        //    }
+        //    else
+        //    {
+        //        Debug.Log("Not all players are ready yet.");
+        //    }
+        //}
     }
 
     public void UpdatePlayerListUI()

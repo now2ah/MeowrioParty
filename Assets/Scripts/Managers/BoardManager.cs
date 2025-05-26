@@ -39,8 +39,6 @@ public class BoardManager : NetSingleton<BoardManager>
     private Dictionary<ulong, PlayerData> _playerDataMap = new();
     public Dictionary<ulong, PlayerController> _playerCtrlMap = new();
 
-    public NetworkPrefabsList networkPrefabList;
-
     public override void Awake()
     {
         base.Awake();
@@ -48,7 +46,7 @@ public class BoardManager : NetSingleton<BoardManager>
         _maxRound = 2;
         _turnOrder = new NetworkList<ulong>();
 
-        InitManager();
+        //InitManager();
 
         if (NetworkManager.Singleton.IsServer)
         {
@@ -63,11 +61,14 @@ public class BoardManager : NetSingleton<BoardManager>
         CameraManager.Instance.gameObject.SetActive(true);
         SoundManager.Instance.gameObject.SetActive(true);
         UIManager.Instance.gameObject.SetActive(true);
-        LeaderBoardManager.Instance.gameObject.SetActive(false);
+        LeaderBoardManager.Instance.gameObject.SetActive(true);
     }
 
     public override void OnNetworkSpawn()
     {
+        //need to remove
+        NetworkManager.Singleton.OnClientConnectedCallback += Singleton_OnClientConnectedCallback;
+
         // 네트워크상에 스폰 시 초기값 설정 및 InitializePlayer에 개별 ClientID 전달
         if (IsServer)
         {
@@ -75,10 +76,6 @@ public class BoardManager : NetSingleton<BoardManager>
             _currentState.Value = GameState.GameReady;
             _currentRound.Value = 0;
 
-            foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
-            {
-                InitalizePlayerRpc(clientId); // 여기에 개별 ClientId 전달
-            }
         }
         CameraManager.Instance.ChangeCamera(0);
         inputManager.OnConfirmButtonPerformed += GetInput;
@@ -89,10 +86,21 @@ public class BoardManager : NetSingleton<BoardManager>
         }
     }
 
+    private void Singleton_OnClientConnectedCallback(ulong obj)
+    {
+        if (NetworkManager.Singleton.ConnectedClientsList.Count == 2)
+        {
+            foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
+            {
+                InitalizePlayerRpc(clientId); // 여기에 개별 ClientId 전달
+            }
+        }
+    }
+
     [Rpc(SendTo.Everyone)]
     private void StartOpeningSequenceRpc()
     {
-        UIManager.Instance.OpenNoticeUIEveryoneSecRpc("순서를 정해보죠!", 3f);
+        //UIManager.Instance.OpenNoticeUIEveryoneSecRpc("순서를 정해보죠!", 3f);
         StartCoroutine(OpeningCo());
     }
 
@@ -113,7 +121,7 @@ public class BoardManager : NetSingleton<BoardManager>
         if (!IsServer)
             return;
 
-        int prefabIndex = (int) NetworkManager.Singleton.LocalClientId;
+        int prefabIndex = (int)clientId;    //need to fix
         Vector3 spawnPos = _spawnPointList[prefabIndex].transform.position;
 
         GameObject playerObj = Instantiate(characterPrefabList[prefabIndex], spawnPos, Quaternion.identity);
