@@ -15,14 +15,15 @@ public class UIManager : NetSingleton<UIManager>
     private Dictionary<Type, GameObject> m_OpenUIPool = new Dictionary<Type, GameObject>();
     private Dictionary<Type, GameObject> m_ClosedUIPool = new Dictionary<Type, GameObject>();
 
-    private void Start()
+    public override void Awake()
     {
-        if (IsServer)
+        base.Awake();
+
+        if (NetworkManager.Singleton.IsServer)
         {
             var networkObject = GetComponent<NetworkObject>();
             networkObject.Spawn(true);  // NetworkObject가 부착된 UIManager가 부착된 게임오브젝트 스폰
         }
-
     }
 
     private BaseUI GetUI<T>(out bool isAlreadyOpen)

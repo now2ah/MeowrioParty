@@ -46,21 +46,24 @@ public class BoardManager : NetSingleton<BoardManager>
         base.Awake();
 
         _maxRound = 2;
-        _currentPlayerIndex = 0;
         _turnOrder = new NetworkList<ulong>();
-    }
 
-    private void Start()
-    {
-        if (IsServer)
+        InitManager();
+
+        if (NetworkManager.Singleton.IsServer)
         {
             var networkObject = GetComponent<NetworkObject>();
             networkObject.Spawn(true);      // NetworkObject가 부착된 BoardManager가 부착된 게임오브젝트 스폰
         }
-        //foreach(var prefab in networkPrefabList.PrefabList)
-        //{
-        //    NetworkManager.Singleton.AddNetworkPrefab(prefab.Prefab);
-        //}
+    }
+
+    private void InitManager()
+    {
+        // HACK: 싱글톤 인스턴스 초기화 순서를 고정하기 위하여 
+        CameraManager.Instance.gameObject.SetActive(true);
+        SoundManager.Instance.gameObject.SetActive(true);
+        UIManager.Instance.gameObject.SetActive(true);
+        LeaderBoardManager.Instance.gameObject.SetActive(false);
     }
 
     public override void OnNetworkSpawn()
@@ -68,6 +71,7 @@ public class BoardManager : NetSingleton<BoardManager>
         // 네트워크상에 스폰 시 초기값 설정 및 InitializePlayer에 개별 ClientID 전달
         if (IsServer)
         {
+            _currentPlayerIndex = 0;
             _currentState.Value = GameState.GameReady;
             _currentRound.Value = 0;
 
@@ -102,10 +106,10 @@ public class BoardManager : NetSingleton<BoardManager>
         //주사위를 On 시킨다
     }
 
-    [Rpc(SendTo.Server)]
     // 씬 로드 시점에서 ClientID를 받아 플레이어 생성 
     private void InitalizePlayerRpc(ulong clientId)
     {
+        Debug.Log("InitializePlayerRpc : " + clientId);
         if (!IsServer)
             return;
 
