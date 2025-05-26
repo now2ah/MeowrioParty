@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class UIManager : Singleton<UIManager>
+public class UIManager : NetSingleton<UIManager>
 {
     public Transform UICanvasTrs; //UI화면을 랜더링할 컨버스
     public Transform CloseUITrs; //닫을 때 비활성화 할 
@@ -12,7 +14,7 @@ public class UIManager : Singleton<UIManager>
     //열려있는, 닫혀있는 ui pool 나눠서 관리리
     private Dictionary<Type, GameObject> m_OpenUIPool = new Dictionary<Type, GameObject>();
     private Dictionary<Type, GameObject> m_ClosedUIPool = new Dictionary<Type, GameObject>();
-    
+
 
     private BaseUI GetUI<T>(out bool isAlreadyOpen)
     {
@@ -20,12 +22,12 @@ public class UIManager : Singleton<UIManager>
         BaseUI ui = null;
         isAlreadyOpen = false;
 
-        if(m_OpenUIPool.ContainsKey(uiType) == true)
+        if (m_OpenUIPool.ContainsKey(uiType) == true)
         {
             ui = m_OpenUIPool[uiType].GetComponent<BaseUI>();
             isAlreadyOpen = true;
         }
-        else if(m_ClosedUIPool.ContainsKey(uiType) == true)
+        else if (m_ClosedUIPool.ContainsKey(uiType) == true)
         {
             ui = m_ClosedUIPool[uiType].GetComponent<BaseUI>();
             m_ClosedUIPool.Remove(uiType);
@@ -104,9 +106,10 @@ public class UIManager : Singleton<UIManager>
         return m_FrontUI;
     }
 
-    public void CloseCurrentFrontUI() 
+    [Rpc(SendTo.Everyone)]
+    public void CloseCurrentFrontUIRpc()
     {
-        m_FrontUI.CloseUI();
+        if (m_FrontUI != null) m_FrontUI.CloseUI();
     }
 
     public void CloseAllOpenUI() //열린 거 다 닫기
@@ -116,4 +119,51 @@ public class UIManager : Singleton<UIManager>
             m_FrontUI.CloseUI(true);
         }
     }
+
+    public void OpenNoticeUI(string message)
+    {
+        NoticeUIData noticeUIData = new NoticeUIData();
+        noticeUIData.currentNoticeTxt = message;
+        OpenUI<NoticeUI>(noticeUIData);
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void OpenNoticeUIEveryoneRpc(string message)
+    {
+        NoticeUIData noticeUIData = new NoticeUIData();
+        noticeUIData.currentNoticeTxt = message;
+        OpenUI<NoticeUI>(noticeUIData);
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void OpenNoticeUIEveryoneSecRpc(string message, float timer)
+    {
+        StartCoroutine(OpenNoticeUIEveryoneSecCo(message, timer));
+    }
+    private IEnumerator OpenNoticeUIEveryoneSecCo(string message, float timer)
+    {
+        NoticeUIData noticeUIData = new NoticeUIData();
+        noticeUIData.currentNoticeTxt = message;
+        OpenUI<NoticeUI>(noticeUIData);
+
+        yield return new WaitForSeconds(timer);
+
+        if (GetActiveUI<NoticeUI>() != null)
+        {
+            CloseUI(GetActiveUI<NoticeUI>());
+
+        }
+
+    }
+    public void OpenLeaderBoardUI(LeaderBoardUIData lbData)
+    {
+        OpenUI<LeaderBoardUI>(lbData);
+    }
+
+    public IEnumerator CloseFrontUISecCo(float timer)
+    {
+        yield return new WaitForSeconds(timer);
+        CloseCurrentFrontUIRpc();
+    }
+
 }

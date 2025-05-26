@@ -6,8 +6,6 @@ using System.Collections;
 
 public class MiniGamePlayerController : NetworkBehaviour
 {
-    public event Action OnMiniGameFinished;
-
     public InputManagerSO inputManager;
 
     private float _baseSpeed;
@@ -167,7 +165,6 @@ public class MiniGamePlayerController : NetworkBehaviour
             // ¼­¹ö¿¡°Ô ¾Ë¸²
             NotifyServerRaceFinishedServerRpc();
 
-            OnMiniGameFinished?.Invoke();
         }
     }
 
