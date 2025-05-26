@@ -22,6 +22,7 @@ public class LobbyManager : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        //if (NetworkManager.Singleton.IsClient) { }
         if (IsServer)
         {
             NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
