@@ -41,7 +41,7 @@ public class SoundManager : Singleton<SoundManager>
             }
         }
         AudioClip[] SFXClips = Resources.LoadAll<AudioClip>("Sound/SFX");
-        foreach (AudioClip clip in BGMClips)
+        foreach (AudioClip clip in SFXClips)
         {
             try
             {
@@ -56,6 +56,8 @@ public class SoundManager : Singleton<SoundManager>
     }
     public void PlayBGM(BGMType type)
     {
+        _bgmSource.clip = _bgmClips[type];
+        _bgmSource.loop = true;
         _bgmSource.Play();
     }
     public void PlaySFX(SFXType type)
@@ -65,9 +67,9 @@ public class SoundManager : Singleton<SoundManager>
 }
 public enum BGMType
 {
-
+    GameBGM,
 }
 public enum SFXType
 {
-
+    Coin, Star, RollingDice, StopDice, Click, Cancle
 }
