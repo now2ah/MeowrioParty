@@ -32,7 +32,7 @@ public class LeaderBoardManager : NetSingleton<LeaderBoardManager>
         Debug.Log("afterCoin : " + player.Coins);
     }
 
-    private string[] GetSortedPlayerNames()
+    private string[] GetPlayerScoresNames()
     {
         string[] result = new string[playerScores.Count];
 
@@ -60,7 +60,7 @@ public class LeaderBoardManager : NetSingleton<LeaderBoardManager>
 
     public void ShowLeaderBoardToAllClients()
     {
-        UpdateLeaderBoardClient(GetSortedPlayerNames());
+        UpdateLeaderBoardClient(GetPlayerScoresNames());
     }
 
 

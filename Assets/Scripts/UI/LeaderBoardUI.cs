@@ -29,7 +29,7 @@ public class LeaderBoardUI : BaseUI
 
         m_leaderBoardUIData = uiData as LeaderBoardUIData;
 
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 2; i++) // 하드코딩 부분 나중에 수정 필요
         {
             PlayerNameTxt[i].text = m_leaderBoardUIData.PlayerNameTxt[i];
         }
