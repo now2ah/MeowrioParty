@@ -197,7 +197,7 @@ public class BoardManager : NetSingleton<BoardManager>
         int diceValue = UnityEngine.Random.Range(1, 7);
         _playerCtrlMap[clientId].RollDiceSequenceRpc(diceValue);
 
-        AnnounceEveryOneCloseRpc();
+        CloseEveryoneNoticeUIRpc();
 
         StartCoroutine(SendTileCo(clientId, diceValue));
         _canInput = false;
@@ -232,6 +232,8 @@ public class BoardManager : NetSingleton<BoardManager>
             yield return new WaitForSeconds(0.1f);
             controller.TurnOffDiceNumberRpc();
         }
+        _board.tileControllers[tileIndex].TileEventAtServer(data, controller);
+        //코인 개수만 서버랑 동기화되면 됨
         TileEffectRpc(tileIndex, playerId);
         yield return new WaitForSeconds(2f);
         NextTurn();
@@ -240,8 +242,25 @@ public class BoardManager : NetSingleton<BoardManager>
     [Rpc(SendTo.Everyone)]
     private void TileEffectRpc(int tileIndex, ulong id)
     {
-        _board.tileControllers[tileIndex].TileEventLeaderBoard(id);
+        ETileType currentTile = _board.tileControllers[tileIndex].TileEventLeaderBoard(id);
+        if (currentTile == ETileType.StarTile)
+        {
+            if (IsServer)
+            {
+                if (_playerDataMap[id].Coins >= 20)
+                {
+                    OpenExchangeStarUIRpc(id);
+                }
+            }
+        }
     }
+    [Rpc(SendTo.Everyone)]
+    private void OpenExchangeStarUIRpc(ulong id)
+    {
+        UIManager.Instance.OpenExchangerStar(id);
+
+    }
+
 
     private void NextTurn()
     {
@@ -251,7 +270,7 @@ public class BoardManager : NetSingleton<BoardManager>
         if (_currentPlayerTurnIndex == _playerTurnOrder.Count)
         {
             _currentPlayerTurnIndex = 0;
-            _currentRound.Value++;
+            //_currentRound.Value++;
 
             if (_currentRound.Value > _maxRound)
             {
@@ -270,6 +289,7 @@ public class BoardManager : NetSingleton<BoardManager>
 
     private void StartMiniGame()
     {
+        CloseEveryoneNoticeUIRpc();
         NoticeEveryoneSecRpc("미니게임 시작!" + "\n" + "SPACE를 빠르게 눌러 먼저 도착하세요!^0^", 5f);
         _currentState.Value = GameState.MiniGame;
         NetworkManager.Singleton.SceneManager.LoadScene("TapRaceScene", LoadSceneMode.Additive);
@@ -284,6 +304,7 @@ public class BoardManager : NetSingleton<BoardManager>
             return;
         }
         _currentState.Value = GameState.GamePlay;
+        _currentRound.Value++;
         Scene scene = SceneManager.GetSceneByName("TapRaceScene");
         NetworkManager.Singleton.SceneManager?.UnloadScene(scene);
         //TogglePlayerDice(_currentPlayerId, true);
@@ -298,16 +319,16 @@ public class BoardManager : NetSingleton<BoardManager>
     }
 
     [Rpc(SendTo.Everyone)]
-    private void AnnounceEveryOneCloseRpc()
+    private void CloseEveryoneNoticeUIRpc()
     {
-        UIManager.Instance.CloseCurrentFrontUI();
+        UIManager.Instance.CloseTargetUI<NoticeUI>();
     }
-
     [Rpc(SendTo.Everyone)]
     private void NoticeEveryoneRpc(string message)
     {
-        UIManager.Instance.OpenNoticeUI("주사위를 굴리세요");
+        UIManager.Instance.OpenNoticeUI(message);
     }
+
 
     [Rpc(SendTo.Server)]
     private void RollDiceSequenceRpc(ulong clientId, int diceValue)
@@ -324,6 +345,7 @@ public class BoardManager : NetSingleton<BoardManager>
     [Rpc(SendTo.Everyone)]
     private void ChangeRoundUIRpc(int previous, int current)
     {
+        UIManager.Instance.CloseTargetUI<RoundUI>();
         RoundUIData roundUIData = new RoundUIData();
         roundUIData.currentRound = current.ToString();
         roundUIData.maxRound = _maxRound.ToString();
