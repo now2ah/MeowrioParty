@@ -12,7 +12,7 @@ public class BoardScene : MonoBehaviour
     {
         NetworkManager.Singleton.SceneManager.OnLoadComplete += (clientId, sceneName, loadSceneMode) =>
         {
-            if (sceneName == "Board")
+            if (sceneName == "BoardTest")
             {
                 if (NetworkManager.Singleton.LocalClientId == clientId)
                 {

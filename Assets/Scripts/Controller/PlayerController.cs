@@ -2,9 +2,12 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using Unity.Netcode;
+using System.Collections;
 
 public class PlayerController : NetworkBehaviour
 {
+    [SerializeField] private InputManagerSO _inputManager;
+
     [SerializeField] private DiceController _diceObj;
     [SerializeField] private List<GameObject> _diceNumberObjects = new List<GameObject>();
 
@@ -15,7 +18,13 @@ public class PlayerController : NetworkBehaviour
 
     private void Awake()
     {
+        _inputManager.OnConfirmButtonPerformed += _inputManager_OnConfirmButtonPerformed;
         _animator = GetComponent<Animator>();
+    }
+
+    private void _inputManager_OnConfirmButtonPerformed(object sender, bool e)
+    {
+        BoardManager.Instance.ProcessPlayerInputServerRpc(NetworkManager.Singleton.LocalClientId);
     }
 
     void Start()
@@ -41,19 +50,34 @@ public class PlayerController : NetworkBehaviour
                     });
         }
     }
-    [Rpc(SendTo.ClientsAndHost)]
-    public void TurnOnDiceNumberRpc(int index)
-    {
-        //TurnOffDiceNumberRpc();
 
+    [Rpc(SendTo.Everyone)]
+    public void RollDiceSequenceRpc(int diceValue)
+    {
+        StartCoroutine(RollDiceSequenceCoroutine(diceValue));
+    }
+
+    IEnumerator RollDiceSequenceCoroutine(int diceValue)
+    {
+        ToggleDice(false);
+        TurnOnDiceNumber(diceValue);
+        yield return null;
+    }
+
+    public void ToggleDice(bool isOn)
+    {
+        _diceObj.gameObject.SetActive(isOn);
+    }
+
+    public void TurnOnDiceNumber(int index)
+    {
         if (_diceNumberObjects[index - 1] != null)
         {
             _diceNumberObjects[index - 1].SetActive(true);
         }
-
     }
 
-    [Rpc(SendTo.ClientsAndHost)]
+    [Rpc(SendTo.Everyone)]
     public void TurnOffDiceNumberRpc()
     {
         foreach (var diceNumberObject in _diceNumberObjects)
@@ -62,13 +86,6 @@ public class PlayerController : NetworkBehaviour
         }
 
     }
-
-    [Rpc(SendTo.Everyone)]
-    public void ToggleDiceRpc(bool isOn)
-    {
-        _diceObj.gameObject.SetActive(isOn);
-    }
-
 
     public void TransportPlayer(TileController tile)
     {
