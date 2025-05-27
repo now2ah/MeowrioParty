@@ -181,6 +181,13 @@ public class BoardManager : NetSingleton<BoardManager>
         return clientId == _currentPlayerId;
     }
 
+    [Rpc(SendTo.Everyone)]
+    private void TileEffectRpc(int tileIndex, ulong id)
+    {
+        _board.tileControllers[tileIndex].TileEventLeaderBoard(id);
+    }
+
+
     private IEnumerator SendTileCo(ulong playerId, int diceValue)
     {
         PlayerData data = _playerDataMap[playerId];
@@ -205,7 +212,7 @@ public class BoardManager : NetSingleton<BoardManager>
             yield return new WaitForSeconds(0.1f);
             controller.TurnOffDiceNumberRpc();
         }
-        _board.tileControllers[tileIndex].TileEvent(data, controller);
+        TileEffectRpc(tileIndex, playerId);
         yield return new WaitForSeconds(2f);
         NextTurn();
     }
@@ -258,7 +265,7 @@ public class BoardManager : NetSingleton<BoardManager>
     public void OnMiniGamePlayerFinished(ulong clientId)
     {
         if (!IsServer) return;
-        NoticeEveryoneSecRpc("우승자는 " + OwnerClientId + " ㅊㅋㅊㅋ", 3f);
+        NoticeEveryoneSecRpc("우승자는 " + clientId + " ㅊㅋㅊㅋ", 3f);
         StopMiniGame();
     }
 
