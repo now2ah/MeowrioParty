@@ -32,8 +32,7 @@ public class CameraManager : Singleton<CameraManager>
         }
     }
 
-    [Rpc(SendTo.Everyone)]
-    public void ChangeCameraRpc(CameraType type)
+    public void ChangeCamera(CameraType type)
     {
         if (_virtualCameraList != null && _virtualCameraList.Count > 0)
         {

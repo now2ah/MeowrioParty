@@ -16,8 +16,6 @@ public enum GameState
 
 public class BoardManager : NetSingleton<BoardManager>
 {
-    [SerializeField] private InputManagerSO inputManager;
-
     [Header("Variables")]
     [SerializeField] private NetworkVariable<GameState> _currentState;
     [SerializeField] private int _maxRound;
@@ -27,8 +25,9 @@ public class BoardManager : NetSingleton<BoardManager>
 
     private int _currentPlayerTurnIndex;
     private Dictionary<ulong, int> _playerDiceNumberList = new(); //순서 Dictionary
+    private bool _canInput;
 
-    private NetworkVariable<bool> _canInput = new NetworkVariable<bool>(false);
+    public bool CanInput => _canInput;
 
     [SerializeField] private Board _board;
     [SerializeField] private List<GameObject> _spawnPointList;
@@ -38,6 +37,7 @@ public class BoardManager : NetSingleton<BoardManager>
     public Dictionary<ulong, PlayerController> _playerCtrlMap = new();
 
     private Action OnInitializeDone;
+    private Action<ulong> OnSetOrderDone;
 
     public override void Awake()
     {
@@ -47,6 +47,7 @@ public class BoardManager : NetSingleton<BoardManager>
         _playerTurnOrder = new NetworkList<ulong>();
 
         OnInitializeDone += OnInitializeDone_StartOpeningSequenceRpc;
+        OnSetOrderDone += OnSetOrderDone_StartBoardGameSequenceServerRpc;
         _currentRound.OnValueChanged += ChangeRoundUIRpc;
     }
 
@@ -63,8 +64,6 @@ public class BoardManager : NetSingleton<BoardManager>
 
             StartCoroutine(CreatePlayerControllersCoroutine(NetworkManager.Singleton.ConnectedClientsList));
         }
-
-        inputManager.OnConfirmButtonPerformed += GetInput;
     }
 
     IEnumerator CreatePlayerControllersCoroutine(IReadOnlyList<NetworkClient> clientList)
@@ -100,7 +99,7 @@ public class BoardManager : NetSingleton<BoardManager>
     [Rpc(SendTo.Everyone)]
     private void OnInitializeDone_StartOpeningSequenceRpc()
     {
-        CameraManager.Instance.ChangeCameraRpc(CameraType.Board);
+        CameraManager.Instance.ChangeCamera(CameraType.Board);
         UIManager.Instance.OpenNoticeUISec("파티 시작!", 3f);
 
         StartCoroutine(OpeningCo());
@@ -109,64 +108,54 @@ public class BoardManager : NetSingleton<BoardManager>
     private IEnumerator OpeningCo()
     {
         yield return new WaitForSeconds(3f);
-        CameraManager.Instance.ChangeCameraRpc(CameraType.Stage);
+        CameraManager.Instance.ChangeCamera(CameraType.Stage);
         UIManager.Instance.OpenNoticeUISec("순서를 정해보죠!", 3f);
-        if (IsServer)
-            _canInput.Value = true;
+        _canInput = true;
+    }
+
+    [Rpc(SendTo.Server)]
+    public void ProcessPlayerInputServerRpc(ulong clientId)
+    {
+        if (_canInput)
+        {
+            if (_currentState.Value == GameState.GameReady)
+            {
+                RollDiceForTurnOrderServerRpc(clientId);
+                return;
+            }
+            else if (_currentState.Value == GameState.GamePlay)
+            {
+                RollDiceForBoardGameServerRpc(clientId);
+                return;
+            }
+        }
     }
 
     [Rpc(SendTo.Server)] //클 -> 서 주사위 굴려줘
-    public void RequestRollDiceServerRpc(ulong clientId)
+    public void RollDiceForTurnOrderServerRpc(ulong clientId)
     {
-        if (!_canInput.Value)
-            return;
+        int diceValue = UnityEngine.Random.Range(1, 7);
+        _playerDiceNumberList[clientId] = diceValue;
 
-        if (_currentState.Value == GameState.GameReady)
+        Debug.Log("cliendId : " + clientId + ", diceValue : " + diceValue);
+
+        RollDiceSequenceRpc(clientId, diceValue);
+
+        if (_playerDiceNumberList.All(p => p.Value != -1))
         {
-            int diceValue = UnityEngine.Random.Range(1, 7);
-            _playerDiceNumberList[clientId] = diceValue;
+            SetTurnOrder();
+            _currentState.Value = GameState.GamePlay;
+            _currentPlayerId = _playerTurnOrder[0];
+            _currentRound.Value = 1;
 
-            Debug.Log("cliendId : " + clientId + ", diceValue : " + diceValue);
-
-            //주사위 숫자 연출 (주사위 off / 숫자 Sprite 출력)
-            RollDiceSequenceRpc(clientId, diceValue);
-
-            if (_playerDiceNumberList.All(p => p.Value != -1))
+            //Player들 시작 타일로 이동
+            foreach (var connectedClient in NetworkManager.Singleton.ConnectedClients)
             {
-                SetTurnOrder();
-                _currentState.Value = GameState.GamePlay;
-                _currentPlayerId = _playerTurnOrder[0];
-
-                //Player들 시작 타일로 이동
-                foreach (var connectedClient in NetworkManager.Singleton.ConnectedClients)
-                {
-                    _playerCtrlMap[connectedClient.Key].TransportPlayer(_board.tileControllers[0]);
-                }
-
-                //첫번째 턴 Player의 정면 카메라 On
-                NoticeEveryoneSecRpc(_currentRound.Value + "라운드 시작~!", 3f);
-                _currentRound.Value = 1;
-
-                _playerCtrlMap[_currentPlayerId].ToggleDiceRpc(true);
+                _playerCtrlMap[connectedClient.Key].TransportPlayer(_board.tileControllers[0]);
             }
-        }
-        else if (_currentState.Value == GameState.GamePlay)
-        {
-            if (!IsPlayersTurn(clientId) || !_canInput.Value) return;
-            //굴리고 이동 
-            int diceValue = UnityEngine.Random.Range(1, 7);
-            TogglePlayerDice(clientId, false);
-            AnnounceEveryOneCloseRpc();
-            StartCoroutine(SendTileCo(clientId, diceValue));
-            _canInput.Value = false;
-        }
-    }
-
-    private void TogglePlayerDice(ulong clientId, bool isOn)
-    {
-        if (_playerCtrlMap.TryGetValue(clientId, out var ctrl))
-        {
-            ctrl.ToggleDiceRpc(isOn);
+            _playerCtrlMap[_currentPlayerId].ToggleDice(true);
+            
+            OnSetOrderDone?.Invoke(_currentPlayerId);
         }
     }
 
@@ -179,17 +168,45 @@ public class BoardManager : NetSingleton<BoardManager>
             _playerTurnOrder.Add(tempDic.Key);
         }
     }
+
+    [Rpc(SendTo.Everyone)]
+    private void OnSetOrderDone_StartBoardGameSequenceServerRpc(ulong clientId)
+    {
+        ChangeCameraSequenceRpc(CameraType.Focus, clientId);
+        NoticeEveryoneSecRpc(_currentRound.Value + "라운드 시작~!", 3f);
+    }
+
+    [Rpc(SendTo.Everyone)]
+    private void ChangeCameraSequenceRpc(CameraType type, ulong clientId)
+    {
+        CameraManager.Instance.ChangeCamera(type);
+        foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
+        {
+            if (client.ClientId == clientId)
+            {
+                CameraManager.Instance.SetTarget(client.PlayerObject.transform);
+            }
+        }
+    }
+
+    [Rpc(SendTo.Server)]
+    public void RollDiceForBoardGameServerRpc(ulong clientId)
+    {
+        if (!IsPlayersTurn(clientId)) return;
+
+        int diceValue = UnityEngine.Random.Range(1, 7);
+        _playerCtrlMap[clientId].RollDiceSequenceRpc(diceValue);
+
+        AnnounceEveryOneCloseRpc();
+
+        StartCoroutine(SendTileCo(clientId, diceValue));
+        _canInput = false;
+    }
+
     private bool IsPlayersTurn(ulong clientId)
     {
         return clientId == _currentPlayerId;
     }
-
-    [Rpc(SendTo.Everyone)]
-    private void TileEffectRpc(int tileIndex, ulong id)
-    {
-        _board.tileControllers[tileIndex].TileEventLeaderBoard(id);
-    }
-
 
     private IEnumerator SendTileCo(ulong playerId, int diceValue)
     {
@@ -205,7 +222,7 @@ public class BoardManager : NetSingleton<BoardManager>
 
             data.MoveTo(nextTileObj);
             controller.MoveTo(nextTileObj);
-            controller.TurnOnDiceNumberRpc(diceValue - i);
+            controller.TurnOnDiceNumber(diceValue - i);
             tileIndex = nextIndex;
 
             while (controller.IsMoving)
@@ -220,10 +237,15 @@ public class BoardManager : NetSingleton<BoardManager>
         NextTurn();
     }
 
+    [Rpc(SendTo.Everyone)]
+    private void TileEffectRpc(int tileIndex, ulong id)
+    {
+        _board.tileControllers[tileIndex].TileEventLeaderBoard(id);
+    }
 
     private void NextTurn()
     {
-        _canInput.Value = true;
+        _canInput = true;
         _currentPlayerTurnIndex++;
 
         if (_currentPlayerTurnIndex == _playerTurnOrder.Count)
@@ -238,9 +260,12 @@ public class BoardManager : NetSingleton<BoardManager>
             }
             StartMiniGame();
         }
+
         if (_currentState.Value != GameState.MiniGame)
             NoticeEveryoneRpc("주사위를 굴리세요");
+
         _currentPlayerId = _playerTurnOrder[_currentPlayerTurnIndex];
+        ChangeCameraSequenceRpc(CameraType.Focus, _currentPlayerId);
     }
 
     private void StartMiniGame()
@@ -261,7 +286,7 @@ public class BoardManager : NetSingleton<BoardManager>
         _currentState.Value = GameState.GamePlay;
         Scene scene = SceneManager.GetSceneByName("TapRaceScene");
         NetworkManager.Singleton.SceneManager?.UnloadScene(scene);
-        TogglePlayerDice(_currentPlayerId, true);
+        //TogglePlayerDice(_currentPlayerId, true);
         NoticeEveryoneSecRpc(_currentRound.Value + "라운드 시작~!", 3f);
     }
 
@@ -272,22 +297,12 @@ public class BoardManager : NetSingleton<BoardManager>
         StopMiniGame();
     }
 
-
-    //Input도 나중에 아예 분리해내면 좋을 것 같습니다.
-    private void GetInput(object sender, bool isPressed)
-    {
-        if (!isPressed) return;
-
-        RequestRollDiceServerRpc(NetworkManager.Singleton.LocalClientId);
-        Debug.Log(NetworkManager.Singleton.LocalClientId);
-    }
-
-
     [Rpc(SendTo.Everyone)]
     private void AnnounceEveryOneCloseRpc()
     {
         UIManager.Instance.CloseCurrentFrontUI();
     }
+
     [Rpc(SendTo.Everyone)]
     private void NoticeEveryoneRpc(string message)
     {
@@ -297,8 +312,7 @@ public class BoardManager : NetSingleton<BoardManager>
     [Rpc(SendTo.Server)]
     private void RollDiceSequenceRpc(ulong clientId, int diceValue)
     {
-        TogglePlayerDice(clientId, false);
-        _playerCtrlMap[clientId].TurnOnDiceNumberRpc(diceValue);
+        _playerCtrlMap[clientId].RollDiceSequenceRpc(diceValue);
     }
 
     [Rpc(SendTo.Everyone)]
@@ -307,7 +321,6 @@ public class BoardManager : NetSingleton<BoardManager>
         UIManager.Instance.OpenNoticeUISec(message, timer);
     }
 
-    //_currentRound.OnValueChanged += fdfd
     [Rpc(SendTo.Everyone)]
     private void ChangeRoundUIRpc(int previous, int current)
     {

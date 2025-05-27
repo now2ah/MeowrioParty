@@ -89,6 +89,6 @@ public class LobbyManager : NetworkBehaviour
     public void LoadNextScene()
     {
         if (NetworkManager.Singleton.IsServer)
-            NetworkManager.Singleton.SceneManager.LoadScene("Board", UnityEngine.SceneManagement.LoadSceneMode.Single);
+            NetworkManager.Singleton.SceneManager.LoadScene("BoardTest", UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
 }
