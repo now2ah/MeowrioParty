@@ -13,9 +13,6 @@ public class InputManagerSO : ScriptableObject
     public event EventHandler<bool> OnConfirmButtonPerformed;
     public event EventHandler<bool> OnConfirmButtonCancelded;
 
-    public event Action<int> OnDiceButtonPerformed;
-    
-
     private void OnEnable()
     {
         if (null == _inputActionAsset)

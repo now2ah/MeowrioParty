@@ -45,8 +45,8 @@ public class MiniGamePlayerController : NetworkBehaviour
 
         if (IsOwner)
         {
-            inputManager.OnConfirmButtonPerformed += GetInput;
             StartCoroutine(WaitUntilSceneReady());
+            inputManager.OnConfirmButtonPerformed += GetInput;
         }
     }
     public override void OnNetworkDespawn()
@@ -168,9 +168,12 @@ public class MiniGamePlayerController : NetworkBehaviour
         }
     }
 
-    [Rpc(SendTo.Server)]
+    [Rpc(SendTo.Everyone)]
     private void NotifyServerRaceFinishedServerRpc()
     {
+        LeaderBoardManager.Instance.UpdateCoin(OwnerClientId, 1);
+        LeaderBoardManager.Instance.UpdateLeaderBoardClient();
+        
         BoardManager.Instance.OnMiniGamePlayerFinished(OwnerClientId);
     }
 }

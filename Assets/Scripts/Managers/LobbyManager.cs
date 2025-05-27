@@ -4,10 +4,27 @@ using UnityEngine.SceneManagement;
 using System;
 using Unity.Collections;
 using Unity.Services.Matchmaker.Models;
+using System.Collections;
 
 public class LobbyManager : NetworkBehaviour
 {
-    public static LobbyManager Instance;
+    [Serializable]
+    public struct PlayerLobbyState : INetworkSerializable, IEquatable<PlayerLobbyState>
+    {
+        public ulong ClientId;
+        public bool IsReady;
+
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        {
+            serializer.SerializeValue(ref ClientId);
+            serializer.SerializeValue(ref IsReady);
+        }
+
+        public bool Equals(PlayerLobbyState other)
+        {
+            return ClientId == other.ClientId && IsReady == other.IsReady;
+        }
+    }
 
     public NetworkList<PlayerLobbyState> playerStates;
 
@@ -15,14 +32,11 @@ public class LobbyManager : NetworkBehaviour
 
     private void Awake()
     {
-        Instance = this;
-
         playerStates = new NetworkList<PlayerLobbyState>();
     }
 
     public override void OnNetworkSpawn()
     {
-        //if (NetworkManager.Singleton.IsClient) { }
         if (IsServer)
         {
             NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
@@ -72,31 +86,9 @@ public class LobbyManager : NetworkBehaviour
         return true;
     }
 
-    [Serializable]
-    public struct PlayerLobbyState : INetworkSerializable, IEquatable<PlayerLobbyState>
+    public void LoadNextScene()
     {
-        public ulong ClientId;
-        public bool IsReady;
-
-        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-        {
-            serializer.SerializeValue(ref ClientId);
-            serializer.SerializeValue(ref IsReady);
-        }
-
-        public bool Equals(PlayerLobbyState other)
-        {
-            return ClientId == other.ClientId && IsReady == other.IsReady;
-        }
-
-        public override bool Equals(object obj)
-        {
-            return obj is PlayerLobbyState other && Equals(other);
-        }
-
-        public override int GetHashCode()
-        {
-            return ClientId.GetHashCode() ^ IsReady.GetHashCode();
-        }
+        if (NetworkManager.Singleton.IsServer)
+            NetworkManager.Singleton.SceneManager.LoadScene("BoardTest", UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
 }

@@ -4,23 +4,18 @@ using UnityEngine.UI;
 
 public class LeaderBoardUIData : BaseUIData
 {
-    public string[] PlayerNameTxt = new string[4];
+    public string[] StarCountTxt = new string[4];
+    public string[] CoinCountTxt = new string[4];
 
-    public Sprite FirstPlayerSpr = null;
-    public Sprite SecondPlayerSpr  = null;
-    public Sprite ThirdPlayerISpr = null;
-    public Sprite FourthPlayerSpr  = null; 
+    public Sprite[] PlayerSprs = new Sprite[4];
 }
 
 public class LeaderBoardUI : BaseUI
 {
-    // 닫기 버튼? 도 있어야 할 것 같습니다.
-    public TextMeshProUGUI[] PlayerNameTxt = new TextMeshProUGUI[4];
+    public TextMeshProUGUI[] StarCountTxt = new TextMeshProUGUI[4];
+    public TextMeshProUGUI[] CoinCountTxt = new TextMeshProUGUI[4];
 
-    public Image FirstPlayerImg = null;
-    public Image SecondPlayerImg = null;
-    public Image ThirdPlayerImg = null;
-    public Image FourthPlayerImg = null;
+    public Image[] PlayerImgs = null;
 
     private LeaderBoardUIData m_leaderBoardUIData = null;
     public override void SetInfo(BaseUIData uiData)
@@ -31,12 +26,10 @@ public class LeaderBoardUI : BaseUI
 
         for (int i = 0; i < 2; i++) // 하드코딩 부분 나중에 수정 필요
         {
-            PlayerNameTxt[i].text = m_leaderBoardUIData.PlayerNameTxt[i];
+            StarCountTxt[i].text = m_leaderBoardUIData.StarCountTxt[i];
+            CoinCountTxt[i].text = m_leaderBoardUIData.CoinCountTxt[i];
+            PlayerImgs[i].sprite = m_leaderBoardUIData.PlayerSprs[i];
         }
         
-        FirstPlayerImg.sprite = m_leaderBoardUIData.FirstPlayerSpr;
-        SecondPlayerImg.sprite = m_leaderBoardUIData.SecondPlayerSpr;
-        ThirdPlayerImg.sprite = m_leaderBoardUIData.ThirdPlayerISpr;
-        FourthPlayerImg.sprite = m_leaderBoardUIData.FourthPlayerSpr;
     }
 }

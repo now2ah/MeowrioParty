@@ -17,22 +17,19 @@ public class TileController : MonoBehaviour
     public int eventParam;
     public TileController MoveTo;
 
-    public void TileEvent(PlayerData playerData, PlayerController playerController)
+    public void TileEventAtServer(PlayerData playerData, PlayerController playerController)
     {
         switch (tileType)
         {
             case ETileType.CoinPlusTile:
                 playerData.UpdateCoinCnt(eventParam);
-                LeaderBoardManager.Instance.UpdateCoin(playerData.ClientId, eventParam);
                 Debug.Log("Coinplus");
                 break;
             case ETileType.CoinMinusTile:
                 playerData.UpdateCoinCnt(-eventParam);
-                LeaderBoardManager.Instance.UpdateCoin(playerData.ClientId, -eventParam);
                 Debug.Log("CoinMinusTile");
                 break;
             case ETileType.StarTile:
-                playerData.UpdateStarCnt(eventParam);
                 Debug.Log("StarTile");
                 break;
             case ETileType.WarpTile:
@@ -40,10 +37,31 @@ public class TileController : MonoBehaviour
                 Debug.Log("WarpTile");
                 break;
             default:
-                 playerData.UpdateCoinCnt(eventParam);
-                 Debug.Log("Coinplus");
                 break;
         }
+    }
+    public ETileType TileEventLeaderBoard(ulong _clientId)
+    {
+        switch (tileType)
+        {
+            case ETileType.CoinPlusTile:
+                LeaderBoardManager.Instance.UpdateCoin(_clientId, eventParam);
+                Debug.Log("Coinplus");
+                break;
+            case ETileType.CoinMinusTile:
+                LeaderBoardManager.Instance.UpdateCoin(_clientId, -eventParam);
+                Debug.Log("CoinMinusTile");
+                break;
+            case ETileType.StarTile:
+
+                //LeaderBoardManager.Instance.UpdateStar(_clientId, eventParam);
+                Debug.Log("StarTile");
+                break;
+            default:
+                Debug.Log("Coinplus");
+                break;
+        }
+        return tileType;
     }
 
     private void WarpTo(PlayerData playerData, PlayerController playerController, TileController targetTile)
