@@ -155,4 +155,8 @@ public class UIManager : Singleton<UIManager>
         CloseCurrentFrontUI();
     }
 
+    public void NoticeRoundUI(RoundUIData roundUIData)
+    {
+        OpenUI<RoundUI>(roundUIData);
+    }
 }

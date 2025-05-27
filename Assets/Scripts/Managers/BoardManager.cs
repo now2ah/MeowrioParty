@@ -47,15 +47,16 @@ public class BoardManager : NetSingleton<BoardManager>
         _playerTurnOrder = new NetworkList<ulong>();
 
         OnInitializeDone += OnInitializeDone_StartOpeningSequenceRpc;
+        _currentRound.OnValueChanged += ChangeRoundUIRpc;
     }
 
     public override void OnNetworkSpawn()
     {
-            _board = FindFirstObjectByType<Board>();
+        _board = FindFirstObjectByType<Board>();
         // 네트워크상에 스폰 시 초기값 설정 및 InitializePlayer에 개별 ClientID 전달
         if (IsServer)
         {
-            
+
             _currentPlayerTurnIndex = 0;
             _currentState.Value = GameState.GameReady;
             _currentRound.Value = 0;
@@ -101,6 +102,7 @@ public class BoardManager : NetSingleton<BoardManager>
     {
         CameraManager.Instance.ChangeCameraRpc(CameraType.Board);
         UIManager.Instance.OpenNoticeUISec("파티 시작!", 3f);
+
         StartCoroutine(OpeningCo());
     }
 
@@ -143,6 +145,8 @@ public class BoardManager : NetSingleton<BoardManager>
 
                 //첫번째 턴 Player의 정면 카메라 On
                 NoticeEveryoneSecRpc(_currentRound.Value + "라운드 시작~!", 3f);
+                _currentRound.Value = 1;
+
                 _playerCtrlMap[_currentPlayerId].ToggleDiceRpc(true);
             }
         }
@@ -157,7 +161,7 @@ public class BoardManager : NetSingleton<BoardManager>
             _canInput.Value = false;
         }
     }
-    
+
     private void TogglePlayerDice(ulong clientId, bool isOn)
     {
         if (_playerCtrlMap.TryGetValue(clientId, out var ctrl))
@@ -278,7 +282,7 @@ public class BoardManager : NetSingleton<BoardManager>
         Debug.Log(NetworkManager.Singleton.LocalClientId);
     }
 
-    
+
     [Rpc(SendTo.Everyone)]
     private void AnnounceEveryOneCloseRpc()
     {
@@ -301,5 +305,16 @@ public class BoardManager : NetSingleton<BoardManager>
     private void NoticeEveryoneSecRpc(string message, float timer)
     {
         UIManager.Instance.OpenNoticeUISec(message, timer);
+    }
+
+    //_currentRound.OnValueChanged += fdfd
+    [Rpc(SendTo.Everyone)]
+    private void ChangeRoundUIRpc(int previous, int current)
+    {
+        RoundUIData roundUIData = new RoundUIData();
+        roundUIData.currentRound = current.ToString();
+        roundUIData.maxRound = _maxRound.ToString();
+
+        UIManager.Instance.NoticeRoundUI(roundUIData);
     }
 }
