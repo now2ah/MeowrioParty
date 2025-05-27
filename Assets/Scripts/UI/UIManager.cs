@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class UIManager : Singleton<UIManager>
@@ -137,26 +138,47 @@ public class UIManager : Singleton<UIManager>
 
         yield return new WaitForSeconds(timer);
 
-        if (GetActiveUI<NoticeUI>() != null)
-        {
-            CloseUI(GetActiveUI<NoticeUI>());
-
-        }
-
+        CloseTargetUI<NoticeUI>();
     }
     public void OpenLeaderBoardUI(LeaderBoardUIData lbData)
     {
         OpenUI<LeaderBoardUI>(lbData);
     }
-
-    public IEnumerator CloseFrontUISecCo(float timer)
+    //CloseUI(GetActiveUI<NoticeUI>());
+    public void CloseTargetUI<T>()
+    {
+         if (GetActiveUI<T>() != null)
+        {
+            CloseUI(GetActiveUI<T>());
+        }
+    }
+    public IEnumerator CloseTargetUISecCo<T>(float timer)
     {
         yield return new WaitForSeconds(timer);
-        CloseCurrentFrontUI();
+        CloseUI(GetActiveUI<T>());
     }
 
     public void NoticeRoundUI(RoundUIData roundUIData)
     {
         OpenUI<RoundUI>(roundUIData);
+    }
+
+    public void OpenExchangerStar(ulong clientId)
+    {
+        ExchangeStarUIData uIData = new ExchangeStarUIData();
+        uIData.OnClickOKBtn += () =>
+        {
+            LeaderBoardManager.Instance.UpdateCoin(clientId, -20);
+            LeaderBoardManager.Instance.UpdateStar(clientId, 1);
+        };
+        if (NetworkManager.Singleton.LocalClientId == clientId)
+        {
+            uIData.DescTxt = "20@  =>  1★";
+        }
+        else
+        {
+            uIData.DescTxt = "뿡뿡";
+        }
+        OpenUI<ExchangeStarUI>(uIData);
     }
 }

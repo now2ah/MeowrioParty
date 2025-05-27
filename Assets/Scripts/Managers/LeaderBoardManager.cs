@@ -75,14 +75,8 @@ public class LeaderBoardManager : Singleton<LeaderBoardManager>
         };
 
         UIManager.Instance.OpenLeaderBoardUI(lbData);
-        StartCoroutine(UIManager.Instance.CloseFrontUISecCo(10f));
+        StartCoroutine(UIManager.Instance.CloseTargetUISecCo<LeaderBoardUI>(10f));
     }
-
-    // public void ShowLeaderBoardToAllClients()
-    // {
-    //     UpdateLeaderBoardClient(GetPlayerScoresNames());
-    // }
-
 
     // public void ResetLeaderboard()
     // {
