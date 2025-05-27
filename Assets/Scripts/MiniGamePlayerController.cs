@@ -45,8 +45,8 @@ public class MiniGamePlayerController : NetworkBehaviour
 
         if (IsOwner)
         {
-            inputManager.OnConfirmButtonPerformed += GetInput;
             StartCoroutine(WaitUntilSceneReady());
+            inputManager.OnConfirmButtonPerformed += GetInput;
         }
     }
     public override void OnNetworkDespawn()

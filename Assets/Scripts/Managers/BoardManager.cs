@@ -51,12 +51,11 @@ public class BoardManager : NetSingleton<BoardManager>
 
     public override void OnNetworkSpawn()
     {
+            _board = FindFirstObjectByType<Board>();
         // 네트워크상에 스폰 시 초기값 설정 및 InitializePlayer에 개별 ClientID 전달
         if (IsServer)
         {
-            LeaderBoardManager.Instance.InitializeLeaderBoard(NetworkManager.Singleton.ConnectedClientsList.Count);
             
-            _board = FindFirstObjectByType<Board>();
             _currentPlayerTurnIndex = 0;
             _currentState.Value = GameState.GameReady;
             _currentRound.Value = 0;

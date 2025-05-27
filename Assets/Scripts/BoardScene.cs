@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class BoardScene : MonoBehaviour
 {
-    [SerializeField] GameObject _leaderBoardManagerPrefab;
-    [SerializeField] GameObject _uiManagerPrefab;
+    // [SerializeField] GameObject _leaderBoardManagerPrefab;
+    // [SerializeField] GameObject _uiManagerPrefab;
     [SerializeField] GameObject _cameraManagerPrefab;
     [SerializeField] GameObject _boardManagerPrefab;
     [SerializeField] BoardManager _boardManager;
@@ -28,23 +28,23 @@ public class BoardScene : MonoBehaviour
         CameraManager cameraManager = null;
         //BoardManager boardManager = null;
 
-        if (_leaderBoardManagerPrefab != null)
-        {
-            GameObject leaderBoardManagerObj = Instantiate(_leaderBoardManagerPrefab);
-            if (leaderBoardManagerObj.TryGetComponent<LeaderBoardManager>(out LeaderBoardManager leaderBoardManagerComponent))
-            {
-                leaderBoardManager = leaderBoardManagerComponent;
-            }
-        }
+        // if (_leaderBoardManagerPrefab != null)
+        // {
+        //     GameObject leaderBoardManagerObj = Instantiate(_leaderBoardManagerPrefab);
+        //     if (leaderBoardManagerObj.TryGetComponent<LeaderBoardManager>(out LeaderBoardManager leaderBoardManagerComponent))
+        //     {
+        //         leaderBoardManager = leaderBoardManagerComponent;
+        //     }
+        // }
 
-        if (_uiManagerPrefab != null)
-        {
-            GameObject uiManagerObj = Instantiate(_uiManagerPrefab);
-            if (uiManagerObj.TryGetComponent<UIManager>(out UIManager uiManagerComponent))
-            {
-                uiManager = uiManagerComponent;
-            }
-        }
+        // if (_uiManagerPrefab != null)
+        // {
+        //     GameObject uiManagerObj = Instantiate(_uiManagerPrefab);
+        //     if (uiManagerObj.TryGetComponent<UIManager>(out UIManager uiManagerComponent))
+        //     {
+        //         uiManager = uiManagerComponent;
+        //     }
+        // }
 
         if (_cameraManagerPrefab != null)
         {
@@ -55,7 +55,7 @@ public class BoardScene : MonoBehaviour
             }
         }
 
-        while (leaderBoardManager == null || uiManager == null || cameraManager == null)
+        while (cameraManager == null)
         {
             yield return null;
         }
@@ -71,6 +71,8 @@ public class BoardScene : MonoBehaviour
                 }
             }
         }
+        LeaderBoardManager.Instance.InitializeLeaderBoard(NetworkManager.Singleton.ConnectedClientsList.Count);
+
         //if (_boardManager != null)
         //{
         //    if (_boardManager.TryGetComponent<NetworkObject>(out NetworkObject networkObject))
