@@ -30,9 +30,6 @@ public class LobbyManager : NetworkBehaviour
 
     public event Action OnPlayerListChanged;
 
-    [SerializeField] private LeaderBoardManager _leaderBoardManager;
-    [SerializeField] private BoardManager _boardManager;
-
     private void Awake()
     {
         playerStates = new NetworkList<PlayerLobbyState>();
