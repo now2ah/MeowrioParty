@@ -9,6 +9,7 @@ public enum CameraType
     Board,
     Stage,
     Focus,
+    MiniGame,
     Move,
 }
 

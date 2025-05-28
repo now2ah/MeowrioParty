@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 222798863
+  GlobalObjectIdHash: 4184344551
   InScenePlacedSourceGlobalObjectIdHash: 1765232269
   DeferredDespawnTick: 0
   Ownership: 8
@@ -200,10 +200,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  inputManager: {fileID: 11400000, guid: d47f0c20fe52b0f40a1474b9f2b13483, type: 2}
   _currentState:
     m_InternalValue: 0
-  _maxRound: 2
+  _maxRound: 3
   _currentRound:
     m_InternalValue: 0
   _currentPlayerId: 0
@@ -214,8 +213,8 @@ MonoBehaviour:
   - {fileID: 1745186478914035030}
   - {fileID: 9082190292958846857}
   characterPrefabList:
-  - {fileID: 3229872934675508115, guid: 346325d38d104e44d98a4963703d0e8a, type: 3}
   - {fileID: 1686880860600399186, guid: 642952c41553c514e864700dfe6e4633, type: 3}
+  - {fileID: 3229872934675508115, guid: 346325d38d104e44d98a4963703d0e8a, type: 3}
 --- !u!1 &9082190292958846857
 GameObject:
   m_ObjectHideFlags: 0

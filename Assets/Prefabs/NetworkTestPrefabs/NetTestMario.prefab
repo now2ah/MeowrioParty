@@ -2589,7 +2589,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   _inputManager: {fileID: 11400000, guid: d47f0c20fe52b0f40a1474b9f2b13483, type: 2}
-  _diceObj: {fileID: 3213107265269356082}
+  _diceController: {fileID: 3213107265269356082}
   _diceNumberObjects:
   - {fileID: 3149836543614511487}
   - {fileID: 6886338694760228292}
@@ -2820,6 +2820,7 @@ GameObject:
   - component: {fileID: 4049157603172138314}
   - component: {fileID: 3463317309677080460}
   - component: {fileID: 3213107265269356082}
+  - component: {fileID: 1229197778693652953}
   m_Layer: 3
   m_Name: Dice
   m_TagString: Untagged
@@ -2881,6 +2882,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &1229197778693652953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3709470549271242736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 1413175990
+    DestinationState: -764071394
+    TransitionDuration: 0.25
+    TriggerNameHash: 504407055
+    TransitionIndex: 0
+  m_Animator: {fileID: 3463317309677080460}
 --- !u!1 &3779829589977492841
 GameObject:
   m_ObjectHideFlags: 0

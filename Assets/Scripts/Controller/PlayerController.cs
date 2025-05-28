@@ -3,12 +3,13 @@ using DG.Tweening;
 using UnityEngine;
 using Unity.Netcode;
 using System.Collections;
+using System;
 
 public class PlayerController : NetworkBehaviour
 {
     [SerializeField] private InputManagerSO _inputManager;
 
-    [SerializeField] private DiceController _diceObj;
+    [SerializeField] private DiceController _diceController;
     [SerializeField] private List<GameObject> _diceNumberObjects = new List<GameObject>();
 
     private Animator _animator;
@@ -24,7 +25,10 @@ public class PlayerController : NetworkBehaviour
 
     private void _inputManager_OnConfirmButtonPerformed(object sender, bool e)
     {
-        BoardManager.Instance.ProcessPlayerInputServerRpc(NetworkManager.Singleton.LocalClientId);
+        if (IsOwner)
+        {
+            BoardManager.Instance.ProcessPlayerInputServerRpc(NetworkManager.Singleton.LocalClientId);
+        }
     }
 
     void Start()
@@ -59,17 +63,23 @@ public class PlayerController : NetworkBehaviour
 
     IEnumerator RollDiceSequenceCoroutine(int diceValue)
     {
-        ToggleDice(false);
-        TurnOnDiceNumber(diceValue);
+        ToggleDiceRpc(false);
+        TurnOnDiceNumberRpc(diceValue);
         yield return null;
     }
 
-    public void ToggleDice(bool isOn)
+    [Rpc(SendTo.Everyone)]
+    public void ToggleDiceRpc(bool isOn)
     {
-        _diceObj.gameObject.SetActive(isOn);
+        _diceController.gameObject.SetActive(isOn);
+        if (isOn)
+        {
+            _diceController.PlayAnimation(AnimationType.Roll);
+        }
     }
 
-    public void TurnOnDiceNumber(int index)
+    [Rpc(SendTo.Everyone)]
+    public void TurnOnDiceNumberRpc(int index)
     {
         if (_diceNumberObjects[index - 1] != null)
         {
@@ -84,7 +94,6 @@ public class PlayerController : NetworkBehaviour
         {
             diceNumberObject.SetActive(false);
         }
-
     }
 
     public void TransportPlayer(TileController tile)
