@@ -206,6 +206,7 @@ MonoBehaviour:
   _currentRound:
     m_InternalValue: 0
   _currentPlayerId: 0
+  _canInput: 0
   _board: {fileID: 0}
   _spawnPointList:
   - {fileID: 2509863209123915319}
@@ -213,8 +214,10 @@ MonoBehaviour:
   - {fileID: 1745186478914035030}
   - {fileID: 9082190292958846857}
   characterPrefabList:
-  - {fileID: 1686880860600399186, guid: 642952c41553c514e864700dfe6e4633, type: 3}
   - {fileID: 3229872934675508115, guid: 346325d38d104e44d98a4963703d0e8a, type: 3}
+  - {fileID: 1686880860600399186, guid: 642952c41553c514e864700dfe6e4633, type: 3}
+  - {fileID: 7191038578388911320, guid: 71bbdbe8029d4974685b7dcd0f788258, type: 3}
+  - {fileID: 445689369614918986, guid: 92f3920c014892840868550b875a0700, type: 3}
 --- !u!1 &9082190292958846857
 GameObject:
   m_ObjectHideFlags: 0

@@ -138,6 +138,7 @@ public class BoardManager : NetSingleton<BoardManager>
     [Rpc(SendTo.Server)] //클 -> 서 주사위 굴려줘
     public void RollDiceForTurnOrderServerRpc(ulong clientId)
     {
+        if (_playerDiceNumberList[clientId] != -1) return;
         int diceValue = UnityEngine.Random.Range(1, 7);
         _playerDiceNumberList[clientId] = diceValue;
 
@@ -183,7 +184,8 @@ public class BoardManager : NetSingleton<BoardManager>
     [Rpc(SendTo.Everyone)]
     private void SetTurnOrderEndingSequenceRpc(float waitTime)
     {
-        UIManager.Instance.OpenNoticeUISec("순서가 정해졌어요!", waitTime);
+        StartCoroutine(UIManager.Instance.OpenNoticeUIEveryoneSecCo("순서가 정해졌어요!", waitTime));
+        //UIManager.Instance.OpenNoticeUISec("순서가 정해졌어요!", waitTime);
     }
 
     private void SetTurnOrder()

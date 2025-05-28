@@ -31,6 +31,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1744333034408412561}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2292469794460885402
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8057293618373881982}
+  m_Layer: 0
+  m_Name: MiniSpawnPos0 (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8057293618373881982
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2292469794460885402}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -35, y: 0, z: -5.28}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2763822250704954343}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &3658156948032785549
 GameObject:
   m_ObjectHideFlags: 0
@@ -129,7 +160,7 @@ GameObject:
   m_Layer: 0
   m_Name: MiniSpawnPos1
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -142,7 +173,7 @@ Transform:
   m_GameObject: {fileID: 4234757262876242178}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -35, y: 0, z: -12}
+  m_LocalPosition: {x: -35, y: 0, z: 2.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -224,10 +255,46 @@ MonoBehaviour:
   _miniGameStartPos:
   - {fileID: 4607274151170606764}
   - {fileID: 461687374023434303}
+  - {fileID: 8057293618373881982}
+  - {fileID: 5292000446218821262}
   _miniGameFinishPos: {fileID: 1744333034408412561}
   _miniGamePlayerPrefab:
   - {fileID: 3229872934675508115, guid: 1684922f8e236c040b14e674c635546c, type: 3}
   - {fileID: 1686880860600399186, guid: 6a9ee0c9cb67abf448b8f74fd9035ae8, type: 3}
+  - {fileID: 7191038578388911320, guid: 1b7ce3e527610a747b65bd90de1e8692, type: 3}
+  - {fileID: 445689369614918986, guid: dab66240cd2897744a64491cb3f30d38, type: 3}
+  _miniGameCharacterList: []
+--- !u!1 &6527744373856843157
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5292000446218821262}
+  m_Layer: 0
+  m_Name: MiniSpawnPos1 (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5292000446218821262
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6527744373856843157}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -35, y: 0, z: -14.88003}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2763822250704954343}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &6529984398150090107
 GameObject:
   m_ObjectHideFlags: 0
@@ -412,6 +479,8 @@ Transform:
   m_Children:
   - {fileID: 4607274151170606764}
   - {fileID: 461687374023434303}
+  - {fileID: 8057293618373881982}
+  - {fileID: 5292000446218821262}
   m_Father: {fileID: 7941770357071839531}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8348086359048066157
@@ -426,7 +495,7 @@ GameObject:
   m_Layer: 0
   m_Name: MiniSpawnPos0
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1

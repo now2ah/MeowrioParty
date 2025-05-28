@@ -60,7 +60,7 @@ public class LeaderBoardManager : Singleton<LeaderBoardManager>
     public void OpenLeaderBoardClient(LeaderBoardUIData lbData)
     {
         UIManager.Instance.OpenLeaderBoardUI(lbData);
-        StartCoroutine(UIManager.Instance.CloseTargetUISecCo<LeaderBoardUI>(10f));
+        StartCoroutine(UIManager.Instance.CloseTargetUISecCo<LeaderBoardUI>(6f));
     }
 
     public void UpdateLeaderBoardClient(bool isFirst)
