@@ -39,7 +39,10 @@ public class MiniGameManager : NetworkBehaviour
             NetworkObject netObj = obj.GetComponent<NetworkObject>();
             _miniGameCharacterList.Add(netObj);
 
-            netObj.SpawnAsPlayerObject(clientId, true);
+            netObj.Spawn();
+            netObj.ChangeOwnership(clientId);
+
+            //netObj.SpawnAsPlayerObject(clientId, true);
 
             obj.transform.SetParent(gameObject.transform);
 
@@ -61,7 +64,10 @@ public class MiniGameManager : NetworkBehaviour
             characters.Despawn();
         }
 
-        NetworkObject netObj = GetComponent<NetworkObject>();
-        netObj.Despawn();
+        if (IsServer)
+        {
+            NetworkObject netObj = GetComponent<NetworkObject>();
+            netObj.Despawn();
+        }
     }
 }
