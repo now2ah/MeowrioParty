@@ -185,7 +185,7 @@ public class UIManager : Singleton<UIManager>
         }
         else
         {
-            StartCoroutine(OpenNoticeUIEveryoneSecCo("스타 구매 중..", 3f));
+            StartCoroutine(OpenNoticeUIEveryoneSecCo("스타 구매 중.. 잠시만 기다려 주세요..", 3f));
         }
     }
 }
