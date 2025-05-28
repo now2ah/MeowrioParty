@@ -6,6 +6,8 @@ public class TapRaceScene : MonoBehaviour
 {
     [SerializeField] GameObject _miniGameManagerPrefab;
 
+    private GameObject _miniGameManagerObject;
+
     private void Awake()
     {
         NetworkManager.Singleton.SceneManager.OnLoadComplete += (clientId, sceneName, loadSceneMode) =>
@@ -14,20 +16,44 @@ public class TapRaceScene : MonoBehaviour
             {
                 if (NetworkManager.Singleton.LocalClientId == clientId)
                 {
-                    StartCoroutine(LoadManagers());
+                    StartCoroutine(LoadManager());
                 }
             }
         };
+
+        //NetworkManager.Singleton.SceneManager.OnUnloadComplete += (clientId, sceneName) =>
+        //{
+        //    if (sceneName == "TapRaceScene")
+        //    {
+        //        if (NetworkManager.Singleton.LocalClientId == clientId)
+        //        {
+        //            StartCoroutine(UnLoadManager());
+        //        }
+        //    }
+        //};
     }
 
-    IEnumerator LoadManagers()
+    IEnumerator LoadManager()
     {
         if (NetworkManager.Singleton.IsServer)
         {
-            GameObject miniGameManagerObj = Instantiate(_miniGameManagerPrefab);
-            if (miniGameManagerObj.TryGetComponent<NetworkObject>(out NetworkObject networkObject))
+            _miniGameManagerObject = Instantiate(_miniGameManagerPrefab);
+            if (_miniGameManagerObject.TryGetComponent<NetworkObject>(out NetworkObject networkObject))
             {
                 networkObject.Spawn();
+            }
+        }
+        yield return null;
+    }
+
+    IEnumerator UnLoadManager()
+    {
+        if (NetworkManager.Singleton.IsServer)
+        {
+            _miniGameManagerObject = Instantiate(_miniGameManagerPrefab);
+            if (_miniGameManagerObject.TryGetComponent<NetworkObject>(out NetworkObject networkObject))
+            {
+                networkObject.Despawn();
             }
         }
         yield return null;

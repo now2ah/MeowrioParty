@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,6 +9,12 @@ public class MiniGameManager : NetworkBehaviour
     [SerializeField] private Transform[] _miniGameStartPos;
     [SerializeField] private Transform _miniGameFinishPos;
     [SerializeField] private GameObject[] _miniGamePlayerPrefab;
+    [SerializeField] private List<NetworkObject> _miniGameCharacterList;
+
+    private void Awake()
+    {
+        _miniGameCharacterList = new List<NetworkObject>();
+    }
 
     public override void OnNetworkSpawn()
     {
@@ -15,7 +22,6 @@ public class MiniGameManager : NetworkBehaviour
 
         StartCoroutine(SpawnAllPlayers());
     }
-
 
     private IEnumerator SpawnAllPlayers()
     {
@@ -31,6 +37,7 @@ public class MiniGameManager : NetworkBehaviour
 
             GameObject obj = Instantiate(_miniGamePlayerPrefab[index], pos, rot);
             NetworkObject netObj = obj.GetComponent<NetworkObject>();
+            _miniGameCharacterList.Add(netObj);
 
             netObj.SpawnAsPlayerObject(clientId, true);
 
@@ -39,9 +46,22 @@ public class MiniGameManager : NetworkBehaviour
             var playerController = obj.GetComponent<MiniGamePlayerController>();
             Vector3 finishPos = _miniGameFinishPos.position;
             playerController.SetFinishPosition(finishPos);
+            playerController.OnFinish += PlayerController_OnFinish;
 
             index++;
         }
+
+        CameraManager.Instance.ChangeCamera(CameraType.MiniGame);
     }
 
+    private void PlayerController_OnFinish()
+    {
+        foreach (var characters in _miniGameCharacterList)
+        {
+            characters.Despawn();
+        }
+
+        NetworkObject netObj = GetComponent<NetworkObject>();
+        netObj.Despawn();
+    }
 }

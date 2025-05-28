@@ -8,6 +8,8 @@ public class MiniGamePlayerController : NetworkBehaviour
 {
     public InputManagerSO inputManager;
 
+    public event Action OnFinish;
+
     private float _baseSpeed;
     private float _maxSpeed;
     private float _acceleration;
@@ -164,7 +166,7 @@ public class MiniGamePlayerController : NetworkBehaviour
 
             // ¼­¹ö¿¡°Ô ¾Ë¸²
             NotifyServerRaceFinishedServerRpc();
-
+            OnFinish?.Invoke();
         }
     }
 
