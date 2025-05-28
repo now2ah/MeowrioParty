@@ -22,11 +22,15 @@ public class LeaderBoardManager : Singleton<LeaderBoardManager>
 
     private List<PlayerScores> playerScoreBoard = new();
     [SerializeField] private Sprite[] _playerPortraits;
+    [SerializeField] private Sprite _defaultSprite;
+
 
     public void InitializeLeaderBoard(int size)
     {
+        playerScoreBoard.Clear();
+        Debug.Log("leaderboard Initial : " + size);
         clientCnt = size;
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < clientCnt; i++)
         {
             playerScoreBoard.Add(new PlayerScores(i, 0, 0));
         }
@@ -53,12 +57,18 @@ public class LeaderBoardManager : Singleton<LeaderBoardManager>
             .ToList();
     }
 
-    public void UpdateLeaderBoardClient()
+    public void OpenLeaderBoardClient(LeaderBoardUIData lbData)
+    {
+        UIManager.Instance.OpenLeaderBoardUI(lbData);
+        StartCoroutine(UIManager.Instance.CloseTargetUISecCo<LeaderBoardUI>(10f));
+    }
+
+    public void UpdateLeaderBoardClient(bool isFirst)
     {
         playerScoreBoard = OrderingLeaderBoardClient();
-        string[] starResult = new string[clientCnt];
-        string[] coinResult = new string[clientCnt];
-        Sprite[] sprResult = new Sprite[clientCnt];
+        string[] starResult = new string[4];
+        string[] coinResult = new string[4];
+        Sprite[] sprResult = new Sprite[4];
         for (int i = 0; i < clientCnt; i++)
         {
             PlayerScores ps = playerScoreBoard[i];
@@ -66,16 +76,28 @@ public class LeaderBoardManager : Singleton<LeaderBoardManager>
             coinResult[i] = ps.Coins.ToString();
             sprResult[i] = _playerPortraits[ps.playerId];
         }
+        for (int i = clientCnt; i < 4; i++)
+        {
+            sprResult[i] = _defaultSprite;
+        }
         LeaderBoardUIData lbData = new LeaderBoardUIData
         {
             StarCountTxt = starResult,
             CoinCountTxt = coinResult,
-            PlayerSprs = sprResult
+            PlayerSprs = sprResult,
+            isAnimPlay = true
             // FirstPlayerSpr ~ FourthPlayerSpr는 필요 시 설정
         };
-
-        UIManager.Instance.OpenLeaderBoardUI(lbData);
-        StartCoroutine(UIManager.Instance.CloseTargetUISecCo<LeaderBoardUI>(10f));
+        PlayerCurrentStateUIData pcData = new PlayerCurrentStateUIData
+        {
+            StarCountTxt = starResult,
+            CoinCountTxt = coinResult,
+            PlayerSprs = sprResult,
+        };
+        UIManager.Instance.CloseTargetUI<PlayerCurrentStateUI>();
+        UIManager.Instance.OpenPlayerCurrentUI(pcData);
+        
+        if (!isFirst) OpenLeaderBoardClient(lbData);
     }
 
     // public void ResetLeaderboard()

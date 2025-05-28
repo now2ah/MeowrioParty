@@ -45,7 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerPortraits:
-  - {fileID: 21300000, guid: 69ad3de7f4e72eb41b284fe94ea10fcf, type: 3}
-  - {fileID: 21300000, guid: 18e808c669a396d43a91bbd46d302b76, type: 3}
-  - {fileID: 21300000, guid: 418bfc81c948f3d4c840d16841fecb85, type: 3}
-  - {fileID: 21300000, guid: b2044f221b3f03149b6fbb0dabbb9438, type: 3}
+  - {fileID: -1145526890, guid: 6e7653b8dd9e00149bbd4b3f0a0db781, type: 3}
+  - {fileID: 953556257, guid: 795c88b667c50c443b874eab13558ff6, type: 3}
+  - {fileID: 792012029, guid: 25dd55527d17eac4795de14d8ab1310d, type: 3}
+  - {fileID: 785559795, guid: ab1323193912f1c4db04f29c4d352891, type: 3}
+  _defaultSprite: {fileID: 21300000, guid: bff4d8329f0e734419a7c396d6fdd58c, type: 3}

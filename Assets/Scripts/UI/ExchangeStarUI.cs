@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class ExchangeStarUIData : BaseUIData
 {
-    public string DescTxt;
     public Action OnClickOKBtn;
     public Action OnClickCancelBtn;
 
@@ -28,7 +27,6 @@ public class ExchangeStarUI : BaseUI
 
         m_ExchangeStarUIDate = uiData as ExchangeStarUIData;
 
-        DescTxt.text = m_ExchangeStarUIDate.DescTxt;
         m_OnClickOKBtn = m_ExchangeStarUIDate.OnClickOKBtn;
         m_OnClickCancelBtn = m_ExchangeStarUIDate.OnClickCancelBtn;
 

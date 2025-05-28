@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -22,6 +23,17 @@ public class NoticeUI : BaseUI
         m_NoticeUIData = uiData as NoticeUIData;
 
         noticeTxt.text = m_NoticeUIData.currentNoticeTxt;
+    }
+
+    public override void ShowUI()
+    {
+        base.ShowUI();
+       
+            var rectTransform = GetComponent<RectTransform>();
+            var seq = DOTween.Sequence();
+            seq.Append(rectTransform.DOScale(1f, 0.3f));
+            seq.Play();
+        
     }
 
     public void OnNoticePop()

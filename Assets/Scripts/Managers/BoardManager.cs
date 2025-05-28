@@ -26,9 +26,9 @@ public class BoardManager : NetSingleton<BoardManager>
 
     private int _currentPlayerTurnIndex;
     private Dictionary<ulong, int> _playerDiceNumberList = new(); //순서 Dictionary
-    private bool _canInput;
+    public bool _canInput;
 
-    public bool CanInput => _canInput;
+    //public bool CanInput => _canInput;
 
     [SerializeField] private Board _board;
     [SerializeField] private List<GameObject> _spawnPointList;
@@ -102,8 +102,8 @@ public class BoardManager : NetSingleton<BoardManager>
     private void OnInitializeDone_StartOpeningSequenceRpc()
     {
         CameraManager.Instance.ChangeCamera(CameraType.Board);
-        UIManager.Instance.OpenNoticeUISec("파티 시작!", 3f);
-
+        //UIManager.Instance.OpenNoticeUISec("파티 시작!", 3f);
+        StartCoroutine(UIManager.Instance.OpenNoticeUIEveryoneSecCo("파티 시작!", 3f));
         StartCoroutine(OpeningCo());
     }
 
@@ -111,7 +111,9 @@ public class BoardManager : NetSingleton<BoardManager>
     {
         yield return new WaitForSeconds(3f);
         CameraManager.Instance.ChangeCamera(CameraType.Stage);
-        UIManager.Instance.OpenNoticeUISec("순서를 정해보죠!", 3f);
+        StartCoroutine(UIManager.Instance.OpenNoticeUIEveryoneSecCo("순서를 정해보죠!", 3f));
+        LeaderBoardManager.Instance.UpdateLeaderBoardClient(true);
+        //UIManager.Instance.OpenNoticeUISec("순서를 정해보죠!", 3f);
         _canInput = true;
     }
 
@@ -273,7 +275,7 @@ public class BoardManager : NetSingleton<BoardManager>
         {
             if (IsServer)
             {
-                if (_playerDataMap[id].Coins >= 20)
+                //if (_playerDataMap[id].Coins >= 20)
                 {
                     OpenExchangeStarUIRpc(id);
                 }
@@ -407,12 +409,15 @@ public class BoardManager : NetSingleton<BoardManager>
     [Rpc(SendTo.Everyone)]
     private void NoticeEveryoneSecRpc(string message, float timer)
     {
-        UIManager.Instance.OpenNoticeUISec(message, timer);
+        //UIManager.Instance.OpenNoticeUISec(message, timer);
+        StartCoroutine(UIManager.Instance.OpenNoticeUIEveryoneSecCo(message, timer));
     }
 
     [Rpc(SendTo.Everyone)]
     private void ChangeRoundUIRpc(int previous, int current)
     {
+        if (current >= _maxRound) current = _maxRound;
+        //일단 ui 숫자 안 넘어가게 여기서 처리함 나중에 엔딩 씬으로 넘기기 추가되면 괜찮을 듯 
         UIManager.Instance.CloseTargetUI<RoundUI>();
         RoundUIData roundUIData = new RoundUIData();
         roundUIData.currentRound = current.ToString();
