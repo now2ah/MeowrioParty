@@ -85,6 +85,7 @@ public class BoardManager : NetSingleton<BoardManager>
             }
 
             PlayerController playerCtrl = playerObj.GetComponent<PlayerController>();
+            playerCtrl.ToggleDiceRpc(true);
 
             _playerCtrlMap[clientId] = playerCtrl;
             _playerDataMap[clientId] = new PlayerData(clientId);
@@ -140,23 +141,42 @@ public class BoardManager : NetSingleton<BoardManager>
         Debug.Log("cliendId : " + clientId + ", diceValue : " + diceValue);
 
         RollDiceSequenceRpc(clientId, diceValue);
-
+        
+        //if all of players rolled dice for order
         if (_playerDiceNumberList.All(p => p.Value != -1))
         {
-            SetTurnOrder();
-            _currentState.Value = GameState.GamePlay;
-            _currentPlayerId = _playerTurnOrder[0];
-            _currentRound.Value = 1;
-
-            //Player들 시작 타일로 이동
-            foreach (var connectedClient in NetworkManager.Singleton.ConnectedClients)
-            {
-                _playerCtrlMap[connectedClient.Key].TransportPlayer(_board.tileControllers[0]);
-            }
-            _playerCtrlMap[_currentPlayerId].ToggleDice(true);
-            
-            OnSetOrderDone?.Invoke(_currentPlayerId);
+            StartCoroutine(SetTurnOrderEndingCoroutine());
         }
+    }
+
+    IEnumerator SetTurnOrderEndingCoroutine()
+    {
+        float waitTime = 3f;
+        SetTurnOrderEndingSequenceRpc(waitTime);
+
+        yield return new WaitForSeconds(waitTime);
+
+        SetTurnOrder();
+
+        _currentState.Value = GameState.GamePlay;
+        _currentPlayerId = _playerTurnOrder[0];
+        _currentRound.Value = 1;
+
+        //Player들 시작 타일로 이동
+        foreach (var connectedClient in NetworkManager.Singleton.ConnectedClients)
+        {
+            _playerCtrlMap[connectedClient.Key].TransportPlayer(_board.tileControllers[0]);
+            _playerCtrlMap[connectedClient.Key].TurnOffDiceNumberRpc();
+        }
+        _playerCtrlMap[_currentPlayerId].ToggleDiceRpc(true);
+
+        OnSetOrderDone?.Invoke(_currentPlayerId);
+    }
+
+    [Rpc(SendTo.Everyone)]
+    private void SetTurnOrderEndingSequenceRpc(float waitTime)
+    {
+        UIManager.Instance.OpenNoticeUISec("순서가 정해졌어요!", waitTime);
     }
 
     private void SetTurnOrder()
@@ -222,7 +242,7 @@ public class BoardManager : NetSingleton<BoardManager>
 
             data.MoveTo(nextTileObj);
             controller.MoveTo(nextTileObj);
-            controller.TurnOnDiceNumber(diceValue - i);
+            controller.TurnOnDiceNumberRpc(diceValue - i);
             tileIndex = nextIndex;
 
             while (controller.IsMoving)
