@@ -195,7 +195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2051223230
+  GlobalObjectIdHash: 3858665510
   InScenePlacedSourceGlobalObjectIdHash: 3858665510
   DeferredDespawnTick: 0
   Ownership: 1
@@ -226,8 +226,8 @@ MonoBehaviour:
   - {fileID: 461687374023434303}
   _miniGameFinishPos: {fileID: 1744333034408412561}
   _miniGamePlayerPrefab:
-  - {fileID: 1686880860600399186, guid: 6a9ee0c9cb67abf448b8f74fd9035ae8, type: 3}
   - {fileID: 3229872934675508115, guid: 1684922f8e236c040b14e674c635546c, type: 3}
+  - {fileID: 1686880860600399186, guid: 6a9ee0c9cb67abf448b8f74fd9035ae8, type: 3}
 --- !u!1 &6529984398150090107
 GameObject:
   m_ObjectHideFlags: 0

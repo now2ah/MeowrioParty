@@ -1,16 +1,21 @@
 using System;
 using UnityEngine;
+using DG.Tweening;
 
 public class BaseUIData
 {
     //동일한 UI여도 상황에 따라 다른 걸 띄워야 할 때가 있기 때문에
     public Action OnShow;
     public Action OnClose;
+
+    public bool isAnimPlay = false;
 }
 
 public class BaseUI : MonoBehaviour
 {
-    public Animation m_UIOpenAnim;
+    // public Animation m_UIOpenAnim;
+    public bool m_isAnimPlay;
+    public bool m_isAnim2Play;
 
     private Action m_OnShow;
     private Action m_OnClose;
@@ -31,16 +36,28 @@ public class BaseUI : MonoBehaviour
     }
     public virtual void SetInfo(BaseUIData uiData)
     {
+        m_isAnimPlay = uiData.isAnimPlay;
+
         m_OnShow = uiData.OnShow;
         m_OnClose = uiData.OnClose;
     }
 
     public virtual void ShowUI()
     {
-        if(m_UIOpenAnim != null)
+        // if(m_UIOpenAnim != null)
+        // {
+        //     m_UIOpenAnim.Play();
+        // }
+
+        if (m_isAnimPlay)
         {
-            m_UIOpenAnim.Play();
+            var rectTransform = GetComponent<RectTransform>();
+            var seq = DOTween.Sequence();
+            seq.Append(rectTransform.DOScale(1.1f, 0.2f));
+            seq.Append(rectTransform.DOScale(1f, 0.1f));
+            seq.Play();
         }
+        
 
         m_OnShow?.Invoke();
         m_OnShow = null;

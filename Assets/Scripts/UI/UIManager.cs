@@ -126,23 +126,29 @@ public class UIManager : Singleton<UIManager>
     }
 
 
-    public void OpenNoticeUISec(string message, float timer)
+    // public void OpenNoticeUISec(string message, float timer)
+    // {
+    //     StartCoroutine(OpenNoticeUIEveryoneSecCo(message, timer));
+    // }
+    public IEnumerator OpenNoticeUIEveryoneSecCo(string message, float timer)
     {
-        StartCoroutine(OpenNoticeUIEveryoneSecCo(message, timer));
-    }
-    private IEnumerator OpenNoticeUIEveryoneSecCo(string message, float timer)
-    {
+        BoardManager.Instance._canInput = false;
         NoticeUIData noticeUIData = new NoticeUIData();
         noticeUIData.currentNoticeTxt = message;
         OpenUI<NoticeUI>(noticeUIData);
 
         yield return new WaitForSeconds(timer);
 
+        BoardManager.Instance._canInput = true;
         CloseTargetUI<NoticeUI>();
     }
     public void OpenLeaderBoardUI(LeaderBoardUIData lbData)
     {
         OpenUI<LeaderBoardUI>(lbData);
+    }
+    public void OpenPlayerCurrentUI(PlayerCurrentStateUIData lbData)
+    {
+        OpenUI<PlayerCurrentStateUI>(lbData);
     }
     //CloseUI(GetActiveUI<NoticeUI>());
     public void CloseTargetUI<T>()
@@ -154,8 +160,10 @@ public class UIManager : Singleton<UIManager>
     }
     public IEnumerator CloseTargetUISecCo<T>(float timer)
     {
+        BoardManager.Instance._canInput = false;
         yield return new WaitForSeconds(timer);
         CloseUI(GetActiveUI<T>());
+        BoardManager.Instance._canInput = true;
     }
 
     public void NoticeRoundUI(RoundUIData roundUIData)
@@ -171,14 +179,13 @@ public class UIManager : Singleton<UIManager>
             LeaderBoardManager.Instance.UpdateCoin(clientId, -20);
             LeaderBoardManager.Instance.UpdateStar(clientId, 1);
         };
+        OpenUI<ExchangeStarUI>(uIData);
         if (NetworkManager.Singleton.LocalClientId == clientId)
         {
-            uIData.DescTxt = "20@  =>  1★";
         }
         else
         {
-            uIData.DescTxt = "뿡뿡";
+            StartCoroutine(OpenNoticeUIEveryoneSecCo("스타 구매 중..", 3f));
         }
-        OpenUI<ExchangeStarUI>(uIData);
     }
 }

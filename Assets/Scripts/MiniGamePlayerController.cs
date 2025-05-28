@@ -174,7 +174,7 @@ public class MiniGamePlayerController : NetworkBehaviour
     private void NotifyServerRaceFinishedServerRpc()
     {
         LeaderBoardManager.Instance.UpdateCoin(OwnerClientId, 1);
-        LeaderBoardManager.Instance.UpdateLeaderBoardClient();
+        LeaderBoardManager.Instance.UpdateLeaderBoardClient(false);
         
         BoardManager.Instance.OnMiniGamePlayerFinished(OwnerClientId);
     }
