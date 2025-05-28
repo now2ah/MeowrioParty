@@ -33,5 +33,6 @@ public class ButtonUI : BaseUI
     public void OnClickRollDiceBtn()
     {
         m_OnClickRollDiceBtn?.Invoke();
+        SoundManager.Instance.PlaySFX(SFXType.Click);
     }
 }
