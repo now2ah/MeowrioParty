@@ -26,6 +26,7 @@ public class BoardManager : NetSingleton<BoardManager>
     private int _currentPlayerTurnIndex;
     private Dictionary<ulong, int> _playerDiceNumberList = new(); //순서 Dictionary
     public bool _canInput;
+    private bool _isWaiting;
 
     //public bool CanInput => _canInput;
 
@@ -45,6 +46,7 @@ public class BoardManager : NetSingleton<BoardManager>
         base.Awake();
 
         _maxRound = 2;
+        _isWaiting = false;
         _playerTurnOrder = new NetworkList<ulong>();
 
         OnInitializeDone += OnInitializeDone_StartOpeningSequenceRpc;
@@ -261,6 +263,20 @@ public class BoardManager : NetSingleton<BoardManager>
             controller.TurnOffDiceNumberRpc();
         }
 
+        if (_board.tileControllers[tileIndex].tileType == ETileType.StarTile &&
+    LeaderBoardManager.Instance.IsAffordStar(playerId))
+        {
+            _isWaiting = true;
+            OpenExchangeStarUIRpc(playerId);
+
+            WaitRpc();
+
+            while (_isWaiting)
+            {
+                yield return null;
+            }
+        }
+
         _board.tileControllers[tileIndex].TileEventAtServer(data, controller);
         TileEffectRpc(tileIndex, playerId);
 
@@ -270,18 +286,38 @@ public class BoardManager : NetSingleton<BoardManager>
     }
 
     [Rpc(SendTo.Everyone)]
+    private void WaitRpc()
+    {
+        StartCoroutine(WaitCoroutine());
+    }
+
+    IEnumerator WaitCoroutine()
+    {
+        while (_isWaiting)
+        {
+            yield return null;
+        }
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void BreakWaitRpc()
+    {
+        _isWaiting = false;
+    }
+
+    [Rpc(SendTo.Everyone)]
     private void TileEffectRpc(int tileIndex, ulong id)
     {
         ETileType currentTile = _board.tileControllers[tileIndex].TileEventLeaderBoard(id);
         if (currentTile == ETileType.StarTile)
         {
-            if (IsServer)
-            {
-                //if (_playerDataMap[id].Coins >= 20)
-                {
-                    OpenExchangeStarUIRpc(id);
-                }
-            }
+            //if (IsServer)
+            //{
+            //    //if (_playerDataMap[id].Coins >= 20)
+            //    {
+            //        OpenExchangeStarUIRpc(id);
+            //    }
+            //}
         }
     }
 
@@ -302,6 +338,16 @@ public class BoardManager : NetSingleton<BoardManager>
 
             if (_currentRound.Value > _maxRound)
             {
+                int winnerClientId = LeaderBoardManager.Instance.GetHighestScoreClientId();
+
+                _playerCtrlMap[(ulong)winnerClientId].transform.position = _spawnPointList[winnerClientId].transform.position;
+                _playerCtrlMap[(ulong)winnerClientId].transform.LookAt(Camera.main.transform, Vector3.up);
+
+                ChangeCameraSequenceRpc(CameraType.Focus, (ulong)winnerClientId);
+                NoticeEveryoneRpc("우승!!");
+
+                _playerCtrlMap[(ulong)winnerClientId].PlayAnimationRpc("Victory");
+
                 _currentState.Value = GameState.GameEnd;
                 return;
             }
@@ -453,6 +499,11 @@ public class BoardManager : NetSingleton<BoardManager>
     {
         LeaderBoardManager.Instance.UpdateCoin(clientId, -20);
         LeaderBoardManager.Instance.UpdateStar(clientId, 1);
+    }
 
+    [Rpc(SendTo.Everyone)]
+    private void CloseFrontUIRpc()
+    {
+        UIManager.Instance.CloseCurrentFrontUI();
     }
 }

@@ -49,11 +49,66 @@ public class LeaderBoardManager : Singleton<LeaderBoardManager>
         UIManager.Instance.OpenLeaderBoardUI(lbData);
         StartCoroutine(UIManager.Instance.CloseTargetUISecCo<LeaderBoardUI>(6f));
     }
-    
-    // public void ResetLeaderboard()
-    // {
-    //     playerScores.Clear();
-    //     UpdateLeaderBoardClient(new string[0]);
-    // }
+
+    public int GetHighestScoreClientId()
+    {
+        int highestPlayerIndex = -1;
+
+        List<PlayerScores> starSortedList = dataSO.OrderingLeaderBoardClient();
+        foreach (var playerScore in starSortedList)
+        {
+            if (playerScore.Stars != starSortedList[0].Stars)
+            {
+                starSortedList.Remove(playerScore);
+            }
+        }
+
+        if (starSortedList.Count == 1)
+        {
+            for (int i = 0; i < dataSO.playerScoreBoard.Count; ++i)
+            {
+                if (starSortedList[0] == dataSO.playerScoreBoard[i])
+                {
+                    highestPlayerIndex = i;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            List<PlayerScores> coinSortedList = dataSO.OrderingLeaderBoardClient();
+
+            for (int i = 0; i < dataSO.playerScoreBoard.Count; ++i)
+            {
+                if (coinSortedList[0] == dataSO.playerScoreBoard[i])
+                {
+                    highestPlayerIndex = i;
+                    break;
+                }
+            }
+        }
+        return highestPlayerIndex;
+    }
+
+
+    public bool IsAffordStar(ulong clientId)
+    {
+        PlayerScores playerScore = null;
+
+        foreach (var ps in dataSO.playerScoreBoard)
+        {
+            if (ps.playerId == (int)clientId)
+                playerScore = ps;
+        }
+
+        if (playerScore.Coins >= 20)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
 

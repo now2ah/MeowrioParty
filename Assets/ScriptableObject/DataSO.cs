@@ -86,7 +86,7 @@ public class DataSO : ScriptableObject
         };
         LeaderBoardManager.Instance.OpenLeaderBoardClient(lbData);
     }
-    private List<PlayerScores> OrderingLeaderBoardClient()
+    public List<PlayerScores> OrderingLeaderBoardClient()
     {
         return playerScoreBoard
             .OrderByDescending(p => p.Stars)
