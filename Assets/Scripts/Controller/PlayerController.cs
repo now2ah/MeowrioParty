@@ -101,4 +101,9 @@ public class PlayerController : NetworkBehaviour
         gameObject.transform.position = tile.gameObject.transform.position;
     }
 
+    [Rpc(SendTo.Everyone)]
+    public void PlayAnimationRpc(string trigger)
+    {
+        _animator.SetTrigger(trigger);
+    }
 }

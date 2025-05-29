@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using WebSocketSharp;
 
 public class LobbyUI : MonoBehaviour
 {
@@ -50,7 +51,7 @@ public class LobbyUI : MonoBehaviour
 
     public void OnHostClicked()
     {
-        //ApplyConnectionSettings();
+        ApplyConnectionSettings();
         NetworkManager.Singleton.StartHost();
         readyButton.gameObject.SetActive(false);
         startButton.interactable = true;
@@ -58,7 +59,7 @@ public class LobbyUI : MonoBehaviour
 
     public void OnClientClicked()
     {
-        //ApplyConnectionSettings();
+        ApplyConnectionSettings();
         NetworkManager.Singleton.StartClient();
         readyButton.interactable = true;
         startButton.gameObject.SetActive(false);
@@ -66,11 +67,14 @@ public class LobbyUI : MonoBehaviour
 
     private void ApplyConnectionSettings()
     {
-        string ip = ipInputField.text;
+        string ip = "127.0.0.1";
         ushort port = 7777; // default port
 
-        if (ushort.TryParse(portInputField.text, out ushort parsedPort))
-            port = parsedPort;
+        if (!ipInputField.text.IsNullOrEmpty())
+            ip = ipInputField.text;
+
+        //if (ushort.TryParse(portInputField.text, out ushort parsedPort))
+        //    port = parsedPort;
 
         var unityTransport = NetworkManager.Singleton.GetComponent<Unity.Netcode.Transports.UTP.UnityTransport>();
 
@@ -92,23 +96,23 @@ public class LobbyUI : MonoBehaviour
         LobbyManager.LoadNextScene();
         
 
-        //if (NetworkManager.Singleton.IsHost)
-        //{
-        //    ulong myClientId = NetworkManager.Singleton.LocalClientId;
+        if (NetworkManager.Singleton.IsHost)
+        {
+            ulong myClientId = NetworkManager.Singleton.LocalClientId;
 
-        //    // 호스트의 Ready 상태를 먼저 설정
-        //    LobbyManager.Instance.SetReadyServerRpc(myClientId);
+            // 호스트의 Ready 상태를 먼저 설정
+            LobbyManager.SetReadyServerRpc(myClientId);
 
-        //    // 모든 플레이어가 준비되었는지 확인
-        //    if (LobbyManager.Instance.IsAllPlayersReady())
-        //    {
-        //        NetworkManager.Singleton.SceneManager.LoadScene("Board", UnityEngine.SceneManagement.LoadSceneMode.Single);
-        //    }
-        //    else
-        //    {
-        //        Debug.Log("Not all players are ready yet.");
-        //    }
-        //}
+            // 모든 플레이어가 준비되었는지 확인
+            if (LobbyManager.IsAllPlayersReady())
+            {
+                NetworkManager.Singleton.SceneManager.LoadScene("Board", UnityEngine.SceneManagement.LoadSceneMode.Single);
+            }
+            else
+            {
+                Debug.Log("Not all players are ready yet.");
+            }
+        }
     }
 
     public void UpdatePlayerListUI()

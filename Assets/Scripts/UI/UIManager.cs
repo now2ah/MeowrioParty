@@ -180,6 +180,7 @@ public class UIManager : Singleton<UIManager>
             ExchangeStarUIData uIData = new ExchangeStarUIData();
             uIData.OnClickOKBtn += () =>
             {
+                BoardManager.Instance.BreakWaitRpc();
                 BoardManager.Instance.UpdateDataSORpc(clientId);
             };
             OpenUI<ExchangeStarUI>(uIData);
