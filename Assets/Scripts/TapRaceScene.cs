@@ -1,36 +1,35 @@
 using System.Collections;
 using Unity.Netcode;
+using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TapRaceScene : MonoBehaviour
 {
     [SerializeField] GameObject _miniGameManagerPrefab;
 
     private GameObject _miniGameManagerObject;
+    private Coroutine _loadManagerCoroutine;
 
     private void Awake()
     {
-        NetworkManager.Singleton.SceneManager.OnLoadComplete += (clientId, sceneName, loadSceneMode) =>
-        {
-            if (sceneName == "TapRaceScene")
-            {
-                if (NetworkManager.Singleton.LocalClientId == clientId)
-                {
-                    StartCoroutine(LoadManager());
-                }
-            }
-        };
+        NetworkManager.Singleton.SceneManager.OnLoadComplete += OnSceneLoaded;
+    }
 
-        //NetworkManager.Singleton.SceneManager.OnUnloadComplete += (clientId, sceneName) =>
-        //{
-        //    if (sceneName == "TapRaceScene")
-        //    {
-        //        if (NetworkManager.Singleton.LocalClientId == clientId)
-        //        {
-        //            StartCoroutine(UnLoadManager());
-        //        }
-        //    }
-        //};
+    private void OnDestroy()
+    {
+        NetworkManager.Singleton.SceneManager.OnLoadComplete -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(ulong clientId, string sceneName, LoadSceneMode loadSceneMode)
+    {
+        if (sceneName == "TapRaceScene")
+        {
+            if (NetworkManager.Singleton.LocalClientId == clientId)
+            {
+                _loadManagerCoroutine = StartCoroutine(LoadManager());
+            }
+        }
     }
 
     IEnumerator LoadManager()
@@ -50,7 +49,6 @@ public class TapRaceScene : MonoBehaviour
     {
         if (NetworkManager.Singleton.IsServer)
         {
-            _miniGameManagerObject = Instantiate(_miniGameManagerPrefab);
             if (_miniGameManagerObject.TryGetComponent<NetworkObject>(out NetworkObject networkObject))
             {
                 networkObject.Despawn();

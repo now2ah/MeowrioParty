@@ -44,11 +44,11 @@ public class MiniGamePlayerController : NetworkBehaviour
         _animator.SetBool("isMoving", true);
 
         _speedStage.OnValueChanged += OnSpeedStageChanged;
+        inputManager.OnConfirmButtonPerformed += GetInput;
 
         if (IsOwner)
         {
             StartCoroutine(WaitUntilSceneReady());
-            inputManager.OnConfirmButtonPerformed += GetInput;
         }
     }
     public override void OnNetworkDespawn()
