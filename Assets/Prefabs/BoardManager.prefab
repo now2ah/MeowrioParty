@@ -202,7 +202,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   _currentState:
     m_InternalValue: 0
-  _maxRound: 3
+  _maxRound: 5
   _currentRound:
     m_InternalValue: 0
   _currentPlayerId: 0
