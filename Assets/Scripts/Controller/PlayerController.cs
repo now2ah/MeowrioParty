@@ -11,7 +11,8 @@ public class PlayerController : NetworkBehaviour
 
     [SerializeField] private DiceController _diceController;
     [SerializeField] private List<GameObject> _diceNumberObjects = new List<GameObject>();
-
+    [SerializeField] private GameObject _coinPlusUI;
+    [SerializeField] private GameObject _coinMinusUI;
     private Animator _animator;
 
     public bool IsMoving { get; private set; }
@@ -95,7 +96,23 @@ public class PlayerController : NetworkBehaviour
             diceNumberObject.SetActive(false);
         }
     }
+    [Rpc(SendTo.Everyone)]
+    public void TurnOnCoinPlusRpc()
+    {
+        StartCoroutine(TurnOnCoinSecCo(_coinPlusUI));
+    }
+    [Rpc(SendTo.Everyone)]
+    public void TurnOnCoinMinusRpc()
+    {
+        StartCoroutine(TurnOnCoinSecCo(_coinMinusUI));
+    }
 
+    private IEnumerator TurnOnCoinSecCo(GameObject go)
+    {
+        go.SetActive(true);
+        yield return new WaitForSeconds(3f);
+        go.SetActive(false);
+    }
     public void TransportPlayer(TileController tile)
     {
         gameObject.transform.position = tile.gameObject.transform.position;

@@ -33,7 +33,7 @@ public class TileController : MonoBehaviour
                 Debug.Log("StarTile");
                 break;
             case ETileType.WarpTile:
-                WarpTo(playerData,playerController, MoveTo);
+                WarpTo(playerData, playerController, MoveTo);
                 Debug.Log("WarpTile");
                 break;
             default:
@@ -53,7 +53,6 @@ public class TileController : MonoBehaviour
                 Debug.Log("CoinMinusTile");
                 break;
             case ETileType.StarTile:
-
                 //LeaderBoardManager.Instance.UpdateStar(_clientId, eventParam);
                 Debug.Log("StarTile");
                 break;
