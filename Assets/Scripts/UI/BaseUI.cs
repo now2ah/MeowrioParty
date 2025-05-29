@@ -15,7 +15,6 @@ public class BaseUI : MonoBehaviour
 {
     // public Animation m_UIOpenAnim;
     public bool m_isAnimPlay;
-    public bool m_isAnim2Play;
 
     private Action m_OnShow;
     private Action m_OnClose;
