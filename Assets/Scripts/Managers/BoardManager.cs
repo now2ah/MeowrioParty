@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Multiplayer.Playmode;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -309,15 +310,18 @@ public class BoardManager : NetSingleton<BoardManager>
     private void TileEffectRpc(int tileIndex, ulong id)
     {
         ETileType currentTile = _board.tileControllers[tileIndex].TileEventLeaderBoard(id);
+        if (!IsServer) return;
         if (currentTile == ETileType.StarTile)
         {
-            //if (IsServer)
-            //{
-            //    //if (_playerDataMap[id].Coins >= 20)
-            //    {
-            //        OpenExchangeStarUIRpc(id);
-            //    }
-            //}
+            OpenExchangeStarUIRpc(id);
+        }
+        else if (currentTile == ETileType.CoinPlusTile)
+        {
+            _playerCtrlMap[id].TurnOnCoinPlusRpc();
+        }
+        else if (currentTile == ETileType.CoinMinusTile)
+        {
+            _playerCtrlMap[id].TurnOnCoinMinusRpc();
         }
     }
 
@@ -501,9 +505,4 @@ public class BoardManager : NetSingleton<BoardManager>
         LeaderBoardManager.Instance.UpdateStar(clientId, 1);
     }
 
-    [Rpc(SendTo.Everyone)]
-    private void CloseFrontUIRpc()
-    {
-        UIManager.Instance.CloseCurrentFrontUI();
-    }
 }
