@@ -73,6 +73,7 @@ public class UIManager : Singleton<UIManager>
 
     public void CloseUI(BaseUI ui)
     {
+        if (ui == null) return;
         Type uiType = ui.GetType();
 
         ui.gameObject.SetActive(false);
@@ -185,6 +186,8 @@ public class UIManager : Singleton<UIManager>
         }
         else
         {
+            UIManager.Instance.CloseTargetUI<ExchangeStarUI>();
+
             StartCoroutine(OpenNoticeUIEveryoneSecCo("스타 구매 중.. 잠시만 기다려 주세요..", 3f));
         }
     }

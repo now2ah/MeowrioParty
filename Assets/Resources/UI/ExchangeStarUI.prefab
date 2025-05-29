@@ -507,7 +507,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f0810b67ab0cae4cb5efe6fd626202c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UIOpenAnim: {fileID: 0}
+  m_isAnimPlay: 0
+  m_isAnim2Play: 0
   DescTxt: {fileID: 0}
   OKBtn: {fileID: 8168386490006521115}
   CancelBtn: {fileID: 1643076840140590152}
@@ -674,9 +675,9 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1120728683912022745}
   - {fileID: 8112709028324185583}
   - {fileID: 5580139611462731423}
+  - {fileID: 1120728683912022745}
   m_Father: {fileID: 8108739364050633068}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -706,7 +707,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.392}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

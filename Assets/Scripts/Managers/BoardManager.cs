@@ -112,7 +112,7 @@ public class BoardManager : NetSingleton<BoardManager>
         yield return new WaitForSeconds(3f);
         CameraManager.Instance.ChangeCamera(CameraType.Stage);
         StartCoroutine(UIManager.Instance.OpenNoticeUIEveryoneSecCo("순서를 정해보죠!", 3f));
-        LeaderBoardManager.Instance.UpdateLeaderBoardClient(true);
+        LeaderBoardManager.Instance.UpdateLeaderBoardClient(false, false);
         //UIManager.Instance.OpenNoticeUISec("순서를 정해보죠!", 3f);
         _canInput = true;
     }
@@ -360,7 +360,27 @@ public class BoardManager : NetSingleton<BoardManager>
     IEnumerator MiniGameFinishedSequenceCoroutine(ulong clientId)
     {
         CameraManager.Instance.ChangeCamera(CameraType.Board);
-        NoticeEveryoneSecRpc("우승자는 " + clientId + " ㅊㅋㅊㅋ", 3f);
+        string winnerName;
+        switch ((int)clientId)
+        {
+            case 0:
+                winnerName = "Mario";
+                break;
+            case 1:
+                winnerName = "Luigi";
+                break;
+            case 2:
+                winnerName = "Waluigi";
+                break;
+            case 3:
+                winnerName = "Birdo";
+                break;
+
+            default:
+                winnerName = "bug";
+                break;
+        }
+        NoticeEveryoneSecRpc("우승자는 " + winnerName + "~!", 3f);
         yield return new WaitForSeconds(3f);
         StopMiniGame();
     }
