@@ -46,7 +46,7 @@ public class BoardManager : NetSingleton<BoardManager>
     {
         base.Awake();
 
-        _maxRound = 2;
+        //_maxRound = 2;
         _isWaiting = false;
         _playerTurnOrder = new NetworkList<ulong>();
 
@@ -311,11 +311,7 @@ public class BoardManager : NetSingleton<BoardManager>
     {
         ETileType currentTile = _board.tileControllers[tileIndex].TileEventLeaderBoard(id);
         if (!IsServer) return;
-        if (currentTile == ETileType.StarTile)
-        {
-            OpenExchangeStarUIRpc(id);
-        }
-        else if (currentTile == ETileType.CoinPlusTile)
+        if (currentTile == ETileType.CoinPlusTile)
         {
             _playerCtrlMap[id].TurnOnCoinPlusRpc();
         }
@@ -339,22 +335,6 @@ public class BoardManager : NetSingleton<BoardManager>
         {
             _currentPlayerTurnIndex = 0;
             //_currentRound.Value++;
-
-            if (_currentRound.Value > _maxRound)
-            {
-                int winnerClientId = LeaderBoardManager.Instance.GetHighestScoreClientId();
-
-                _playerCtrlMap[(ulong)winnerClientId].transform.position = _spawnPointList[winnerClientId].transform.position;
-                _playerCtrlMap[(ulong)winnerClientId].transform.LookAt(Camera.main.transform, Vector3.up);
-
-                ChangeCameraSequenceRpc(CameraType.Focus, (ulong)winnerClientId);
-                NoticeEveryoneRpc("우승!!");
-
-                _playerCtrlMap[(ulong)winnerClientId].PlayAnimationRpc("Victory");
-
-                _currentState.Value = GameState.GameEnd;
-                return;
-            }
 
             StartMiniGame();
         }
@@ -439,15 +419,27 @@ public class BoardManager : NetSingleton<BoardManager>
     {
         if (!IsServer) return;
 
+        _currentRound.Value++;
+
         if (_currentRound.Value > _maxRound)
         {
+            int winnerClientId = LeaderBoardManager.Instance.GetHighestScoreClientId();
+
+            _playerCtrlMap[(ulong)winnerClientId].transform.position = _spawnPointList[winnerClientId].transform.position;
+
+            ChangeCameraSequenceRpc(CameraType.Focus, (ulong)winnerClientId);
+            NoticeEveryoneRpc("우승!!");
+
+            _playerCtrlMap[(ulong)winnerClientId].PlayAnimationRpc("Victory");
+
+
             _currentState.Value = GameState.GameEnd;
             return;
         }
         else
         {
             _currentState.Value = GameState.GamePlay;
-            _currentRound.Value++;
+            
             Scene scene = SceneManager.GetSceneByName("TapRaceScene");
             NetworkManager.Singleton.SceneManager?.UnloadScene(scene);
 

@@ -63,6 +63,7 @@ public class DataSO : ScriptableObject
         for (int i = clientCnt; i < 4; i++)
         {
             sprResult[i] = _defaultSprite;
+            coinResult[i] = 0.ToString();
         }
         PlayerCurrentStateUIData pcData = new PlayerCurrentStateUIData
         {

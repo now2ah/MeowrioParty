@@ -1581,7 +1581,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_isAnimPlay: 0
-  m_isAnim2Play: 0
   StarCountTxt:
   - {fileID: 4302101691342312180}
   - {fileID: 7954569157103041484}
@@ -2398,7 +2397,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 1000, y: 550}
+  m_AnchoredPosition: {x: 900, y: 550}
   m_SizeDelta: {x: 1200, y: 200}
   m_Pivot: {x: 1, y: 1}
 --- !u!222 &6653093888144677299
