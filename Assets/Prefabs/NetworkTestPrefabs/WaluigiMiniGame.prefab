@@ -2384,6 +2384,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   inputManager: {fileID: 11400000, guid: d47f0c20fe52b0f40a1474b9f2b13483, type: 2}
+  dataSO: {fileID: 11400000, guid: 75288a1cae45a654592229ed4ce92d68, type: 2}
 --- !u!1 &7257389764418825338
 GameObject:
   m_ObjectHideFlags: 0

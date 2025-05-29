@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c735fba7f01c9dc48ae98de8520c0e6d, type: 3}
+  m_Name: DataSO
+  m_EditorClassIdentifier: 
+  clientCnt: 0
+  isFirst: 0
+  isLBOpen: 0
+  _playerPortraits:
+  - {fileID: -1145526890, guid: 6e7653b8dd9e00149bbd4b3f0a0db781, type: 3}
+  - {fileID: 953556257, guid: 795c88b667c50c443b874eab13558ff6, type: 3}
+  - {fileID: 792012029, guid: 25dd55527d17eac4795de14d8ab1310d, type: 3}
+  - {fileID: 785559795, guid: ab1323193912f1c4db04f29c4d352891, type: 3}
+  _defaultSprite: {fileID: 21300000, guid: bff4d8329f0e734419a7c396d6fdd58c, type: 3}
