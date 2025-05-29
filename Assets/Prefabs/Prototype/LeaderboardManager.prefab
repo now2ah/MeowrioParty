@@ -44,9 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24d6043a4068e9040a9091525d8d1073, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerPortraits:
-  - {fileID: -1145526890, guid: 6e7653b8dd9e00149bbd4b3f0a0db781, type: 3}
-  - {fileID: 953556257, guid: 795c88b667c50c443b874eab13558ff6, type: 3}
-  - {fileID: 792012029, guid: 25dd55527d17eac4795de14d8ab1310d, type: 3}
-  - {fileID: 785559795, guid: ab1323193912f1c4db04f29c4d352891, type: 3}
-  _defaultSprite: {fileID: 21300000, guid: bff4d8329f0e734419a7c396d6fdd58c, type: 3}
+  dataSO: {fileID: 11400000, guid: 75288a1cae45a654592229ed4ce92d68, type: 2}

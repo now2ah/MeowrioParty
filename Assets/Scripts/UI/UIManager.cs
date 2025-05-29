@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class UIManager : Singleton<UIManager>
 {
+    [SerializeField] DataSO dataSO;
     public Transform UICanvasTrs; //UI화면을 랜더링할 컨버스
     public Transform CloseUITrs; //닫을 때 비활성화 할 
 
@@ -174,20 +175,17 @@ public class UIManager : Singleton<UIManager>
 
     public void OpenExchangerStar(ulong clientId)
     {
-        ExchangeStarUIData uIData = new ExchangeStarUIData();
-        uIData.OnClickOKBtn += () =>
-        {
-            LeaderBoardManager.Instance.UpdateCoin(clientId, -20);
-            LeaderBoardManager.Instance.UpdateStar(clientId, 1);
-        };
-        OpenUI<ExchangeStarUI>(uIData);
         if (NetworkManager.Singleton.LocalClientId == clientId)
         {
+            ExchangeStarUIData uIData = new ExchangeStarUIData();
+            uIData.OnClickOKBtn += () =>
+            {
+                BoardManager.Instance.UpdateDataSORpc(clientId);
+            };
+            OpenUI<ExchangeStarUI>(uIData);
         }
         else
         {
-            UIManager.Instance.CloseTargetUI<ExchangeStarUI>();
-
             StartCoroutine(OpenNoticeUIEveryoneSecCo("스타 구매 중.. 잠시만 기다려 주세요..", 3f));
         }
     }

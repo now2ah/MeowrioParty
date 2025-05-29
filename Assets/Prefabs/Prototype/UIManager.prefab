@@ -383,7 +383,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1e965f074b55d64bbf0bf57e89a4f06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UIOpenAnim: {fileID: 0}
+  m_isAnimPlay: 0
   TitleTxt: {fileID: 0}
   DescTxt: {fileID: 0}
   OKBtn: {fileID: 0}
@@ -1048,5 +1048,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8a69de0a98723f47b430c92692ff16e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dataSO: {fileID: 11400000, guid: 75288a1cae45a654592229ed4ce92d68, type: 2}
   UICanvasTrs: {fileID: 6586370455884276991}
   CloseUITrs: {fileID: 1944175127303400454}

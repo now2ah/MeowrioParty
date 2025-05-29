@@ -7,6 +7,7 @@ using System.Collections;
 public class MiniGamePlayerController : NetworkBehaviour
 {
     public InputManagerSO inputManager;
+    public DataSO dataSO;
 
     public event Action OnFinish;
 
@@ -174,8 +175,7 @@ public class MiniGamePlayerController : NetworkBehaviour
     private void NotifyServerRaceFinishedServerRpc()
     {
         LeaderBoardManager.Instance.UpdateCoin(OwnerClientId, 1);
-        LeaderBoardManager.Instance.UpdateLeaderBoardClient(false, true);
-        
+        dataSO.OpenLeaderBoard();
         BoardManager.Instance.OnMiniGamePlayerFinished(OwnerClientId);
     }
 }

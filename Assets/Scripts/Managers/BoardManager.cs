@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -33,6 +32,7 @@ public class BoardManager : NetSingleton<BoardManager>
     [SerializeField] private Board _board;
     [SerializeField] private List<GameObject> _spawnPointList;
     [SerializeField] private List<GameObject> characterPrefabList;
+    [SerializeField] private DataSO dataSO;
 
     private Dictionary<ulong, PlayerData> _playerDataMap = new();
     public Dictionary<ulong, PlayerController> _playerCtrlMap = new();
@@ -112,7 +112,7 @@ public class BoardManager : NetSingleton<BoardManager>
         yield return new WaitForSeconds(3f);
         CameraManager.Instance.ChangeCamera(CameraType.Stage);
         StartCoroutine(UIManager.Instance.OpenNoticeUIEveryoneSecCo("순서를 정해보죠!", 3f));
-        LeaderBoardManager.Instance.UpdateLeaderBoardClient(false, false);
+        dataSO.UpdateLeaderBoardClient();
         //UIManager.Instance.OpenNoticeUISec("순서를 정해보죠!", 3f);
         _canInput = true;
     }
@@ -145,7 +145,7 @@ public class BoardManager : NetSingleton<BoardManager>
         Debug.Log("cliendId : " + clientId + ", diceValue : " + diceValue);
 
         RollDiceSequenceRpc(clientId, diceValue);
-        
+
         //if all of players rolled dice for order
         if (_playerDiceNumberList.All(p => p.Value != -1))
         {
@@ -446,5 +446,13 @@ public class BoardManager : NetSingleton<BoardManager>
         roundUIData.maxRound = _maxRound.ToString();
 
         UIManager.Instance.NoticeRoundUI(roundUIData);
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void UpdateDataSORpc(ulong clientId)
+    {
+        LeaderBoardManager.Instance.UpdateCoin(clientId, -20);
+        LeaderBoardManager.Instance.UpdateStar(clientId, 1);
+
     }
 }
