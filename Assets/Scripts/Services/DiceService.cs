@@ -1,5 +1,5 @@
-﻿
-using System;
+﻿using UnityEngine;
+using Random = System.Random;
 
 namespace Meowrio.Service
 {
@@ -18,7 +18,9 @@ namespace Meowrio.Service
 
         public int GetRandomDiceNumber()
         {
-            return _random.Next(_minimumNumber, _maximumNumber);
+            int randomNumber = _random.Next(_minimumNumber, _maximumNumber + 1);
+            Debug.Log($"Random dice number is {randomNumber}");
+            return randomNumber;
         }
     }
 }
