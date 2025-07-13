@@ -22,7 +22,7 @@ namespace Assets.Scripts.TestCode
             }
             _tileService = new TileService(testTileList);
 
-            _player = new PlayerEntity();
+            //_player = new PlayerEntity();
         }
 
         private void Start()

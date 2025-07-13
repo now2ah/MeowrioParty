@@ -6,11 +6,13 @@ namespace Meowrio.Domain
     {
         private const int PLAYER_START_COIN_VALUE = 10;
 
+        private int playerId;
         private Tile _currentTile;
         private Coin _ownedCoins;
 
-        public PlayerEntity()
+        public PlayerEntity(int playerId)
         {
+            this.playerId = playerId;
             _ownedCoins = new Coin(PLAYER_START_COIN_VALUE);
         }
 
