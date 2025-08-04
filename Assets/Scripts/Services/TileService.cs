@@ -18,5 +18,11 @@ namespace Meowrio.Service
         {
             _tileList = tileList;
         }
+
+        public int GetNextTileIndex(int playerTileIndex, int diceNumber)
+        {
+            int nextTileIndex = (playerTileIndex + diceNumber) % _tileList.Count;
+            return nextTileIndex;
+        }
     }
 }

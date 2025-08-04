@@ -8,6 +8,10 @@ namespace Meowrio.Domain
     /// </summary>
     public abstract class Tile : IEffectable
     {
+        protected int _indexNumber;
+
+        public int IndexNumber => _indexNumber;
+
         public abstract void ApplyEffect(PlayerEntity affectedPlayer);
     }
 
@@ -16,6 +20,11 @@ namespace Meowrio.Domain
     /// </summary>
     public class NormalTile : Tile
     {
+        public NormalTile(int indexNumber) 
+        {
+            _indexNumber = indexNumber;
+        }
+
         public override void ApplyEffect(PlayerEntity affectedPlayer)
         {
             Debug.Log($"Apply normal tile effect to { affectedPlayer }!");

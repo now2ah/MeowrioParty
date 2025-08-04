@@ -7,8 +7,9 @@ namespace Meowrio.Domain
         private const int PLAYER_START_COIN_VALUE = 10;
 
         private int playerId;
-        private Tile _currentTile;
         private Coin _ownedCoins;
+
+        public int CurrentTileIndex { get; private set; }
 
         public PlayerEntity(int playerId)
         {
@@ -16,9 +17,9 @@ namespace Meowrio.Domain
             _ownedCoins = new Coin(PLAYER_START_COIN_VALUE);
         }
 
-        public void MoveTo(Tile destinationTile)
+        public void MoveTo(int nextTileIndex)
         {
-            _currentTile = destinationTile;
+            CurrentTileIndex = nextTileIndex;
         }
 
         public void GainCoin(int gainCoinValue)

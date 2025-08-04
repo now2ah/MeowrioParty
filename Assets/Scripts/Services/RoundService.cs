@@ -1,6 +1,9 @@
 ﻿
 namespace Meowrio.Service
 {
+    /// <summary>
+    /// BoardGame의 정해진 Round를 반복 진행
+    /// </summary>
     public class RoundService
     {
         private int _maxRound;

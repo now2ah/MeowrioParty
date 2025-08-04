@@ -35,7 +35,7 @@ namespace Assets.Scripts.TestCode
             int randomNum = _diceService.GetRandomDiceNumber();
             Tile destinationTile = _tileService.TileList[randomNum];
 
-            _player.MoveTo(destinationTile);
+            //_player.MoveTo(destinationTile);
             destinationTile.ApplyEffect(_player);
         }
     }
