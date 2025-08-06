@@ -24,5 +24,10 @@ namespace Meowrio.Service
             int nextTileIndex = (playerTileIndex + diceNumber) % _tileList.Count;
             return nextTileIndex;
         }
+
+        public void ApplyTileEffect(PlayerEntity playerEntity, int tileIndex)
+        {
+            _tileList[tileIndex].ApplyEffect(playerEntity);
+        }
     }
 }

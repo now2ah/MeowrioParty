@@ -1,4 +1,8 @@
 ﻿
+using Meowrio.Domain;
+using Meowrio.Services;
+using System.Collections.Generic;
+
 namespace Meowrio.Service
 {
     /// <summary>
@@ -6,15 +10,30 @@ namespace Meowrio.Service
     /// </summary>
     public class RoundService
     {
+        private TileService _tileService;
+        private TurnService _turnService;
         private int _maxRound;
         private int _roundCount;
 
-        public RoundService(int maxRound)
+
+        public RoundService(int maxRound, TileService tileService)
         {
+            _tileService = tileService;
             _maxRound = maxRound;
             _roundCount = 0;
         }
 
-        
+        public void StartFullRound(IReadOnlyDictionary<int, PlayerEntity> playerDic, IReadOnlyList<int> turnOrderList)
+        {
+            for (int i = 1; i <= _maxRound; ++i)
+            {
+                for (int j = 0; j < turnOrderList.Count; ++j)
+                {
+                    _turnService = new TurnService(playerDic[turnOrderList[j]], _tileService);
+                    _turnService.ProgressTurn();
+                }
+                _roundCount++;
+            }
+        }
     }
 }

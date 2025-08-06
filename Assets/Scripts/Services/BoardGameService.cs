@@ -1,4 +1,9 @@
 
+using Meowrio.Domain;
+using Meowrio.Services;
+using System.Collections.Generic;
+using UnityEngine;
+
 namespace Meowrio.Service
 {
     /// <summary>
@@ -6,8 +11,48 @@ namespace Meowrio.Service
     /// </summary>
     public class BoardGameService
     {
+        private const int MIN_TURNORDER_DICENUMBER = 1;
+        private const int MAX_TURNORDER_DICENUMBER = 10;
+        private const int DEFAULT_ROUND = 3;
+
         private TileService _tileService;
         private DiceService _diceService;
+        private TurnOrderService _turnOrderService;
+        private RoundService _roundService;
+        private Dictionary<int, PlayerEntity> _playerDic;
+
+        public IReadOnlyDictionary<int, PlayerEntity> PlayerDic => _playerDic;
+
+        public BoardGameService(TileService tileService, int numberOfPlayers)
+        {
+            _tileService = tileService;
+            _turnOrderService = new TurnOrderService(numberOfPlayers);
+            _diceService = new DiceService(MIN_TURNORDER_DICENUMBER, MAX_TURNORDER_DICENUMBER);
+            _playerDic = new Dictionary<int, PlayerEntity>();
+        }
+
+        public void AddPlayer(int playerID, PlayerEntity playerEntity)
+        {
+            _playerDic.Add(playerID, playerEntity);
+        }
+
+        public void RollDiceForSetTurnOrder(int playerID)
+        {
+            int diceNumber = _diceService.GetRandomDiceNumber();
+            _turnOrderService.RegisterPlayerDiceNumber(playerID, diceNumber);
+            Debug.Log($"Player {playerID} roll the dice : {diceNumber}");
+        }
+
+        public void SetTurnOrder()
+        {
+            _turnOrderService.SetTurnOrder();
+        }
+
+        public void StartBoardGame(TileService tileService)
+        {
+            _roundService = new RoundService(DEFAULT_ROUND, tileService);
+            _roundService.StartFullRound(_playerDic, _turnOrderService.TurnOrderArray);
+        }
     }
 }
 

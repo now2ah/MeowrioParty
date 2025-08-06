@@ -8,7 +8,7 @@ namespace Meowrio.Service
     /// </summary>
     public class TurnService
     {
-        private const int MIN_DICE_NUMBER = 0;
+        private const int MIN_DICE_NUMBER = 1;
         private const int MAX_DICE_NUMBER = 6;
 
         private PlayerEntity _playerEntity;
@@ -33,6 +33,7 @@ namespace Meowrio.Service
             _playerEntity.MoveTo(nextTileIndex);
 
             //tile effect
+            _tileService.ApplyTileEffect(_playerEntity, nextTileIndex);
         }
     }
 }

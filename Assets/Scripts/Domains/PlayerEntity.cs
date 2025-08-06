@@ -20,6 +20,7 @@ namespace Meowrio.Domain
         public void MoveTo(int nextTileIndex)
         {
             CurrentTileIndex = nextTileIndex;
+            Debug.Log($"Player {playerId} move to tile {nextTileIndex}");
         }
 
         public void GainCoin(int gainCoinValue)

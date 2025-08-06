@@ -13,6 +13,8 @@ namespace Meowrio.Services
         private int _currentTurnOrder;
         private List<(int playerId, int diceNumber)> _playerDicePairList;
 
+        public IReadOnlyList<int> TurnOrderArray => _turnOrderArray;
+
         public TurnOrderService(int numberOfPlayers)
         {
             _turnOrderArray = new int[numberOfPlayers];
