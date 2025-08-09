@@ -1,6 +1,6 @@
 
 using Meowrio.Domain;
-using Meowrio.Services;
+using Meowrio.Service;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -51,7 +51,7 @@ namespace Meowrio.Service
         public void StartBoardGame(TileService tileService)
         {
             _roundService = new RoundService(DEFAULT_ROUND, tileService);
-            _roundService.StartFullRound(_playerDic, _turnOrderService.TurnOrderArray);
+            _roundService.StartRound(_playerDic, _turnOrderService.TurnOrderArray);
         }
     }
 }

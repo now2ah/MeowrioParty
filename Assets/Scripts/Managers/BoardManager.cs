@@ -1,8 +1,9 @@
+using Meowrio.Service;
+using Meowrio.Domain;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Multiplayer.Playmode;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -29,8 +30,6 @@ public class BoardManager : NetSingleton<BoardManager>
     public bool _canInput;
     private bool _isWaiting;
 
-    //public bool CanInput => _canInput;
-
     [SerializeField] private Board _board;
     [SerializeField] private List<GameObject> _spawnPointList;
     [SerializeField] private List<GameObject> characterPrefabList;
@@ -46,7 +45,7 @@ public class BoardManager : NetSingleton<BoardManager>
     {
         base.Awake();
 
-        //_maxRound = 2;
+        
         _isWaiting = false;
         _playerTurnOrder = new NetworkList<ulong>();
 
@@ -57,15 +56,8 @@ public class BoardManager : NetSingleton<BoardManager>
 
     public override void OnNetworkSpawn()
     {
-        _board = FindFirstObjectByType<Board>();
-        // 네트워크상에 스폰 시 초기값 설정 및 InitializePlayer에 개별 ClientID 전달
         if (IsServer)
         {
-
-            _currentPlayerTurnIndex = 0;
-            _currentState.Value = GameState.GameReady;
-            _currentRound.Value = 0;
-
             StartCoroutine(CreatePlayerControllersCoroutine(NetworkManager.Singleton.ConnectedClientsList));
         }
     }
@@ -311,11 +303,11 @@ public class BoardManager : NetSingleton<BoardManager>
     {
         ETileType currentTile = _board.tileControllers[tileIndex].TileEventLeaderBoard(id);
         if (!IsServer) return;
-        if (currentTile == ETileType.CoinPlusTile)
+        if (currentTile == ETileType.GainCoinTile)
         {
             _playerCtrlMap[id].TurnOnCoinPlusRpc();
         }
-        else if (currentTile == ETileType.CoinMinusTile)
+        else if (currentTile == ETileType.LoseCoinTile)
         {
             _playerCtrlMap[id].TurnOnCoinMinusRpc();
         }

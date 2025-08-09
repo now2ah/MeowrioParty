@@ -2,8 +2,8 @@ using UnityEngine;
 public enum ETileType
 {
     None,
-    CoinPlusTile,
-    CoinMinusTile,
+    GainCoinTile,
+    LoseCoinTile,
     StarTile,
     WarpTile
 }
@@ -21,11 +21,11 @@ public class TileController : MonoBehaviour
     {
         switch (tileType)
         {
-            case ETileType.CoinPlusTile:
+            case ETileType.GainCoinTile:
                 playerData.UpdateCoinCnt(eventParam);
                 Debug.Log("Coinplus");
                 break;
-            case ETileType.CoinMinusTile:
+            case ETileType.LoseCoinTile:
                 playerData.UpdateCoinCnt(-eventParam);
                 Debug.Log("CoinMinusTile");
                 break;
@@ -44,11 +44,11 @@ public class TileController : MonoBehaviour
     {
         switch (tileType)
         {
-            case ETileType.CoinPlusTile:
+            case ETileType.GainCoinTile:
                 LeaderBoardManager.Instance.UpdateCoin(_clientId, eventParam);
                 Debug.Log("Coinplus");
                 break;
-            case ETileType.CoinMinusTile:
+            case ETileType.LoseCoinTile:
                 LeaderBoardManager.Instance.UpdateCoin(_clientId, -eventParam);
                 Debug.Log("CoinMinusTile");
                 break;

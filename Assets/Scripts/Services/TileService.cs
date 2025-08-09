@@ -5,16 +5,16 @@ namespace Meowrio.Service
 {
     public class TileService
     {
-        private List<Tile> _tileList;
+        private IReadOnlyList<Tile> _tileList;
 
-        public List<Tile> TileList => _tileList;
+        public IReadOnlyList<Tile> TileList => _tileList;
 
         public TileService()
         {
             _tileList = new List<Tile>();
         }
 
-        public TileService(List<Tile> tileList)
+        public TileService(IReadOnlyList<Tile> tileList)
         {
             _tileList = tileList;
         }

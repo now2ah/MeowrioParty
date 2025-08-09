@@ -18,7 +18,7 @@ namespace Assets.Scripts.TestCode
             List<Tile> testTileList = new List<Tile>();
             for (int i = 0; i < 8; ++i)
             {
-                testTileList.Add(new GainCoinTile(3));
+                //testTileList.Add(new GainCoinTile(3));
             }
             _tileService = new TileService(testTileList);
 

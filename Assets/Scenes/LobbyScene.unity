@@ -287,8 +287,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bcb4f826a9a36242bf6de506dc40068, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hostButton: {fileID: 775336234}
-  clientButton: {fileID: 1805395321}
+  startHostButton: {fileID: 775336234}
+  startClientButton: {fileID: 1805395321}
   readyButton: {fileID: 1869117620}
   startButton: {fileID: 1466358251}
   playerListText: {fileID: 1390073835}

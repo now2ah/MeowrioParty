@@ -1,6 +1,6 @@
 ﻿
 using Meowrio.Domain;
-using Meowrio.Services;
+using Meowrio.Service;
 using System.Collections.Generic;
 
 namespace Meowrio.Service
@@ -23,8 +23,12 @@ namespace Meowrio.Service
             _roundCount = 0;
         }
 
-        public void StartFullRound(IReadOnlyDictionary<int, PlayerEntity> playerDic, IReadOnlyList<int> turnOrderList)
+        public void StartRound(IReadOnlyDictionary<int, PlayerEntity> playerDic, IReadOnlyList<int> turnOrderList)
         {
+            _roundCount++;
+
+
+
             for (int i = 1; i <= _maxRound; ++i)
             {
                 for (int j = 0; j < turnOrderList.Count; ++j)

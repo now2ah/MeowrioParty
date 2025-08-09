@@ -1,10 +1,5 @@
 using Unity.Netcode;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 using System;
-using Unity.Collections;
-using Unity.Services.Matchmaker.Models;
-using System.Collections;
 
 public class LobbyManager : NetworkBehaviour
 {
@@ -30,11 +25,6 @@ public class LobbyManager : NetworkBehaviour
 
     public event Action OnPlayerListChanged;
 
-    private void Awake()
-    {
-        playerStates = new NetworkList<PlayerLobbyState>();
-    }
-
     public override void OnNetworkSpawn()
     {
         if (IsServer)
@@ -43,20 +33,6 @@ public class LobbyManager : NetworkBehaviour
         }
         // 바로 이벤트 바인딩
         playerStates.OnListChanged += _ => OnPlayerListChanged?.Invoke();
-    }
-
-    private void OnClientConnected(ulong clientId)
-    {
-        if (IsServer)
-        {
-            playerStates.Add(new PlayerLobbyState
-            {
-                ClientId = clientId,
-                IsReady = false
-            });
-
-            OnPlayerListChanged?.Invoke();
-        }
     }
 
     [Rpc(SendTo.Server)]
@@ -91,4 +67,40 @@ public class LobbyManager : NetworkBehaviour
         if (NetworkManager.Singleton.IsServer)
             NetworkManager.Singleton.SceneManager.LoadScene("BoardTest", UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
+    public void ApplyConnectionSettings(string ip)
+    {
+        ushort port = 7777; // default port
+
+        //if (ushort.TryParse(portInputField.text, out ushort parsedPort))
+        //    port = parsedPort;
+
+        var unityTransport = NetworkManager.Singleton.GetComponent<Unity.Netcode.Transports.UTP.UnityTransport>();
+
+        if (unityTransport != null)
+        {
+            unityTransport.SetConnectionData(ip, port);
+        }
+    }
+
+    private void Awake()
+    {
+        playerStates = new NetworkList<PlayerLobbyState>();
+    }
+
+
+    private void OnClientConnected(ulong clientId)
+    {
+        if (IsServer)
+        {
+            playerStates.Add(new PlayerLobbyState
+            {
+                ClientId = clientId,
+                IsReady = false
+            });
+
+            OnPlayerListChanged?.Invoke();
+        }
+    }
+
+    
 }

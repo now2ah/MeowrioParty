@@ -6,7 +6,6 @@ public class BoardScene : MonoBehaviour
 {
     [SerializeField] GameObject _cameraManagerPrefab;
     [SerializeField] GameObject _boardManagerPrefab;
-    [SerializeField] BoardManager _boardManager;
 
     private void Awake()
     {
@@ -35,11 +34,6 @@ public class BoardScene : MonoBehaviour
             }
         }
 
-        while (cameraManager == null)
-        {
-            yield return null;
-        }
-
         if (NetworkManager.Singleton.IsServer)
         {
             if (_boardManagerPrefab != null)
@@ -51,6 +45,9 @@ public class BoardScene : MonoBehaviour
                 }
             }
         }
+
         LeaderBoardManager.Instance.InitializeLeaderBoard(NetworkManager.Singleton.ConnectedClientsList.Count);
+
+        yield return null;
     }
 }

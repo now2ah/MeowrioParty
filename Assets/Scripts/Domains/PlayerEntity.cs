@@ -28,5 +28,11 @@ namespace Meowrio.Domain
             _ownedCoins.Add(gainCoinValue);
             Debug.Log($"Gain coin : {gainCoinValue}");
         }
+
+        public void LoseCoin(int loseCoinValue)
+        {
+            _ownedCoins.Lose(loseCoinValue);
+            Debug.Log($"Lose coin : {loseCoinValue}");
+        }
     }
 }

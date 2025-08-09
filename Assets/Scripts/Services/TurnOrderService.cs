@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Meowrio.Services
+namespace Meowrio.Service
 {
     public class TurnOrderService
     {

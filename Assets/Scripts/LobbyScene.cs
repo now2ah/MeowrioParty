@@ -26,11 +26,6 @@ public class LobbyScene : MonoBehaviour
             }
         }
 
-        while (networkManager == null)
-        {
-            yield return null;
-        }
-
         if (_lobbyManagerPrefab != null)
         {
             GameObject lobbyManagerObj = Instantiate(_lobbyManagerPrefab);
@@ -43,5 +38,6 @@ public class LobbyScene : MonoBehaviour
                 }
             }
         }
+        yield return null;
     }
 }
