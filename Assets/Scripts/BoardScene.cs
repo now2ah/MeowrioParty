@@ -5,7 +5,7 @@ using UnityEngine;
 public class BoardScene : MonoBehaviour
 {
     [SerializeField] GameObject _cameraManagerPrefab;
-    [SerializeField] GameObject _boardManagerPrefab;
+    [SerializeField] GameObject _boardGameManagerPrefab;
 
     private void Awake()
     {
@@ -36,9 +36,9 @@ public class BoardScene : MonoBehaviour
 
         if (NetworkManager.Singleton.IsServer)
         {
-            if (_boardManagerPrefab != null)
+            if (_boardGameManagerPrefab != null)
             {
-                GameObject boardManagerObj = Instantiate(_boardManagerPrefab);
+                GameObject boardManagerObj = Instantiate(_boardGameManagerPrefab);
                 if (boardManagerObj.TryGetComponent<NetworkObject>(out NetworkObject networkObject))
                 {
                     networkObject.Spawn();
@@ -46,7 +46,7 @@ public class BoardScene : MonoBehaviour
             }
         }
 
-        LeaderBoardManager.Instance.InitializeLeaderBoard(NetworkManager.Singleton.ConnectedClientsList.Count);
+        //LeaderBoardManager.Instance.InitializeLeaderBoard(NetworkManager.Singleton.ConnectedClientsList.Count);
 
         yield return null;
     }

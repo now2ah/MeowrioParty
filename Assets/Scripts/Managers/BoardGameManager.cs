@@ -3,6 +3,8 @@ using Meowrio.Service;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using Meowrio.Util;
+using Meowrio.Controller;
 
 namespace Meowrio.Manager
 {
@@ -16,16 +18,31 @@ namespace Meowrio.Manager
 
         TileService _tileService;
         BoardGameService _boardGameService;
+        CharacterFactory _characterFactory;
+        MapController _mapController;
 
+        BoardGameStateMachine _boardGameStateMachine;
+        IntroBoardGameState _introBoardGameState;
+        SetTurnOrderGameState _setTurnOrderGameState;
+        BoardGameState _boardGameState;
 
         public override void Awake()
         {
             base.Awake();
+            _characterFactory = gameObject.GetComponent<CharacterFactory>();
+            _mapController = gameObject.GetComponent<MapController>();
+            _boardGameStateMachine = new BoardGameStateMachine();
+            _introBoardGameState = new IntroBoardGameState();
+            _setTurnOrderGameState = new SetTurnOrderGameState();
+            _boardGameState = new BoardGameState();
         }
 
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
+
+            if (IsHost == false)
+                return;
 
             _tileService = new TileService(LoadMapTiles());
             _boardGameService = new BoardGameService(_tileService, NetworkManager.Singleton.ConnectedClientsList.Count);
@@ -33,11 +50,9 @@ namespace Meowrio.Manager
             {
                 ulong clientID = client.ClientId;
                 _boardGameService.AddPlayer((int)clientID, new PlayerEntity((int)clientID));
-            }
-
-            if (IsHost)
-            {
-                //_boardGameService.StartBoardGame(_tileService);
+                Transform character = _characterFactory.GenerateCharacter((ECharacterType)clientID);
+                character.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientID);
+                _mapController.PlaceToSpawnPoint(character.gameObject, (int)clientID);
             }
         }
 
@@ -67,7 +82,8 @@ namespace Meowrio.Manager
                     tileList.Add(new WarpTile(tileObj.tileIndex));
                 }
             }
-            tileList.Sort();
+
+            tileList.Sort((tile1, tile2) => tile1.CompareTo(tile2.IndexNumber));
 
             return tileList;
         }

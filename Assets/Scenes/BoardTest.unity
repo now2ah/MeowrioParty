@@ -285,8 +285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cameraManagerPrefab: {fileID: 5227898324358821237, guid: f1aa92239685f164d9f2b7689ccebb03, type: 3}
-  _boardManagerPrefab: {fileID: 6032905265896594968, guid: 57eb8b7c9ab77bb4ab40a00c95182489, type: 3}
-  _boardManager: {fileID: 0}
+  _boardGameManagerPrefab: {fileID: 6318635272755776465, guid: 14d04885bf4e67243bece090c4795047, type: 3}
 --- !u!4 &822877724
 Transform:
   m_ObjectHideFlags: 0
@@ -369,7 +368,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 577550842841661547, guid: 36df7ae6b38055f428c9b639254903c0, type: 3}
       propertyPath: m_Name
-      value: FianlMap
+      value: FinalMap
       objectReference: {fileID: 0}
     - target: {fileID: 651981890710775089, guid: 36df7ae6b38055f428c9b639254903c0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2665,15 +2664,15 @@ MonoBehaviour:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 822877724}
+  - {fileID: 149015673}
   - {fileID: 1349531661}
-  - {fileID: 1763287980}
   - {fileID: 1916563086}
   - {fileID: 1378778586}
   - {fileID: 1264429925}
   - {fileID: 847622374}
   - {fileID: 2111261697}
   - {fileID: 1164239739}
-  - {fileID: 822877724}
-  - {fileID: 149015673}
   - {fileID: 941017795}
+  - {fileID: 1763287980}
   - {fileID: 48617109}
