@@ -1,58 +1,80 @@
+using Meowrio.Manager;
 using Meowrio.Util;
 
 namespace Meowrio.Domain
 {
     public class IntroBoardGameState : IBoardGameState
     {
+        private BoardGameManager _boardGameManager;
+
+        public IntroBoardGameState(BoardGameManager boardGameManager)
+        {
+            _boardGameManager = boardGameManager;
+        }
+
         public void EnterState()
         {
-            throw new System.NotImplementedException();
+            _boardGameManager.GenerateCharacters();
         }
 
         public void ExitState()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public void UpdateState()
         {
-            throw new System.NotImplementedException();
+            
         }
     }
 
     public class SetTurnOrderGameState : IBoardGameState
     {
+        private BoardGameManager _boardGameManager;
+
+        public SetTurnOrderGameState(BoardGameManager boardGameManager)
+        {
+            _boardGameManager = boardGameManager;
+        }
+
         public void EnterState()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public void ExitState()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public void UpdateState()
         {
-            throw new System.NotImplementedException();
+            
         }
     }
 
     public class BoardGameState : IBoardGameState
     {
+        private BoardGameManager _boardGameManager;
+
+        public BoardGameState(BoardGameManager boardGameManager)
+        {
+            _boardGameManager = boardGameManager;
+        }
+
         public void EnterState()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public void ExitState()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public void UpdateState()
         {
-            throw new System.NotImplementedException();
+            
         }
     }
 }

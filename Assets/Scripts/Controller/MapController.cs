@@ -10,6 +10,7 @@ namespace Meowrio.Controller
         public void PlaceToSpawnPoint(GameObject gameObject, int playerNumber)
         {
             gameObject.transform.position = _spawnPointList[playerNumber].transform.position;
+            gameObject.transform.rotation = _spawnPointList[playerNumber].transform.rotation;
         }
     }
 }

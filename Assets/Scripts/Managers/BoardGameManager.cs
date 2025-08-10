@@ -32,9 +32,14 @@ namespace Meowrio.Manager
             _characterFactory = gameObject.GetComponent<CharacterFactory>();
             _mapController = gameObject.GetComponent<MapController>();
             _boardGameStateMachine = new BoardGameStateMachine();
-            _introBoardGameState = new IntroBoardGameState();
-            _setTurnOrderGameState = new SetTurnOrderGameState();
-            _boardGameState = new BoardGameState();
+            _introBoardGameState = new IntroBoardGameState(this);
+            _setTurnOrderGameState = new SetTurnOrderGameState(this);
+            _boardGameState = new BoardGameState(this);
+        }
+
+        public void Update()
+        {
+            _boardGameStateMachine.Update();
         }
 
         public override void OnNetworkSpawn()
@@ -44,8 +49,14 @@ namespace Meowrio.Manager
             if (IsHost == false)
                 return;
 
+
             _tileService = new TileService(LoadMapTiles());
             _boardGameService = new BoardGameService(_tileService, NetworkManager.Singleton.ConnectedClientsList.Count);
+            _boardGameStateMachine.StartState(_introBoardGameState);
+        }
+
+        public void GenerateCharacters()
+        {
             foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
             {
                 ulong clientID = client.ClientId;

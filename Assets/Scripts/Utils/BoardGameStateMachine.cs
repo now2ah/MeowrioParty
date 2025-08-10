@@ -4,10 +4,12 @@ namespace Meowrio.Util
 {
     public class BoardGameStateMachine
     {
+        bool _isRunning = false;
         IBoardGameState _currentState;
 
         public void StartState(IBoardGameState startState)
         {
+            _isRunning = true;
             _currentState = startState;
             _currentState.EnterState();
         }
@@ -21,7 +23,8 @@ namespace Meowrio.Util
 
         public void Update()
         {
-            _currentState.UpdateState();
+            if (_isRunning)
+                _currentState.UpdateState();
         }
     }
 
