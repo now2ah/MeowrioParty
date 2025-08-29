@@ -15,20 +15,19 @@ namespace Meowrio.Manager
     /// </summary>
     public class BoardGameManager : NetSingleton<BoardGameManager>
     {
-        [SerializeField] private CameraController _cameraController;
-
         private int DEFAULT_GAIN_COIN_VALUE = 3;
         private int DEFAULT_LOSE_COIN_VALUE = 3;
 
-        TileService _tileService;
-        BoardGameService _boardGameService;
-        CharacterFactory _characterFactory;
-        MapController _mapController;
+        private TileService _tileService;
+        private BoardGameService _boardGameService;
+        private CharacterFactory _characterFactory;
+        private MapController _mapController;
+        private CameraController _cameraController;
 
-        BoardGameStateMachine _boardGameStateMachine;
-        IntroBoardGameState _introBoardGameState;
-        SetTurnOrderGameState _setTurnOrderGameState;
-        BoardGameState _boardGameState;
+        private BoardGameStateMachine _boardGameStateMachine;
+        private IntroBoardGameState _introBoardGameState;
+        private SetTurnOrderGameState _setTurnOrderGameState;
+        private BoardGameState _boardGameState;
 
         public event Action OnIntroBoardGame;
 
@@ -43,9 +42,10 @@ namespace Meowrio.Manager
             _boardGameState = new BoardGameState(this);
         }
 
-        public void Update()
+        public void Start()
         {
-            _boardGameStateMachine.Update();
+            _cameraController = FindAnyObjectByType<CameraController>();
+            _boardGameStateMachine.StartState(_introBoardGameState);
         }
 
         public override void OnNetworkSpawn()
@@ -57,13 +57,17 @@ namespace Meowrio.Manager
 
             _tileService = new TileService(LoadMapTiles());
             _boardGameService = new BoardGameService(_tileService, NetworkManager.Singleton.ConnectedClientsList.Count);
-            _boardGameStateMachine.StartState(_introBoardGameState);
+        }
+
+        public void Update()
+        {
+            _boardGameStateMachine.Update();
         }
 
         public async void IntroSequenceAsync()
         {
             GenerateCharacters();
-            _cameraController.ChangeCamera(CameraType.Board);
+            _cameraController.ChangeCameraRpc(CameraType.Board);
 
             await Task.Delay(2000);
 
@@ -104,6 +108,9 @@ namespace Meowrio.Manager
 
         private void GenerateCharacters()
         {
+            if (IsServer == false)
+                return;
+
             foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
             {
                 ulong clientID = client.ClientId;
@@ -113,8 +120,6 @@ namespace Meowrio.Manager
                 _mapController.PlaceToSpawnPoint(character.gameObject, (int)clientID);
             }
         }
-
-        
     }
 }
 

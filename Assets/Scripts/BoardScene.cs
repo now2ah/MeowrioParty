@@ -23,16 +23,16 @@ public class BoardScene : MonoBehaviour
 
     private IEnumerator LoadManagersCoroutine()
     {
-        CameraManager cameraManager = null;
+        //CameraManager cameraManager = null;
         
-        if (_cameraManagerPrefab != null)
-        {
-            GameObject cameraManagerObj = Instantiate(_cameraManagerPrefab);
-            if (cameraManagerObj.TryGetComponent<CameraManager>(out CameraManager cameraManagerComponent))
-            {
-                cameraManager = cameraManagerComponent;
-            }
-        }
+        //if (_cameraManagerPrefab != null)
+        //{
+        //    GameObject cameraManagerObj = Instantiate(_cameraManagerPrefab);
+        //    if (cameraManagerObj.TryGetComponent<CameraManager>(out CameraManager cameraManagerComponent))
+        //    {
+        //        cameraManager = cameraManagerComponent;
+        //    }
+        //}
 
         if (NetworkManager.Singleton.IsServer)
         {

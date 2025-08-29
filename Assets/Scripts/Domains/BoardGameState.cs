@@ -7,7 +7,6 @@ namespace Meowrio.Domain
     public class IntroBoardGameState : IBoardGameState
     {
         private BoardGameManager _boardGameManager;
-        private event Action _onIntroStateCompleted;
 
         public IntroBoardGameState(BoardGameManager boardGameManager)
         {

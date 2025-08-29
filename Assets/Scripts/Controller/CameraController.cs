@@ -27,7 +27,7 @@ namespace Meowrio.Controller
         }
 
         [Rpc(SendTo.ClientsAndHost)]
-        public void ChangeCamera(CameraType type)
+        public void ChangeCameraRpc(CameraType type)
         {
             if (_virtualCameraList != null && _virtualCameraList.Count > 0)
             {
