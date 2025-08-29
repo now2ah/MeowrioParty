@@ -4,10 +4,11 @@ using UnityEngine;
 using Unity.Netcode;
 using System.Collections;
 using System;
+using Meowrio.Manager;
 
 public class PlayerController : NetworkBehaviour
 {
-    [SerializeField] private InputManagerSO _inputManager;
+    //[SerializeField] private InputManagerSO _inputManager;
 
     [SerializeField] private DiceController _diceController;
     [SerializeField] private List<GameObject> _diceNumberObjects = new List<GameObject>();
@@ -18,10 +19,17 @@ public class PlayerController : NetworkBehaviour
     public bool IsMoving { get; private set; }
     [SerializeField] private float moveSpeed = 3f;
 
+
     private void Awake()
     {
-        _inputManager.OnConfirmButtonPerformed += _inputManager_OnConfirmButtonPerformed;
+        //_inputManager.OnConfirmButtonPerformed += _inputManager_OnConfirmButtonPerformed;
         _animator = GetComponent<Animator>();
+        BoardGameManager.Instance.OnSetTurnOrderStateStarted += BoardGameManager_OnSetTurnOrderStateStarted;
+    }
+
+    private void BoardGameManager_OnSetTurnOrderStateStarted()
+    {
+        ToggleDiceRpc(true);
     }
 
     private void _inputManager_OnConfirmButtonPerformed(object sender, bool e)
@@ -35,6 +43,13 @@ public class PlayerController : NetworkBehaviour
     void Start()
     {
         DOTween.Init(false, true, LogBehaviour.Verbose).SetCapacity(200, 50);
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void MoveToRpc(Vector3 position, Quaternion rotation)
+    {
+        gameObject.transform.position = transform.position;
+        gameObject.transform.rotation = transform.rotation;
     }
 
     public void MoveTo(TileController nextTile)
@@ -101,6 +116,7 @@ public class PlayerController : NetworkBehaviour
     {
         StartCoroutine(TurnOnCoinSecCo(_coinPlusUI));
     }
+
     [Rpc(SendTo.Everyone)]
     public void TurnOnCoinMinusRpc()
     {
@@ -113,6 +129,7 @@ public class PlayerController : NetworkBehaviour
         yield return new WaitForSeconds(3f);
         go.SetActive(false);
     }
+
     public void TransportPlayer(TileController tile)
     {
         gameObject.transform.position = tile.gameObject.transform.position;

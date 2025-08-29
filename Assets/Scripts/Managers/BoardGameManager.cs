@@ -1,12 +1,14 @@
+using Meowrio.Controller;
 using Meowrio.Domain;
 using Meowrio.Service;
-using System.Collections.Generic;
-using UnityEngine;
-using Unity.Netcode;
 using Meowrio.Util;
-using Meowrio.Controller;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.Netcode;
+using UnityEditor.PackageManager;
+using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 namespace Meowrio.Manager
 {
@@ -29,7 +31,8 @@ namespace Meowrio.Manager
         private SetTurnOrderGameState _setTurnOrderGameState;
         private BoardGameState _boardGameState;
 
-        public event Action OnIntroBoardGame;
+        public event Action<int> OnPlayerInput;
+        public event Action OnSetTurnOrderStateStarted;
 
         public override void Awake()
         {
@@ -64,6 +67,13 @@ namespace Meowrio.Manager
             _boardGameStateMachine.Update();
         }
 
+        public int PlayerCount => _boardGameService.PlayerCount;
+
+        public void ProcessInput(int clientID)
+        {
+            OnPlayerInput.Invoke(clientID);
+        }
+
         public async void IntroSequenceAsync()
         {
             GenerateCharacters();
@@ -72,6 +82,22 @@ namespace Meowrio.Manager
             await Task.Delay(2000);
 
             _boardGameStateMachine.ChangeState(_setTurnOrderGameState);
+            OnSetTurnOrderStateStarted.Invoke();
+        }
+
+        public void SetTurnOrderSequence()
+        {
+            _cameraController.ChangeCameraRpc(CameraType.Stage);
+        }
+
+        public void RollDiceForSetTurnOrder(int playerID)
+        {
+            _boardGameService.RollDiceForSetTurnOrder(playerID);
+        }
+
+        public void SetTurnOrder()
+        {
+            _boardGameService.SetTurnOrder();
         }
 
         private IReadOnlyList<Tile> LoadMapTiles()
@@ -117,7 +143,9 @@ namespace Meowrio.Manager
                 _boardGameService.AddPlayer((int)clientID, new PlayerEntity((int)clientID));
                 Transform character = _characterFactory.GenerateCharacter((ECharacterType)clientID);
                 character.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientID);
-                _mapController.PlaceToSpawnPoint(character.gameObject, (int)clientID);
+
+                Transform spawnPoint = _mapController.GetSpawnPointTransform((int)clientID);
+                character.GetComponent<PlayerController>().MoveToRpc(spawnPoint.position, spawnPoint.rotation);
             }
         }
     }

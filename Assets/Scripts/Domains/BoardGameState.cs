@@ -31,15 +31,26 @@ namespace Meowrio.Domain
     public class SetTurnOrderGameState : IBoardGameState
     {
         private BoardGameManager _boardGameManager;
+        private int _completeRollPlayerCount = 0;
 
         public SetTurnOrderGameState(BoardGameManager boardGameManager)
         {
             _boardGameManager = boardGameManager;
+            _boardGameManager.OnPlayerInput += BoardGameManager_OnPlayerInput;
+        }
+
+        private void BoardGameManager_OnPlayerInput(int playerID)
+        {
+            _boardGameManager.RollDiceForSetTurnOrder(playerID);
+            _completeRollPlayerCount++;
+
+            if (_completeRollPlayerCount == _boardGameManager.PlayerCount)
+                _boardGameManager.SetTurnOrder();
         }
 
         public void EnterState()
         {
-            CameraManager.Instance.ChangeCamera(CameraType.Stage);
+            _boardGameManager.SetTurnOrderSequence();
         }
 
         public void ExitState()

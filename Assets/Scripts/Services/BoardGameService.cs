@@ -31,6 +31,8 @@ namespace Meowrio.Service
             _playerDic = new Dictionary<int, PlayerEntity>();
         }
 
+        public int PlayerCount => _playerDic.Count;
+
         public void AddPlayer(int playerID, PlayerEntity playerEntity)
         {
             _playerDic.Add(playerID, playerEntity);
