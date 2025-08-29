@@ -1,6 +1,5 @@
 using UnityEngine;
 using Unity.Cinemachine;
-using Unity.VisualScripting;
 using System.Collections.Generic;
 using Unity.Netcode;
 
@@ -33,6 +32,7 @@ public class CameraManager : Singleton<CameraManager>
         }
     }
 
+    [Rpc(SendTo.ClientsAndHost)]
     public void ChangeCamera(CameraType type)
     {
         if (_virtualCameraList != null && _virtualCameraList.Count > 0)

@@ -1,11 +1,13 @@
 using Meowrio.Manager;
 using Meowrio.Util;
+using System;
 
 namespace Meowrio.Domain
 {
     public class IntroBoardGameState : IBoardGameState
     {
         private BoardGameManager _boardGameManager;
+        private event Action _onIntroStateCompleted;
 
         public IntroBoardGameState(BoardGameManager boardGameManager)
         {
@@ -14,12 +16,11 @@ namespace Meowrio.Domain
 
         public void EnterState()
         {
-            _boardGameManager.GenerateCharacters();
+            _boardGameManager.IntroSequenceAsync();
         }
 
         public void ExitState()
         {
-            
         }
 
         public void UpdateState()
@@ -39,7 +40,7 @@ namespace Meowrio.Domain
 
         public void EnterState()
         {
-            
+            CameraManager.Instance.ChangeCamera(CameraType.Stage);
         }
 
         public void ExitState()

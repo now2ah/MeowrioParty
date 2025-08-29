@@ -5,6 +5,8 @@ using UnityEngine;
 using Unity.Netcode;
 using Meowrio.Util;
 using Meowrio.Controller;
+using System;
+using System.Threading.Tasks;
 
 namespace Meowrio.Manager
 {
@@ -13,6 +15,8 @@ namespace Meowrio.Manager
     /// </summary>
     public class BoardGameManager : NetSingleton<BoardGameManager>
     {
+        [SerializeField] private CameraController _cameraController;
+
         private int DEFAULT_GAIN_COIN_VALUE = 3;
         private int DEFAULT_LOSE_COIN_VALUE = 3;
 
@@ -25,6 +29,8 @@ namespace Meowrio.Manager
         IntroBoardGameState _introBoardGameState;
         SetTurnOrderGameState _setTurnOrderGameState;
         BoardGameState _boardGameState;
+
+        public event Action OnIntroBoardGame;
 
         public override void Awake()
         {
@@ -49,22 +55,19 @@ namespace Meowrio.Manager
             if (IsHost == false)
                 return;
 
-
             _tileService = new TileService(LoadMapTiles());
             _boardGameService = new BoardGameService(_tileService, NetworkManager.Singleton.ConnectedClientsList.Count);
             _boardGameStateMachine.StartState(_introBoardGameState);
         }
 
-        public void GenerateCharacters()
+        public async void IntroSequenceAsync()
         {
-            foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
-            {
-                ulong clientID = client.ClientId;
-                _boardGameService.AddPlayer((int)clientID, new PlayerEntity((int)clientID));
-                Transform character = _characterFactory.GenerateCharacter((ECharacterType)clientID);
-                character.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientID);
-                _mapController.PlaceToSpawnPoint(character.gameObject, (int)clientID);
-            }
+            GenerateCharacters();
+            _cameraController.ChangeCamera(CameraType.Board);
+
+            await Task.Delay(2000);
+
+            _boardGameStateMachine.ChangeState(_setTurnOrderGameState);
         }
 
         private IReadOnlyList<Tile> LoadMapTiles()
@@ -98,6 +101,20 @@ namespace Meowrio.Manager
 
             return tileList;
         }
+
+        private void GenerateCharacters()
+        {
+            foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
+            {
+                ulong clientID = client.ClientId;
+                _boardGameService.AddPlayer((int)clientID, new PlayerEntity((int)clientID));
+                Transform character = _characterFactory.GenerateCharacter((ECharacterType)clientID);
+                character.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientID);
+                _mapController.PlaceToSpawnPoint(character.gameObject, (int)clientID);
+            }
+        }
+
+        
     }
 }
 
