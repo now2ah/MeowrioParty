@@ -1,6 +1,7 @@
 using Meowrio.Manager;
 using Meowrio.Util;
 using System;
+using Unity.Netcode;
 
 namespace Meowrio.Domain
 {
@@ -36,10 +37,10 @@ namespace Meowrio.Domain
         public SetTurnOrderGameState(BoardGameManager boardGameManager)
         {
             _boardGameManager = boardGameManager;
-            _boardGameManager.OnPlayerInput += BoardGameManager_OnPlayerInput;
         }
 
-        private void BoardGameManager_OnPlayerInput(int playerID)
+        [Rpc(SendTo.Server)]
+        private void BoardGameManager_OnPlayerInputRpc(int playerID)
         {
             _boardGameManager.RollDiceForSetTurnOrder(playerID);
             _completeRollPlayerCount++;
@@ -50,12 +51,13 @@ namespace Meowrio.Domain
 
         public void EnterState()
         {
+            _boardGameManager.OnPlayerInput += BoardGameManager_OnPlayerInputRpc;
             _boardGameManager.SetTurnOrderSequence();
         }
 
         public void ExitState()
         {
-            
+            _boardGameManager.OnPlayerInput -= BoardGameManager_OnPlayerInputRpc;
         }
 
         public void UpdateState()

@@ -1,16 +1,21 @@
 ﻿using Meowrio.Manager;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace Meowrio.Util
 {
-    public class InputHandler : NetworkBehaviour
+    public class InputHandler : MonoBehaviour
     {
-        private BoardGameManager _boardGameManager;
-        private InputManagerSO _inputManager;
+        [SerializeField] private InputManagerSO _inputManager;
 
-        public override void OnNetworkSpawn()
+        public void OnEnable()
         {
             _inputManager.OnConfirmButtonPerformed += InputManager_OnConfirmButtonPerformed;
+        }
+
+        public void OnDisable()
+        {
+            _inputManager.OnConfirmButtonPerformed -= InputManager_OnConfirmButtonPerformed;
         }
 
         private void InputManager_OnConfirmButtonPerformed(object sender, bool e)
@@ -21,7 +26,7 @@ namespace Meowrio.Util
         [Rpc(SendTo.Server)]
         private void RequestInputServerRpc()
         {
-            _boardGameManager.ProcessInput((int)OwnerClientId);
+            BoardGameManager.Instance.ProcessInput((int)NetworkManager.Singleton.LocalClientId);
         }
     }
 }

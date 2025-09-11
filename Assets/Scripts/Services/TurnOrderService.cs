@@ -2,6 +2,7 @@ using Meowrio.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Meowrio.Service
 {
@@ -44,6 +45,11 @@ namespace Meowrio.Service
             for (int i = 0; i < _playerDicePairList.Count; ++i)
             {
                 _turnOrderArray[i] = _playerDicePairList[i].playerId;
+            }
+
+            for (int i = 0; i < _turnOrderArray.Length; ++i)
+            {
+                Debug.Log($" order : {i} / player : {_turnOrderArray[i]}");
             }
         }
 

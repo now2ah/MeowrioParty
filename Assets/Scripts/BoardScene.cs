@@ -1,3 +1,4 @@
+using Meowrio.Util;
 using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
@@ -6,6 +7,7 @@ public class BoardScene : MonoBehaviour
 {
     [SerializeField] GameObject _cameraManagerPrefab;
     [SerializeField] GameObject _boardGameManagerPrefab;
+    [SerializeField] GameObject _inputHandlerPrefab;
 
     private void Awake()
     {
@@ -24,7 +26,7 @@ public class BoardScene : MonoBehaviour
     private IEnumerator LoadManagersCoroutine()
     {
         //CameraManager cameraManager = null;
-        
+
         //if (_cameraManagerPrefab != null)
         //{
         //    GameObject cameraManagerObj = Instantiate(_cameraManagerPrefab);
@@ -34,17 +36,25 @@ public class BoardScene : MonoBehaviour
         //    }
         //}
 
+        
         if (NetworkManager.Singleton.IsServer)
         {
             if (_boardGameManagerPrefab != null)
             {
-                GameObject boardManagerObj = Instantiate(_boardGameManagerPrefab);
-                if (boardManagerObj.TryGetComponent<NetworkObject>(out NetworkObject networkObject))
+                GameObject boardGameManagerObj = Instantiate(_boardGameManagerPrefab);
+                if (boardGameManagerObj.TryGetComponent<NetworkObject>(out NetworkObject boardGameManagerNetworkObject))
                 {
-                    networkObject.Spawn();
+                    boardGameManagerNetworkObject.Spawn();
                 }
             }
         }
+
+        if (_inputHandlerPrefab != null)
+        {
+            GameObject inputHandlerObj = Instantiate(_inputHandlerPrefab);
+        }
+
+
 
         //LeaderBoardManager.Instance.InitializeLeaderBoard(NetworkManager.Singleton.ConnectedClientsList.Count);
 
