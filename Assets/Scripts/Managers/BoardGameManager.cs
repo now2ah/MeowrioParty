@@ -142,10 +142,10 @@ namespace Meowrio.Manager
                 ulong clientID = client.ClientId;
                 _boardGameService.AddPlayer((int)clientID, new PlayerEntity((int)clientID));
                 Transform character = _characterFactory.GenerateCharacter((ECharacterType)clientID);
-                character.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientID);
-
                 Transform spawnPoint = _mapController.GetSpawnPointTransform((int)clientID);
-                character.GetComponent<PlayerController>().MoveToRpc(spawnPoint.position, spawnPoint.rotation);
+                character.transform.position = spawnPoint.position;
+                character.transform.rotation = spawnPoint.rotation;
+                character.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientID);
             }
         }
     }
