@@ -39,7 +39,6 @@ namespace Meowrio.Domain
             _boardGameManager = boardGameManager;
         }
 
-        [Rpc(SendTo.Server)]
         private void BoardGameManager_OnPlayerInputRpc(int playerID)
         {
             _boardGameManager.RollDiceForSetTurnOrder(playerID);
@@ -51,13 +50,17 @@ namespace Meowrio.Domain
 
         public void EnterState()
         {
-            _boardGameManager.OnPlayerInput += BoardGameManager_OnPlayerInputRpc;
-            _boardGameManager.SetTurnOrderSequence();
+            if (NetworkManager.Singleton.IsServer)
+            {
+                _boardGameManager.OnPlayerInput += BoardGameManager_OnPlayerInputRpc;
+                _boardGameManager.SetTurnOrderSequence();
+            }
         }
 
         public void ExitState()
         {
-            _boardGameManager.OnPlayerInput -= BoardGameManager_OnPlayerInputRpc;
+            if (NetworkManager.Singleton.IsServer)
+                _boardGameManager.OnPlayerInput -= BoardGameManager_OnPlayerInputRpc;
         }
 
         public void UpdateState()

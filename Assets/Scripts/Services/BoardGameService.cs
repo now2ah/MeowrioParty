@@ -12,7 +12,7 @@ namespace Meowrio.Service
     public class BoardGameService
     {
         private const int MIN_TURNORDER_DICENUMBER = 1;
-        private const int MAX_TURNORDER_DICENUMBER = 10;
+        private const int MAX_TURNORDER_DICENUMBER = 6;
         private const int DEFAULT_ROUND = 3;
 
         private TileService _tileService;
@@ -38,11 +38,12 @@ namespace Meowrio.Service
             _playerDic.Add(playerID, playerEntity);
         }
 
-        public void RollDiceForSetTurnOrder(int playerID)
+        public int RollDiceForSetTurnOrder(int playerID)
         {
             int diceNumber = _diceService.GetRandomDiceNumber();
             _turnOrderService.RegisterPlayerDiceNumber(playerID, diceNumber);
             Debug.Log($"Player {playerID} roll the dice : {diceNumber}");
+            return diceNumber;
         }
 
         public void SetTurnOrder()

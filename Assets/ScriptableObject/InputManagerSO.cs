@@ -11,7 +11,7 @@ public class InputManagerSO : ScriptableObject
 
     public event EventHandler<bool> OnConfirmButtonStarted;
     public event EventHandler<bool> OnConfirmButtonPerformed;
-    public event EventHandler<bool> OnConfirmButtonCancelded;
+    public event EventHandler<bool> OnConfirmButtonCanceled;
 
     private void OnEnable()
     {
@@ -50,6 +50,6 @@ public class InputManagerSO : ScriptableObject
 
     private void OnConfirmAction_canceled(InputAction.CallbackContext context)
     {
-        OnConfirmButtonCancelded?.Invoke(this, context.ReadValueAsButton());
+        OnConfirmButtonCanceled?.Invoke(this, context.ReadValueAsButton());
     }
 }

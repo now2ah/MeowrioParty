@@ -6,9 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Netcode;
-using UnityEditor.PackageManager;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 namespace Meowrio.Manager
 {
@@ -33,6 +31,7 @@ namespace Meowrio.Manager
 
         public event Action<int> OnPlayerInput;
         public event Action OnSetTurnOrderStateStarted;
+        public event Action<int, int> OnRollDiceForSetTurnOrder;
 
         public override void Awake()
         {
@@ -48,6 +47,14 @@ namespace Meowrio.Manager
         public void Start()
         {
             _cameraController = FindAnyObjectByType<CameraController>();
+            //if (IsServer)
+            //{
+            //    if (_cameraController.TryGetComponent<NetworkObject>(out NetworkObject networkObject))
+            //    {
+            //        networkObject.Spawn();
+            //    }
+            //}
+            
             _boardGameStateMachine.StartState(_introBoardGameState);
         }
 
@@ -92,7 +99,8 @@ namespace Meowrio.Manager
 
         public void RollDiceForSetTurnOrder(int playerID)
         {
-            _boardGameService.RollDiceForSetTurnOrder(playerID);
+            int diceNumber = _boardGameService.RollDiceForSetTurnOrder(playerID);
+            OnRollDiceForSetTurnOrder.Invoke(playerID, diceNumber);
         }
 
         public void SetTurnOrder()
@@ -140,8 +148,10 @@ namespace Meowrio.Manager
             foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
             {
                 ulong clientID = client.ClientId;
-                _boardGameService.AddPlayer((int)clientID, new PlayerEntity((int)clientID));
+                PlayerEntity playerEnity = new PlayerEntity((int)clientID);
+                _boardGameService.AddPlayer((int)clientID, playerEnity);
                 Transform character = _characterFactory.GenerateCharacter((ECharacterType)clientID);
+                character.GetComponent<PlayerController>().Initialize(playerEnity);
                 Transform spawnPoint = _mapController.GetSpawnPointTransform((int)clientID);
                 character.transform.position = spawnPoint.position;
                 character.transform.rotation = spawnPoint.rotation;

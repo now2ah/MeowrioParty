@@ -47,12 +47,18 @@ public class BoardScene : MonoBehaviour
                     boardGameManagerNetworkObject.Spawn();
                 }
             }
+
+            if (_inputHandlerPrefab != null)
+            {
+                GameObject inputHandlerObj = Instantiate(_inputHandlerPrefab);
+                if (inputHandlerObj.TryGetComponent<NetworkObject>(out NetworkObject inputHandlerNetworkObject))
+                {
+                    inputHandlerNetworkObject.Spawn();
+                }
+            }
         }
 
-        if (_inputHandlerPrefab != null)
-        {
-            GameObject inputHandlerObj = Instantiate(_inputHandlerPrefab);
-        }
+        
 
 
 

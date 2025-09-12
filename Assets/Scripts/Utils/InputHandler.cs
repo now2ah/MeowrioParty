@@ -4,29 +4,29 @@ using UnityEngine;
 
 namespace Meowrio.Util
 {
-    public class InputHandler : MonoBehaviour
+    public class InputHandler : NetworkBehaviour
     {
         [SerializeField] private InputManagerSO _inputManager;
 
         public void OnEnable()
         {
-            _inputManager.OnConfirmButtonPerformed += InputManager_OnConfirmButtonPerformed;
+            _inputManager.OnConfirmButtonCanceled += InputManager_OnConfirmButtonCanceled;
         }
 
         public void OnDisable()
         {
-            _inputManager.OnConfirmButtonPerformed -= InputManager_OnConfirmButtonPerformed;
+            _inputManager.OnConfirmButtonCanceled -= InputManager_OnConfirmButtonCanceled;
         }
 
-        private void InputManager_OnConfirmButtonPerformed(object sender, bool e)
+        private void InputManager_OnConfirmButtonCanceled(object sender, bool e)
         {
-            RequestInputServerRpc();
+            RequestInputServerRpc((int)NetworkManager.Singleton.LocalClientId);
         }
 
         [Rpc(SendTo.Server)]
-        private void RequestInputServerRpc()
+        private void RequestInputServerRpc(int clientId)
         {
-            BoardGameManager.Instance.ProcessInput((int)NetworkManager.Singleton.LocalClientId);
+            BoardGameManager.Instance.ProcessInput(clientId);
         }
     }
 }

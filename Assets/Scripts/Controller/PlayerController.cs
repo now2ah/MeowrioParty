@@ -5,16 +5,17 @@ using Unity.Netcode;
 using System.Collections;
 using System;
 using Meowrio.Manager;
+using Meowrio.Domain;
 
 public class PlayerController : NetworkBehaviour
 {
-    //[SerializeField] private InputManagerSO _inputManager;
-
     [SerializeField] private DiceController _diceController;
     [SerializeField] private List<GameObject> _diceNumberObjects = new List<GameObject>();
     [SerializeField] private GameObject _coinPlusUI;
     [SerializeField] private GameObject _coinMinusUI;
     private Animator _animator;
+
+    private PlayerEntity _playerEntity;
 
     public bool IsMoving { get; private set; }
     [SerializeField] private float moveSpeed = 3f;
@@ -24,7 +25,19 @@ public class PlayerController : NetworkBehaviour
     {
         //_inputManager.OnConfirmButtonPerformed += _inputManager_OnConfirmButtonPerformed;
         _animator = GetComponent<Animator>();
+        
+    }
+
+    private void OnEnable()
+    {
         BoardGameManager.Instance.OnSetTurnOrderStateStarted += BoardGameManager_OnSetTurnOrderStateStarted;
+        BoardGameManager.Instance.OnRollDiceForSetTurnOrder += BoardGameManager_OnRollDiceForSetTurnOrder;
+    }
+
+    private void OnDisable()
+    {
+        BoardGameManager.Instance.OnSetTurnOrderStateStarted -= BoardGameManager_OnSetTurnOrderStateStarted;
+        BoardGameManager.Instance.OnRollDiceForSetTurnOrder -= BoardGameManager_OnRollDiceForSetTurnOrder;
     }
 
     private void BoardGameManager_OnSetTurnOrderStateStarted()
@@ -32,17 +45,20 @@ public class PlayerController : NetworkBehaviour
         ToggleDiceRpc(true);
     }
 
-    private void _inputManager_OnConfirmButtonPerformed(object sender, bool e)
+    private void BoardGameManager_OnRollDiceForSetTurnOrder(int playerID, int diceNumber)
     {
-        if (IsOwner)
-        {
-            BoardManager.Instance.ProcessPlayerInputServerRpc(NetworkManager.Singleton.LocalClientId);
-        }
+        if (playerID == _playerEntity.PlayerID)
+            RollDiceSequenceRpc(diceNumber);
     }
 
     void Start()
     {
         DOTween.Init(false, true, LogBehaviour.Verbose).SetCapacity(200, 50);
+    }
+
+    public void Initialize(PlayerEntity playerEntity)
+    {
+        _playerEntity = playerEntity;
     }
 
     [Rpc(SendTo.Everyone)]

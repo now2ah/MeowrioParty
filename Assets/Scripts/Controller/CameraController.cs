@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Meowrio.Controller
 {
-    public class CameraController : MonoBehaviour
+    public class CameraController : NetworkBehaviour
     {
         [SerializeField] private GameObject _focusObject;
 

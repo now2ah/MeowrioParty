@@ -45,7 +45,7 @@ public class MiniGamePlayerController : NetworkBehaviour
         _animator.SetBool("isMoving", true);
 
         _speedStage.OnValueChanged += OnSpeedStageChanged;
-        inputManager.OnConfirmButtonPerformed += GetInput;
+        inputManager.OnConfirmButtonCanceled += GetInput;
 
         if (IsOwner)
         {
@@ -59,7 +59,7 @@ public class MiniGamePlayerController : NetworkBehaviour
 
         if (IsOwner && inputManager != null)
         {
-            inputManager.OnConfirmButtonPerformed -= GetInput;
+            inputManager.OnConfirmButtonCanceled -= GetInput;
         }
     }
 
