@@ -8,14 +8,16 @@ namespace Meowrio.Util
     {
         [SerializeField] private InputManagerSO _inputManager;
 
-        public void OnEnable()
+        public override void OnNetworkSpawn()
         {
-            _inputManager.OnConfirmButtonCanceled += InputManager_OnConfirmButtonCanceled;
+            if (IsOwner)
+                _inputManager.OnConfirmButtonCanceled += InputManager_OnConfirmButtonCanceled;
         }
 
-        public void OnDisable()
+        public override void OnNetworkDespawn()
         {
-            _inputManager.OnConfirmButtonCanceled -= InputManager_OnConfirmButtonCanceled;
+            if (IsOwner)
+                _inputManager.OnConfirmButtonCanceled -= InputManager_OnConfirmButtonCanceled;
         }
 
         private void InputManager_OnConfirmButtonCanceled(object sender, bool e)
