@@ -10,6 +10,13 @@ using UnityEngine;
 
 namespace Meowrio.Manager
 {
+    public enum EGameState
+    {
+        IntroBoard,
+        SetTurnOrder,
+        Board,
+    }
+
     /// <summary>
     /// BoardGame의 진행을 관리한다
     /// </summary>
@@ -24,10 +31,11 @@ namespace Meowrio.Manager
         private MapController _mapController;
         private CameraController _cameraController;
 
+        private Dictionary<EGameState, IBoardGameState> _gamePhaseDic;
         private BoardGameStateMachine _boardGameStateMachine;
-        private IntroBoardGameState _introBoardGameState;
-        private SetTurnOrderGameState _setTurnOrderGameState;
-        private BoardGameState _boardGameState;
+        //private IntroBoardGameState _introBoardGameState;
+        //private SetTurnOrderGameState _setTurnOrderGameState;
+        //private BoardGameState _boardGameState;
 
         public event Action<int> OnPlayerInput;
         public event Action OnSetTurnOrderStateStarted;
@@ -39,9 +47,12 @@ namespace Meowrio.Manager
             _characterFactory = gameObject.GetComponent<CharacterFactory>();
             _mapController = gameObject.GetComponent<MapController>();
             _boardGameStateMachine = new BoardGameStateMachine();
-            _introBoardGameState = new IntroBoardGameState(this);
-            _setTurnOrderGameState = new SetTurnOrderGameState(this);
-            _boardGameState = new BoardGameState(this);
+            _gamePhaseDic = new Dictionary<EGameState, IBoardGameState>() 
+            {
+                {EGameState.IntroBoard,  new IntroBoardGameState(this)},
+                {EGameState.SetTurnOrder,  new SetTurnOrderGameState(this)},
+                {EGameState.Board,  new BoardGameState(this)},
+            };
         }
 
         public void Start()
@@ -54,8 +65,8 @@ namespace Meowrio.Manager
             //        networkObject.Spawn();
             //    }
             //}
-            
-            _boardGameStateMachine.StartState(_introBoardGameState);
+
+            _boardGameStateMachine.StartState(_gamePhaseDic[EGameState.IntroBoard]);
         }
 
         public override void OnNetworkSpawn()
@@ -88,7 +99,7 @@ namespace Meowrio.Manager
 
             await Task.Delay(2000);
 
-            _boardGameStateMachine.ChangeState(_setTurnOrderGameState);
+            _boardGameStateMachine.ChangeState(_gamePhaseDic[EGameState.SetTurnOrder]);
             OnSetTurnOrderStateStarted.Invoke();
         }
 
@@ -106,6 +117,8 @@ namespace Meowrio.Manager
         public void SetTurnOrder()
         {
             _boardGameService.SetTurnOrder();
+
+            _boardGameStateMachine.ChangeState(_gamePhaseDic[EGameState.Board]);
         }
 
         private IReadOnlyList<Tile> LoadMapTiles()
