@@ -33,9 +33,7 @@ namespace Meowrio.Manager
 
         private Dictionary<EGameState, IBoardGameState> _gamePhaseDic;
         private BoardGameStateMachine _boardGameStateMachine;
-        //private IntroBoardGameState _introBoardGameState;
-        //private SetTurnOrderGameState _setTurnOrderGameState;
-        //private BoardGameState _boardGameState;
+        private List<ulong> _playerNetObjectID;
 
         public event Action<int> OnPlayerInput;
         public event Action OnSetTurnOrderStateStarted;
@@ -47,6 +45,7 @@ namespace Meowrio.Manager
             _characterFactory = gameObject.GetComponent<CharacterFactory>();
             _mapController = gameObject.GetComponent<MapController>();
             _boardGameStateMachine = new BoardGameStateMachine();
+            _playerNetObjectID = new List<ulong>();
             _gamePhaseDic = new Dictionary<EGameState, IBoardGameState>() 
             {
                 {EGameState.IntroBoard,  new IntroBoardGameState(this)},
@@ -58,14 +57,6 @@ namespace Meowrio.Manager
         public void Start()
         {
             _cameraController = FindAnyObjectByType<CameraController>();
-            //if (IsServer)
-            //{
-            //    if (_cameraController.TryGetComponent<NetworkObject>(out NetworkObject networkObject))
-            //    {
-            //        networkObject.Spawn();
-            //    }
-            //}
-
             _boardGameStateMachine.StartState(_gamePhaseDic[EGameState.IntroBoard]);
         }
 
@@ -73,7 +64,7 @@ namespace Meowrio.Manager
         {
             base.OnNetworkSpawn();
 
-            if (IsHost == false)
+            if (IsServer == false)
                 return;
 
             _tileService = new TileService(LoadMapTiles());
@@ -161,14 +152,14 @@ namespace Meowrio.Manager
             foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
             {
                 ulong clientID = client.ClientId;
-                PlayerEntity playerEnity = new PlayerEntity((int)clientID);
-                _boardGameService.AddPlayer((int)clientID, playerEnity);
+                _boardGameService.AddPlayer((int)clientID);
                 Transform character = _characterFactory.GenerateCharacter((ECharacterType)clientID);
-                character.GetComponent<PlayerController>().Initialize(playerEnity);
                 Transform spawnPoint = _mapController.GetSpawnPointTransform((int)clientID);
                 character.transform.position = spawnPoint.position;
                 character.transform.rotation = spawnPoint.rotation;
                 character.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientID);
+                _playerNetObjectID.Add(character.GetComponent<NetworkObject>().NetworkObjectId);
+                PlayerController controller = character.GetComponent<PlayerController>();
             }
         }
     }

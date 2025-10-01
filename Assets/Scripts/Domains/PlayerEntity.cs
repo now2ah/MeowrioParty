@@ -1,9 +1,14 @@
-﻿using UnityEngine;
+﻿using System;
+using Unity.VisualScripting;
+using UnityEngine;
 
 namespace Meowrio.Domain
 {
     public class PlayerEntity
     {
+        public event Action<int, int> OnWarp;
+        public event Action<int, int> OnMove;
+
         private const int PLAYER_START_COIN_VALUE = 10;
 
         private int _playerId;
@@ -18,9 +23,17 @@ namespace Meowrio.Domain
             _ownedCoins = new Coin(PLAYER_START_COIN_VALUE);
         }
 
+        public void WarpTo(int nextTileIndex)
+        {
+            CurrentTileIndex = nextTileIndex;
+            OnWarp?.Invoke(PlayerID, CurrentTileIndex);
+            Debug.Log($"Player {_playerId} warp to tile {nextTileIndex}");
+        }
+
         public void MoveTo(int nextTileIndex)
         {
             CurrentTileIndex = nextTileIndex;
+            OnMove?.Invoke(PlayerID, CurrentTileIndex);
             Debug.Log($"Player {_playerId} move to tile {nextTileIndex}");
         }
 

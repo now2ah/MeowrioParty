@@ -33,8 +33,9 @@ namespace Meowrio.Service
 
         public int PlayerCount => _playerDic.Count;
 
-        public void AddPlayer(int playerID, PlayerEntity playerEntity)
+        public void AddPlayer(int playerID)
         {
+            PlayerEntity playerEntity = new PlayerEntity(playerID);
             _playerDic.Add(playerID, playerEntity);
         }
 
@@ -53,6 +54,11 @@ namespace Meowrio.Service
 
         public void StartBoardGame(TileService tileService)
         {
+            foreach (var player in _playerDic)
+            {
+                player.Value.MoveTo(tileService.StartTileIndex);
+            }
+
             _roundService = new RoundService(DEFAULT_ROUND, tileService);
             _roundService.StartRound(_playerDic, _turnOrderService.TurnOrderArray);
         }

@@ -80,7 +80,10 @@ namespace Meowrio.Domain
 
         public void EnterState()
         {
-            
+            if (NetworkManager.Singleton.IsServer)
+            {
+                //_boardGameManager
+            }
         }
 
         public void ExitState()

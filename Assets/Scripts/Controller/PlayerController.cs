@@ -15,8 +15,6 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private GameObject _coinMinusUI;
     private Animator _animator;
 
-    private PlayerEntity _playerEntity;
-
     public bool IsMoving { get; private set; }
     [SerializeField] private float moveSpeed = 3f;
 
@@ -47,18 +45,13 @@ public class PlayerController : NetworkBehaviour
 
     private void BoardGameManager_OnRollDiceForSetTurnOrder(int playerID, int diceNumber)
     {
-        if (playerID == _playerEntity.PlayerID)
+        if (playerID == (int)NetworkObjectId)
             RollDiceSequenceRpc(diceNumber);
     }
 
     void Start()
     {
         DOTween.Init(false, true, LogBehaviour.Verbose).SetCapacity(200, 50);
-    }
-
-    public void Initialize(PlayerEntity playerEntity)
-    {
-        _playerEntity = playerEntity;
     }
 
     [Rpc(SendTo.Everyone)]

@@ -21,8 +21,8 @@ namespace Assets.Scripts.TestCode
             
             _tileService = new TileService(testTileList);
             _boardGameService = new BoardGameService(_tileService, 2);
-            _boardGameService.AddPlayer(0, new PlayerEntity(0));
-            _boardGameService.AddPlayer(1, new PlayerEntity(1));
+            _boardGameService.AddPlayer(0);
+            _boardGameService.AddPlayer(1);
 
             _boardGameService.RollDiceForSetTurnOrder(0);
             _boardGameService.RollDiceForSetTurnOrder(1);

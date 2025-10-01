@@ -48,12 +48,15 @@ public class BoardScene : MonoBehaviour
                 }
             }
 
-            if (_inputHandlerPrefab != null)
+            foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
             {
-                GameObject inputHandlerObj = Instantiate(_inputHandlerPrefab);
-                if (inputHandlerObj.TryGetComponent<NetworkObject>(out NetworkObject inputHandlerNetworkObject))
+                if (_inputHandlerPrefab != null)
                 {
-                    inputHandlerNetworkObject.Spawn();
+                    GameObject inputHandlerObj = Instantiate(_inputHandlerPrefab);
+                    if (inputHandlerObj.TryGetComponent<NetworkObject>(out NetworkObject inputHandlerNetworkObject))
+                    {
+                        inputHandlerNetworkObject.SpawnAsPlayerObject(client.ClientId);
+                    }
                 }
             }
         }
