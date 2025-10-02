@@ -1,6 +1,7 @@
 
 using Meowrio.Domain;
 using Meowrio.Service;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +12,8 @@ namespace Meowrio.Service
     /// </summary>
     public class BoardGameService
     {
+        public event Action<int, int> OnPlayerWarped;
+
         private const int MIN_TURNORDER_DICENUMBER = 1;
         private const int MAX_TURNORDER_DICENUMBER = 6;
         private const int DEFAULT_ROUND = 3;
@@ -37,6 +40,18 @@ namespace Meowrio.Service
         {
             PlayerEntity playerEntity = new PlayerEntity(playerID);
             _playerDic.Add(playerID, playerEntity);
+            _playerDic[playerID].OnWarp += BoardGameService_OnWarp;
+        }
+
+        private void BoardGameService_OnWarp(int playerID, int nextTileIndex)
+        {
+            OnPlayerWarped?.Invoke(playerID, nextTileIndex);
+        }
+
+        public void RemovePlayer(int playerID)
+        {
+            _playerDic[playerID].OnWarp -= BoardGameService_OnWarp;
+            _playerDic.Remove(playerID);
         }
 
         public int RollDiceForSetTurnOrder(int playerID)

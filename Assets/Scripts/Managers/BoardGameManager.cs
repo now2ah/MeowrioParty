@@ -33,7 +33,7 @@ namespace Meowrio.Manager
 
         private Dictionary<EGameState, IBoardGameState> _gamePhaseDic;
         private BoardGameStateMachine _boardGameStateMachine;
-        private List<ulong> _playerNetObjectID;
+        private Dictionary<int, TileController> _tileControllerDic;
 
         public event Action<int> OnPlayerInput;
         public event Action OnSetTurnOrderStateStarted;
@@ -45,7 +45,7 @@ namespace Meowrio.Manager
             _characterFactory = gameObject.GetComponent<CharacterFactory>();
             _mapController = gameObject.GetComponent<MapController>();
             _boardGameStateMachine = new BoardGameStateMachine();
-            _playerNetObjectID = new List<ulong>();
+            _tileControllerDic = new Dictionary<int, TileController>();
             _gamePhaseDic = new Dictionary<EGameState, IBoardGameState>() 
             {
                 {EGameState.IntroBoard,  new IntroBoardGameState(this)},
@@ -69,6 +69,18 @@ namespace Meowrio.Manager
 
             _tileService = new TileService(LoadMapTiles());
             _boardGameService = new BoardGameService(_tileService, NetworkManager.Singleton.ConnectedClientsList.Count);
+            _boardGameService.OnPlayerWarped += BoardGameService_OnPlayerWarped;
+        }
+
+        private void BoardGameService_OnPlayerWarped(int playerID, int nextTileIndex)
+        {
+            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue((ulong)playerID, out NetworkObject networkObj))
+            {
+                if (networkObj.TryGetComponent<PlayerController>(out PlayerController playerController))
+                {
+                    playerController.MoveToRpc(nextTileIndex);
+                }
+            }
         }
 
         public void Update()
@@ -112,6 +124,11 @@ namespace Meowrio.Manager
             _boardGameStateMachine.ChangeState(_gamePhaseDic[EGameState.Board]);
         }
 
+        public void StartBoardGame()
+        {
+            _boardGameService.StartBoardGame(_tileService);
+        }
+
         private IReadOnlyList<Tile> LoadMapTiles()
         {
             List<Tile> tileList = new List<Tile>();
@@ -137,6 +154,8 @@ namespace Meowrio.Manager
                 {
                     tileList.Add(new WarpTile(tileObj.tileIndex));
                 }
+
+                _tileControllerDic.Add(tileObj.tileIndex, tileObj);
             }
 
             tileList.Sort((tile1, tile2) => tile1.CompareTo(tile2.IndexNumber));
@@ -158,7 +177,6 @@ namespace Meowrio.Manager
                 character.transform.position = spawnPoint.position;
                 character.transform.rotation = spawnPoint.rotation;
                 character.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientID);
-                _playerNetObjectID.Add(character.GetComponent<NetworkObject>().NetworkObjectId);
                 PlayerController controller = character.GetComponent<PlayerController>();
             }
         }

@@ -21,7 +21,6 @@ public class PlayerController : NetworkBehaviour
 
     private void Awake()
     {
-        //_inputManager.OnConfirmButtonPerformed += _inputManager_OnConfirmButtonPerformed;
         _animator = GetComponent<Animator>();
         
     }
@@ -59,6 +58,13 @@ public class PlayerController : NetworkBehaviour
     {
         gameObject.transform.position = transform.position;
         gameObject.transform.rotation = transform.rotation;
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void MoveToRpc(int nextTileIndex)
+    {
+        //gameObject.transform.position = nextTile.transform.position;
+        //gameObject.transform.position = nextTile.transform.position;
     }
 
     public void MoveTo(TileController nextTile)
