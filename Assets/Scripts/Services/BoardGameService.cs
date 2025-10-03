@@ -71,7 +71,7 @@ namespace Meowrio.Service
         {
             foreach (var player in _playerDic)
             {
-                player.Value.MoveTo(tileService.StartTileIndex);
+                player.Value.WarpTo(tileService.StartTileIndex);
             }
 
             _roundService = new RoundService(DEFAULT_ROUND, tileService);

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 public enum ETileType
 {
@@ -8,7 +9,7 @@ public enum ETileType
     WarpTile
 }
 
-public class TileController : MonoBehaviour
+public class TileController : MonoBehaviour, IComparable<TileController>
 {
     public ETileType tileType;
     public int tileIndex;
@@ -16,6 +17,16 @@ public class TileController : MonoBehaviour
     [Header("Effect Parameters")]
     public int eventParam;
     public TileController MoveTo;
+
+    public int CompareTo(TileController other)
+    {
+        if (other == null)
+        {
+            return 1;
+        }
+
+        return tileIndex.CompareTo(other.tileIndex);
+    }
 
     public void TileEventAtServer(PlayerData playerData, PlayerController playerController)
     {

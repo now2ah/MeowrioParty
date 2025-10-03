@@ -6,6 +6,7 @@ using System.Collections;
 using System;
 using Meowrio.Manager;
 using Meowrio.Domain;
+using Meowrio.Controller;
 
 public class PlayerController : NetworkBehaviour
 {
@@ -13,6 +14,7 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private List<GameObject> _diceNumberObjects = new List<GameObject>();
     [SerializeField] private GameObject _coinPlusUI;
     [SerializeField] private GameObject _coinMinusUI;
+    private IMapDataProvider _mapController;
     private Animator _animator;
 
     public bool IsMoving { get; private set; }
@@ -53,6 +55,19 @@ public class PlayerController : NetworkBehaviour
         DOTween.Init(false, true, LogBehaviour.Verbose).SetCapacity(200, 50);
     }
 
+    [Rpc(SendTo.ClientsAndHost)]
+    public void DependencyInjectRpc()
+    {
+        _mapController = MapController.Instance;
+
+        Initialize(_mapController);
+    }
+
+    public void Initialize(IMapDataProvider mapController)
+    {
+        _mapController = mapController;
+    }
+
     [Rpc(SendTo.Everyone)]
     public void MoveToRpc(Vector3 position, Quaternion rotation)
     {
@@ -63,8 +78,12 @@ public class PlayerController : NetworkBehaviour
     [Rpc(SendTo.Everyone)]
     public void MoveToRpc(int nextTileIndex)
     {
-        //gameObject.transform.position = nextTile.transform.position;
-        //gameObject.transform.position = nextTile.transform.position;
+        if (_mapController is MapController)
+        {
+            TileController nextTileController = ((MapController)_mapController).GetTileController(nextTileIndex);
+            gameObject.transform.position = nextTileController.transform.position;
+        }
+        
     }
 
     public void MoveTo(TileController nextTile)

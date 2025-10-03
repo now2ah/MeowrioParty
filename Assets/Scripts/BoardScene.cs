@@ -1,6 +1,7 @@
 using Meowrio.Util;
 using System.Collections;
 using Unity.Netcode;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class BoardScene : MonoBehaviour
@@ -8,6 +9,7 @@ public class BoardScene : MonoBehaviour
     [SerializeField] GameObject _cameraManagerPrefab;
     [SerializeField] GameObject _boardGameManagerPrefab;
     [SerializeField] GameObject _inputHandlerPrefab;
+    [SerializeField] GameObject _mapControllerManagerPrefab;
 
     private void Awake()
     {
@@ -61,7 +63,8 @@ public class BoardScene : MonoBehaviour
             }
         }
 
-        
+        if (_mapControllerManagerPrefab != null)
+            Instantiate(_mapControllerManagerPrefab);
 
 
 

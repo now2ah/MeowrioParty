@@ -28,12 +28,12 @@ namespace Meowrio.Manager
         private TileService _tileService;
         private BoardGameService _boardGameService;
         private CharacterFactory _characterFactory;
-        private MapController _mapController;
         private CameraController _cameraController;
 
         private Dictionary<EGameState, IBoardGameState> _gamePhaseDic;
         private BoardGameStateMachine _boardGameStateMachine;
-        private Dictionary<int, TileController> _tileControllerDic;
+
+        private Dictionary<int, ulong> _playerControllerDic;
 
         public event Action<int> OnPlayerInput;
         public event Action OnSetTurnOrderStateStarted;
@@ -43,9 +43,8 @@ namespace Meowrio.Manager
         {
             base.Awake();
             _characterFactory = gameObject.GetComponent<CharacterFactory>();
-            _mapController = gameObject.GetComponent<MapController>();
             _boardGameStateMachine = new BoardGameStateMachine();
-            _tileControllerDic = new Dictionary<int, TileController>();
+            _playerControllerDic = new Dictionary<int, ulong>();
             _gamePhaseDic = new Dictionary<EGameState, IBoardGameState>() 
             {
                 {EGameState.IntroBoard,  new IntroBoardGameState(this)},
@@ -74,7 +73,8 @@ namespace Meowrio.Manager
 
         private void BoardGameService_OnPlayerWarped(int playerID, int nextTileIndex)
         {
-            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue((ulong)playerID, out NetworkObject networkObj))
+            _playerControllerDic.TryGetValue(playerID, out ulong networkObjKey);
+            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(networkObjKey, out NetworkObject networkObj))
             {
                 if (networkObj.TryGetComponent<PlayerController>(out PlayerController playerController))
                 {
@@ -154,8 +154,6 @@ namespace Meowrio.Manager
                 {
                     tileList.Add(new WarpTile(tileObj.tileIndex));
                 }
-
-                _tileControllerDic.Add(tileObj.tileIndex, tileObj);
             }
 
             tileList.Sort((tile1, tile2) => tile1.CompareTo(tile2.IndexNumber));
@@ -173,11 +171,13 @@ namespace Meowrio.Manager
                 ulong clientID = client.ClientId;
                 _boardGameService.AddPlayer((int)clientID);
                 Transform character = _characterFactory.GenerateCharacter((ECharacterType)clientID);
-                Transform spawnPoint = _mapController.GetSpawnPointTransform((int)clientID);
+                Transform spawnPoint = MapController.Instance.GetSpawnPointTransform((int)clientID);
                 character.transform.position = spawnPoint.position;
                 character.transform.rotation = spawnPoint.rotation;
                 character.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientID);
+                _playerControllerDic.Add((int)clientID, character.GetComponent<NetworkObject>().NetworkObjectId);
                 PlayerController controller = character.GetComponent<PlayerController>();
+                controller.DependencyInjectRpc();
             }
         }
     }
