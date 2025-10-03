@@ -67,6 +67,11 @@ namespace Meowrio.Service
             _turnOrderService.SetTurnOrder();
         }
 
+        public int GetCurrentTurnPlayerId()
+        {
+            return _turnOrderService.GetCurrentTurnPlayerId();
+        }
+
         public void StartBoardGame(TileService tileService)
         {
             foreach (var player in _playerDic)

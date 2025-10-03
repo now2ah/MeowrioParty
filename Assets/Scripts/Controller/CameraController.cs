@@ -17,12 +17,19 @@ namespace Meowrio.Controller
         private Camera _mainCamera;
         private CinemachineBrain _cinemachineBrain;
 
-        public void SetTarget(Transform targetTransform)
+        [Rpc(SendTo.ClientsAndHost)]
+        public void SetTargetRpc(ulong currentTurnNetworkObjKey)
         {
             if (_focusObject != null)
             {
-                _focusObject.transform.SetParent(targetTransform, false);
-                _currentLiveCamera.Target.TrackingTarget = _focusObject.transform;
+                if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(currentTurnNetworkObjKey, out NetworkObject networkObj))
+                {
+                    if (networkObj.TryGetComponent<PlayerController>(out PlayerController playerController))
+                    {
+                        _focusObject.transform.SetParent(playerController.transform, false);
+                        _currentLiveCamera.Target.TrackingTarget = _focusObject.transform;
+                    }
+                }
             }
         }
 

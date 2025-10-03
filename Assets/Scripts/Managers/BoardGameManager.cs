@@ -127,6 +127,9 @@ namespace Meowrio.Manager
         public void StartBoardGame()
         {
             _boardGameService.StartBoardGame(_tileService);
+            _cameraController.ChangeCameraRpc(CameraType.Focus);
+            _playerControllerDic.TryGetValue(_boardGameService.GetCurrentTurnPlayerId(), out ulong networkObjKey);
+            _cameraController.SetTargetRpc(networkObjKey);
         }
 
         private IReadOnlyList<Tile> LoadMapTiles()

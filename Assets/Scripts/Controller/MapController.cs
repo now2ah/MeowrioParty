@@ -42,7 +42,6 @@ namespace Meowrio.Controller
         {
             foreach (var tileObj in FindObjectsByType<TileController>(FindObjectsSortMode.None))
             {
-                Debug.Log($"{tileObj.name} , {tileObj.tileIndex}");
                 _tileControllerDic.Add(tileObj.tileIndex, tileObj);
             }
         }
